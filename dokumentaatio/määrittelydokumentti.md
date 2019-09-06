@@ -12,7 +12,7 @@ Hahmojaossa kyse on kahteen erilliseen ryhmään (hahmot ja pelaajat) kuuluvien 
 
 Koska kyseessä on käytännössä kaksiulotteinen matriisi, kaarten määrä on *p* × *h*, jossa *p* on pelaajien ja *h* hahmojen määrä, mikä tarkoittaa, että esimerkiksi 100 hahmon ja 150 ilmoittautuneen pelaajan tapauksessa kaarten määrä nousee helposti kohtuullisen suureksi algoritmeille, joiden aikavaativuus on O(n^2) tai korkeampi (kuten monissa tämäntapaisten ongelmien perinteisissä ratkaisuissa joita käsitellään alempana). Aineiston luonteesta johtuen verkkoa on kuitenkin mahdollista yksinkertaistaa jo sen syöttövaiheessa. Johtuen negatiivisille toiveille annetusta absoluuttisesta painotuksesta (eli pelaajalle ei haluta antaa hahmoa joka sisältää elementtejä joita tämä ei ehdottomasti halua pelata) aineisto sisältää runsaasti hahmo-pelaajapareja, joiden välinen yhteensopivuus on 0, mikä tarkoittaa, että näiden solmujen välille ei ole tarpeen luoda kaarta. Tästä johtuen luonnollisin esitysmuoto syötteelle on kohdesolmut ja näihin johtavien kaarien painot sisältävä vieruslista, jossa kunkin solmun naapurit on järjestetty niihin johtavan kaaren painon mukaan.
 
-Aineiston pohjalta muodostetun kaksijakoisen verkon avulla annettu ongelma voidaan pyrkiä ratkaisemaan laskemalla eri algoritmeja käyttäen maksimiparitus, jossa jokainen hahmo yhdistyy yhteen pelaajaan ja jonka kokonaisvirtaus on mahdollisimman suuri. 
+Aineiston pohjalta muodostetun kaksijakoisen verkon avulla annettu ongelma voidaan pyrkiä ratkaisemaan laskemalla eri algoritmeja käyttäen maksimiparitus, jossa jokainen hahmo yhdistyy yhteen pelaajaan siten, että kokonaisvirtaus on mahdollisimman suuri. 
 
 # Syöte ja käytettävät tietorakenteet
 Työkalu saa syötteekseen yhteensopivuuslaskentaprosessin tuottaman TEI XML -muotoisen dokumentin, joka sisältää: 
@@ -20,11 +20,15 @@ Työkalu saa syötteekseen yhteensopivuuslaskentaprosessin tuottaman TEI XML -mu
 1. *hahmolistan* jossa kunkin hahmon kohdalla on listattu kaikki pelaajat joiden yhteensopivuusprosentti on >0 yhteensopivuusprosentteineen , ja 
 2. *pelaajalistan*, jossa on vastavuoroisesti listattu kunkin pelaajan kohdalla hahmot, joiden yhteensopivuusprosentti on >0 yhteensopivuusprosentteineen.
 
-Hahmojen ja pelaajien tunnukset tallennetaan erillisiin taulukoihin, joiden indeksejä käytetään ohjelman sisällä niiden tunnuksena. Hahmojen ja pelaajien välisiä yhteensopivuuksia kuvaavat vieruslistat tallennetaan samoja indeksejä käyttäen taulukoihin, jonka kukin alkio sisältää 
+Koska ratkaistavan ongelman tapauksessa aikavaativuus on paljon suurempi ongelma kuin tilavaativuus, tallennetaan tieto osittain päällekkäisiin rakenteisiin siten, että kussakin tilanteessa voidaan käyttää hakuihin tehokkainta rakennetta. Hahmojen ja pelaajien tunnukset tallennetaan erillisiin taulukoihin, joiden indeksejä käytetään ohjelman sisällä niiden tunnuksena; indeksi 0 jätetään molemmissa taulukoissa tyhjäksi jotta sitä voidaan myöhemmin käyttää ilmaisemaan ettei jokin pelaaja yhdisty mihinkään hahmoon tai toisin päin. 
+
+Hahmojen ja pelaajien väliset yhteensopivuusprosentit (ilmaistuna kokonaislukuarvoilla 0–100) tallennetaan kaksiulotteiseen taulukkoon, jossa rivin numero viittaa pelaajan indeksiin ja sarakkeen numero hahmon indeksiin. Koska tämä kaksiulotteinen taulukko sisältää todennäköisesti runsaasti arvoja 0 joka käytännössä tarkoittaa sitä, ettei hahmoa ja pelaajaa verkossa edustavien solmujen välillä ole kaarta, sen käyttö ei ole tehokasta silloin kun halutaan käydä läpi tietyn solmun kaikki naapurit. Tämän vuoksi jokaista pelaajaa ja hahmoa kuvaavalle solmulle tallennetaan erikseen vieruslista, joka sisältää vain ne vastapuolen solmut, joiden yhteensopivuus solmun kanssa on suurempi kuin 0. Nämä vieruslistat tallennetaan kahteen taulukkoon (hahmot ja pelaajat) jonka jokainen alkio sisältää viittauksen indeksin osoittaman solmun vieruslistan sisältävään taulukkolistaan (ArrayList). 
 
 # Käytettävät algoritmit
+Ratkaistavana oleva ongelma on luonteeltaan paritusongelma, jonka triviaali ratkaisu on aikavaativuudeltaan n!, mikä sulkee pois sen käyttämisen (koska tyypillisissä käytännön tapauksissa *n* on välillä 30–100). Onneksi ongelma voidaan kuitenkin nähdä variaationa useammastakin klassisesta ohjelmointiongelmasta joihin puolestaan saattaa olla useita vakiintuneita ratkaisualgoritmeja, joihin voidaan lisäksi tehdä erilaisia aineiston erityispiirteet huomioon ottavia optimointeja. Tästä syystä työkalu tarjoaa useita eri ratkaisualgoritmeja, joiden tuottamia tuloksia voidaan myös tarkastella rinnakkain ja vertailla.
 
-
+## Vakaa avioliitto -ongelma
+Yhtäältä ratkaistavana oleva ongelma voidaan nähdä klassisen vakaa avioliitto -ongelman (Stable Marriage Problem, SMP) erikoistapauksena, jossa toinen osapuoli voi olla ylijäämäinen eli kaikille kosijoille tai kosittaville ei löydy paria (riippuen siitä, määritelläänkö kosijoiksi pelaajat vai hahmot). Tämän ongelman  
 
 # Aika- ja tilavaativuus
 
