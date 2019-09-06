@@ -10,4 +10,4 @@ Hieman epäselväksi on vielä jäänyt se, kuinka moni kirjallisuudesta kuvattu
 
 Seuraavaksi aion koodata ohjelman rungon ja käyttöliittymän sekä aineiston tallentamiseen tarvittavat tietorakenteet ja logiikan. Sen jälkeen aloitan itse algoritmien koodaamisen helpoimmasta eli vakaiden avioliittojen ongelman ratkaisemisesta Galen-Shapleyn algoritmin avulla.
 
-Viikon 1. aikana työhön käytetty aika: 12 h
+1. viikon aikana työhön käytetty aika: 12 h
