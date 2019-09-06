@@ -1,5 +1,7 @@
 # Määrittelydokumentti: LARPCaster-työkalu
 
+LARPCaster on Javalla toteutettu ja tekstimuotoisella käyttöliittymällä varustettu työkalu liveroolipelien hahmojaon optimointiin.
+
 ## Taustaa
 LARPCaster-työkalu on tarkoitettu auttamaan liveroolipelien järjestäjiä eli pelinjohtajia pelaajavalintojen ja hahmojaon tekemisessä. Suomalaisissa liveroolipeleissä on yleensä tapana, että pelaajat ilmoittautuvat peliin täyttämällä lomakkeen, jossa kysytään henkilötietojen lisäksi myös lukuisia kysymyksiä pelityyliin ja hahmoon liittyvistä mieltymyksistä ja toiveista, jotta kullekin pelaajalle voidaan valita mahdollisimman hyvin tälle sopiva hahmo. Perinteisesti pelinjohto on lukenut ilmoittautumislomakkeet läpi manuaalisesti ja yrittäneet jakaa valmiiksi kirjoitetut hahmot pelaajille siten, että kukin pelaaja saisi mahdollisimman hyvin toiveitaan vastaavan hahmon. Tämä on kuitenkin hyvin hankalaa ja työlästä, ja edellyttää että hahmojakoon osallistuvat pelinjohtajat tuntevat myös hahmot hyvin, mikä saattaa aiheuttaa ongelmia suuremmissa peleissä joissa hahmoja on ollut kirjoittamassa suuri määrä ihmisiä ja hyvin harvalla on käsitystä muista kuin itse kirjoittamistaan hahmoista.
 
@@ -25,22 +27,24 @@ Koska ratkaistavan ongelman tapauksessa aikavaativuus on paljon suurempi ongelma
 Hahmojen ja pelaajien väliset yhteensopivuusprosentit (ilmaistuna kokonaislukuarvoilla 0–100) tallennetaan kaksiulotteiseen taulukkoon, jossa rivin numero viittaa pelaajan indeksiin ja sarakkeen numero hahmon indeksiin. Koska tämä kaksiulotteinen taulukko sisältää todennäköisesti runsaasti arvoja 0 joka käytännössä tarkoittaa sitä, ettei hahmoa ja pelaajaa verkossa edustavien solmujen välillä ole kaarta, sen käyttö ei ole tehokasta silloin kun halutaan käydä läpi tietyn solmun kaikki naapurit. Tämän vuoksi jokaista pelaajaa ja hahmoa kuvaavalle solmulle tallennetaan erikseen vieruslista, joka sisältää vain ne vastapuolen solmut, joiden yhteensopivuus solmun kanssa on suurempi kuin 0. Nämä vieruslistat tallennetaan kahteen taulukkoon (hahmot ja pelaajat) jonka jokainen alkio sisältää viittauksen indeksin osoittaman solmun vieruslistan sisältävään taulukkolistaan (ArrayList). 
 
 # Käytettävät algoritmit
-Ratkaistavana oleva ongelma on luonteeltaan paritusongelma, jonka triviaalit ratkaisut ovat aikavaativuudeltaan lähtökohtaisest n!, mikä sulkee pois sen käyttämisen (koska tyypillisissä käytännön tapauksissa *n* on välillä 30–100). Onneksi ongelma voidaan kuitenkin nähdä variaationa useammastakin klassisesta ohjelmointiongelmasta joihin puolestaan saattaa olla useita vakiintuneita ratkaisualgoritmeja, joihin voidaan lisäksi tehdä erilaisia aineiston erityispiirteet huomioon ottavia optimointeja. Tästä syystä työkalu tarjoaa useita eri ratkaisualgoritmeja, joiden tuottamia tuloksia voidaan myös tarkastella rinnakkain ja vertailla.
+Ratkaistavana oleva ongelma on luonteeltaan paritusongelma, jonka triviaalit ratkaisut ovat aikavaativuudeltaan lähtökohtaisest n!, mikä sulkee pois sen käyttämisen (koska tyypillisissä käytännön tapauksissa *n* on välillä 30–100). Onneksi ongelma voidaan kuitenkin nähdä variaationa useammastakin klassisesta ohjelmointiongelmasta joihin puolestaan saattaa olla useita vakiintuneita ratkaisualgoritmeja, joihin voidaan lisäksi tehdä erilaisia aineiston erityispiirteet huomioon ottavia optimointeja. Tästä syystä työkalun on tarkoitus tarjota useita eri ratkaisualgoritmeja, joiden tuottamia tuloksia voidaan myös tarkastella rinnakkain ja vertailla.
 
 ## Vakaiden avioliittojen ongelma (Stable Marriage Problem)
 Yhtäältä ratkaistavana oleva ongelma voidaan nähdä klassisen vakaiden avioliittojen ongelman erikoistapauksena, jossa toinen osapuoli voi olla ylijäämäinen eli kaikille kosijoille tai kosittaville ei löydy paria (riippuen siitä, määritelläänkö kosijoiksi pelaajat vai hahmot). Tämän ongelman tunnetuin ratkaisu on nk. Galen–Shapleyn algoritmi, joka perustuu kosinta-analogiaan, jossa ensimmäisen joukon jäsenet ("kosijat) tekevät "tarjouksia" toisen joukon jäsenille ("kosittaville") näiden mieluisuusjärjestyksessä, ja kosittavat puolestaan joko hylkäävät tai hyväksyvät toistaiseksi kunkin tarjouksen oman mieluisuusjärjestyksensä perusteella. Tätä jatketaan, kunnes syntyy tilanne jossa yhdenkään muodostuneen parin molemmat jäsenet eivät suosi yhtäkään parin ulkopuolista jäsentä. 
 
 Koska Galen–Shapleyn algoritmi olettaa että kosittavien ja kosijoiden määrä on sama, sitä on tässä tapauksessa muokattava siten, että osa joko kosijoista tai kosittavista voi jäädä ilman paria ja kierrosta toistetaan vain kunnes pienemmän ryhmän kaikki jäsenet ovat pariutuneet. Vakaiden avioliittojen ongelmalle voi olla useita ratkaisuja, jotka ovat optimaalisia eri näkökulmista. Koska Galen–Shapleyn algoritmi tuottaa aina ratkaisun, joka priorisoi kosijoiden preferenssejä ja on siis optimoitu näiden kannalta, työkaluun toteutetaan mahdollisuus määrittää ratkaisu Galen–Shapleyn algoritmilla priorisoiden joko hahmoja (eli jokaiselle hahmolle haetaan sopivin mahdollinen pelaaja) tai pelaajia (eli jokaiselle pelaajalle haetaan sopivin mahdollinen hahmo) ja vertailla näiden tuottamia ratkaisuja.
 
-Galen–Shapleyn algoritmin aikavaativuus on nˆ2 
-
 ## Kohdistusongelma (Assignment Problem)
 Ratkaistavaa ongelmaa voidaan tarkastella myös enemmän kokonaisuuden kuin yksittäisten hahmojen ja pelaajien näkökulmasta ja pyrkiä optimoimaan hahmojaon kokonaissopivuutta, jolloin ongelma näyttäytyy kohdistusongelmana, jossa pyritään saamaan aikaan maksimiparitus, jossa verkon maksimivirtaus on mahdollisimman suuri. Yksinkertaisin ratkaisu tällaiseen ongelmaan on laskea kaikki mahdolliset vaihtoehdot ja vertailla niiden kokonaisvirtauksia, mutta koska tämän aikavaativuus on *n!* (jos sekä hahmojen että pelaajien määrä on *n*) ei tämä ole mahdollista tyypillisillä pelaaja- ja hahmomäärillä.
 
+Onneksi kohdistusongelman ratkaisemiseen on kehitetty useitakin menetelmiä, joiden aikavaativuus on huomattavasti kohtuullisempi. Näistä työkalussa toteutetaan ensisijaisesti ns. "unkarilainen algoritmi", joka ei ole kovin tehokas, mutta yksinkertaisempi ja siten paremmin harjoituksen rajoihin mahtuva kuin siitä kehitetyt tehokkaammat variantit. Unkarilaisen algoritmin perusversion lisäksi työkaluun voidaan integroida sen kehittyneempiä versioita sikäli kuin niitä löytyy valmiina Java-kirjastoina. Unkarilaisen algoritmin lisäksi työkalussa toteutetaan vähintään yksi versio ns. huutokauppa-algoritmista.
+
+Erilaisten ratkaisualgoritmien lisäksi 
 
 # Aika- ja tilavaativuus
 
 
+Galen–Shapleyn algoritmin aikavaativuus on O(nˆ2), joten tyypillisillä syötteillä ( 30 < n < 200) ongelman ratkaiseminen vakaiden avioliittojen ongelmana on mahdollista kohtuullisessa ajassa.
 
 # Lähteet
-
+(Tulossa myöhemmin.)
