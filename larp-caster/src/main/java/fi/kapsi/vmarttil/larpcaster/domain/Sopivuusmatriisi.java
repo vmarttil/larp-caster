@@ -16,7 +16,6 @@ public class Sopivuusmatriisi {
     final private int pelaajamaara;
     final private int hahmomaara;
     
-    
     // NB! Matriisista tehdään pelaajamäärän kokoinen, koska ylijäämäpelaajia 
     // varten matriisiin luodaan haamuhahmot joiden vastaavuusprosentiksi 
     // tulee minimivastaavuus. Näihin hahmoihin päätyminen tarkoittaa, ettei 

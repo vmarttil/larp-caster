@@ -5,8 +5,18 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -114,8 +124,42 @@ public class Hahmojako {
     
     // Operaatiot
     
-    public void lataaYhteensopivuustiedot(String tiedostonimi) {
-        // Tähän tiedoston lataamiseen ja sopivuusmatriisin luomiseen liittyvä koodi
+    public void lataaYhteensopivuustiedot(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
+        File xmlTiedosto = new File(tiedostonimi);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder;
+        dBuilder = dbFactory.newDocumentBuilder();
+        Document dokumentti = dBuilder.parse(xmlTiedosto);
+        dokumentti.getDocumentElement().normalize();
+        NodeList pelaajaluettelo = dokumentti.getElementsByTagName("person");
+        for (int i = 0; i < pelaajaluettelo.getLength(); i++) {
+            Element pelaaja = (Element) pelaajaluettelo.item(i);
+            String pelaajatunnus = pelaaja.getAttribute("xml:id");
+            // Pelaajatunnukset kirjoitetaan indeksitaulukkoon
+            yhteensopivuusdata.setPelaajatunnus(i + 1, pelaajatunnus);
+            NodeList hahmoluettelo = pelaaja.getElementsByTagName("note");
+            // Lisätään yhteensopivuustiedot kaikille hahmoille ja tarvittavalle määrälle tyhjiä täytehahmoja
+            for (int j = 0; j < pelaajaluettelo.getLength(); j++) {
+                if (j < hahmoluettelo.getLength()) {
+                    Element hahmo = (Element) hahmoluettelo.item(j);
+                    String hahmotunnus = hahmo.getAttribute("xml:id");
+                    // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
+                    if (i == 0) {
+                        yhteensopivuusdata.setHahmotunnus(j + 1, hahmotunnus);
+                    }
+                    Element yhteensopivuus = (Element) hahmo.getElementsByTagName("num").item(0);
+                    int yhteensopivuusprosentti = Integer.parseInt(yhteensopivuus.getAttribute("value"));
+                    // Yhteensopivuusprosentti kirjoitetaan matriisiin
+                    yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
+                } else {
+                    // Lisätään täytehahmoja kunnes hahmoja on yhtä monta kuin pelaajia
+                    if (i == 0) {
+                        yhteensopivuusdata.setHahmotunnus(j + 1, "");
+                    }
+                    yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
+                }
+            }
+        }
     }
     
     

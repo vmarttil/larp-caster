@@ -8,6 +8,13 @@ package fi.kapsi.vmarttil.larpcaster.ui;
 import java.util.Scanner;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.*;
+import org.xml.sax.SAXException;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -16,6 +23,7 @@ import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 public class TextUI {
     
     Hahmojako hahmojako;
+    Scanner lukija;
     
     public TextUI() {
         
@@ -23,7 +31,7 @@ public class TextUI {
     
     public void kaynnista(Hahmojako hahmojako) throws Exception {
         this.hahmojako = hahmojako;
-        Scanner lukija = new Scanner(System.in);
+        lukija = new Scanner(System.in);
         while (true) {
             System.out.println("LARPCaster-työkalu");
             System.out.println("");
@@ -33,10 +41,11 @@ public class TextUI {
             if (hahmojako.getYhteensopivuusdata() != null) {
                 System.out.println(" 4 - Laske optimoitu hahmojako");
             }
-            System.out.println(" 5 - Lopeta");
+            System.out.println(" X - Lopeta");
             System.out.println("");
+            System.out.print("Komento: ");
             String komento = lukija.nextLine();
-            if (komento.equals("5")) {
+            if (komento.equals("X")) {
                 break;
             }
             switch (komento) {
@@ -58,8 +67,19 @@ public class TextUI {
         }
     }
             
-    private void lataaTiedosto() {
-        // Käyttöliittymä matriisin täyttämiseen tiedostosta
+    private void lataaTiedosto() { 
+        System.out.println("");
+        System.out.print("Tiedoston nimi: ");
+        String tiedostonimi = lukija.nextLine();
+        try {
+            hahmojako.lataaYhteensopivuustiedot(tiedostonimi);
+        } catch (SAXException | ParserConfigurationException | IOException e1) {
+            System.out.println("");
+            System.out.println("VIRHE: Yhteensopivuustietojen lataus ei onnistunut.");
+            System.out.println("");
+            e1.printStackTrace();
+        }
+        System.out.println("Yhteensopivuustiedot ladattu tiedostosta " + tiedostonimi);
     }
     
     private void valitseAlgoritmi() {

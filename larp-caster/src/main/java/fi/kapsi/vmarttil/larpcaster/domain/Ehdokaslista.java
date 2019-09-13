@@ -5,7 +5,7 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 /**
  *
@@ -16,23 +16,23 @@ public class Ehdokaslista {
     private int seuraava;
     
     public Ehdokaslista(Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
-        TreeSet<Integer> naapurit = new TreeSet<>();
+        TreeMap<Integer, Integer> naapurit = new TreeMap<>();
         if (rooli.equals("pelaaja")) {
             for (int i=1; i<=sopivuusprosentit.getPelaajamaara()+1; i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(indeksi, i) >= minimisopivuus) {
-                    naapurit.add(i);
+                    naapurit.put(sopivuusprosentit.getSopivuusprosentti(indeksi, i), i);
                 }
             }
         } else if (rooli.equals("hahmo")) {
             for (int i=1; i<=sopivuusprosentit.getPelaajamaara()+1; i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(i, indeksi) >= minimisopivuus) {
-                    naapurit.add(i);
+                    naapurit.put(sopivuusprosentit.getSopivuusprosentti(i, indeksi), i);
                 }
             }
         }
         this.lista = new int[naapurit.size()];
         for (int i=0; i < naapurit.size(); i++) {
-            this.lista[i] = naapurit.pollLast();
+            this.lista[i] = naapurit.pollLastEntry().getValue();
         }
         this.seuraava = 0;
     }
