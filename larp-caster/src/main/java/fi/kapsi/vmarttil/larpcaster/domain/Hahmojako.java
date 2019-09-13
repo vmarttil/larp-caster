@@ -124,8 +124,7 @@ public class Hahmojako {
     
     // Operaatiot
     
-    public void lataaYhteensopivuustiedot(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
-        File xmlTiedosto = new File(tiedostonimi);
+    public void lataaYhteensopivuustiedot(File xmlTiedosto) throws SAXException, ParserConfigurationException, IOException {    
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         dBuilder = dbFactory.newDocumentBuilder();

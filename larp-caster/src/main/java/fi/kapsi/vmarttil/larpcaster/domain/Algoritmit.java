@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 public class Algoritmit {
     
-        /**
+    /**
      * Tämä metodi toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen 
      * ongelmaan käyttäen Galen-Shapleyn algoritmia siten, että hahmot 
      * toimivat kosivana osapuolena, jolloin tulos on optimaalinen hahmojen 
