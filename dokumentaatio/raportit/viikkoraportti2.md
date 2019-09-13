@@ -8,6 +8,6 @@ Viikon aikana olen palauttanut kesän jälkeen mieleen paljon käyttöliittymän
 
 Koska en ole viikon aikana kerennyt vielä perehtymään itse algoritmeja käsitteleviin lähteisiin, on edelleen hieman epäselvää kuinka moni algoritmeista on sellainen, jonka toteuttaminen on mahdollista tämän kurssin aikataulun ja oman osaamisen puitteissa; tähän tulen todennäköisesti kysymään neuvoa ensi viikon algoritmityöpajassa, kunhan työkalun perusrunko on paikallaan ja edistyneempien algoritmien toteutus on ajankohtaista.
 
-Seuraavaksi aion kirjoittaa ohjelman rungon ja perustoiminnot valmiiksi, jonka jälkeen aloitan itse algoritmien koodaamisen helpoimmasta eli vakaiden avioliittojen ongelman ratkaisemisesta Galen-Shapleyn algoritmin avulla.
+Seuraavaksi aion kirjoittaa ohjelman rungon ja perustoiminnot valmiiksi ja toteuttaa niiden toimintaa testaavat testit, jonka jälkeen aloitan itse algoritmien koodaamisen helpoimmasta eli vakaiden avioliittojen ongelman ratkaisemisesta Galen-Shapleyn algoritmin avulla.
 
 2. viikon aikana työhön käytetty aika: 10 h
