@@ -71,8 +71,9 @@ public class TextUI {
         System.out.println("");
         System.out.print("Tiedoston nimi: ");
         String tiedostonimi = lukija.nextLine();
+        File xmlTiedosto = new File(tiedostonimi);
         try {
-            hahmojako.lataaYhteensopivuustiedot(tiedostonimi);
+            hahmojako.lataaYhteensopivuustiedot(xmlTiedosto);
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             System.out.println("");
             System.out.println("VIRHE: Yhteensopivuustietojen lataus ei onnistunut.");

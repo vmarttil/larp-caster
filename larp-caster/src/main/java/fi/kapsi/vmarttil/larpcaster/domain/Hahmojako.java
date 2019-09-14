@@ -131,6 +131,9 @@ public class Hahmojako {
         Document dokumentti = dBuilder.parse(xmlTiedosto);
         dokumentti.getDocumentElement().normalize();
         NodeList pelaajaluettelo = dokumentti.getElementsByTagName("person");
+        int pelaajamaara = pelaajaluettelo.getLength();
+        int hahmomaara = pelaajaluettelo.item(0).getChildNodes().getLength();
+        yhteensopivuusdata = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
         for (int i = 0; i < pelaajaluettelo.getLength(); i++) {
             Element pelaaja = (Element) pelaajaluettelo.item(i);
             String pelaajatunnus = pelaaja.getAttribute("xml:id");
