@@ -39,7 +39,8 @@ public class TextUI {
             System.out.println(" 2 - Valitse algoritmi");
             System.out.println(" 3 - Aseta reunaehdot ja optimoinnit");
             if (hahmojako.getYhteensopivuusdata() != null) {
-                System.out.println(" 4 - Laske optimoitu hahmojako");
+                System.out.println(" 4 - Tulosta ehdokaslistat");
+                System.out.println(" 5 - Laske optimoitu hahmojako");
             }
             System.out.println(" X - Lopeta");
             System.out.println("");
@@ -58,9 +59,15 @@ public class TextUI {
                 case "3":
                     asetaEhdot();
                     break;
-                case "4":
-                    this.hahmojako.teeHahmojako();
+                case "4":    
+                    tulostaEhdokaslistat();
                     break;
+                case "5":
+                    if (hahmojako.getYhteensopivuusdata() != null) {    
+                        this.hahmojako.teeHahmojako();
+                    }
+                    break;
+                    
                 default:
                     break;
             }
@@ -89,6 +96,10 @@ public class TextUI {
     
     private void asetaEhdot() {
         // Käyttöliittymä reunaehtojen ja optiomointien asettamiseksi
+    }
+    
+    private void tulostaEhdokaslistat() {
+        // Ehdokaslistojen tulostus
     }
     
 }
