@@ -90,6 +90,7 @@ public class Hahmojako {
 
     public void setMinimisopivuus(int minimisopivuus) {
         this.minimisopivuus = minimisopivuus;
+        luoEhdokaslistat();
     }
 
     public void setPriorisoiHankalatHahmot(boolean priorisoiHankalatHahmot) {
@@ -133,12 +134,12 @@ public class Hahmojako {
         NodeList pelaajaluettelo = dokumentti.getElementsByTagName("person");
         int pelaajamaara = pelaajaluettelo.getLength();
         int hahmomaara = pelaajaluettelo.item(0).getChildNodes().getLength();
-        yhteensopivuusdata = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
-        for (int i = 0; i < pelaajaluettelo.getLength(); i++) {
+        Sopivuusmatriisi yhteensopivuudet = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
+        for (int i = 0; i < pelaajamaara; i++) {
             Element pelaaja = (Element) pelaajaluettelo.item(i);
             String pelaajatunnus = pelaaja.getAttribute("xml:id");
             // Pelaajatunnukset kirjoitetaan indeksitaulukkoon
-            yhteensopivuusdata.setPelaajatunnus(i + 1, pelaajatunnus);
+            yhteensopivuudet.setPelaajatunnus(i + 1, pelaajatunnus);
             NodeList hahmoluettelo = pelaaja.getElementsByTagName("note");
             // Lisätään yhteensopivuustiedot kaikille hahmoille ja tarvittavalle määrälle tyhjiä täytehahmoja
             for (int j = 0; j < pelaajaluettelo.getLength(); j++) {
@@ -147,23 +148,38 @@ public class Hahmojako {
                     String hahmotunnus = hahmo.getAttribute("xml:id");
                     // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
                     if (i == 0) {
-                        yhteensopivuusdata.setHahmotunnus(j + 1, hahmotunnus);
+                        yhteensopivuudet.setHahmotunnus(j + 1, hahmotunnus);
                     }
                     Element yhteensopivuus = (Element) hahmo.getElementsByTagName("num").item(0);
                     int yhteensopivuusprosentti = Integer.parseInt(yhteensopivuus.getAttribute("value"));
                     // Yhteensopivuusprosentti kirjoitetaan matriisiin
-                    yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
+                    yhteensopivuudet.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
                 } else {
                     // Lisätään täytehahmoja kunnes hahmoja on yhtä monta kuin pelaajia
                     if (i == 0) {
-                        yhteensopivuusdata.setHahmotunnus(j + 1, "");
+                        yhteensopivuudet.setHahmotunnus(j + 1, "");
                     }
-                    yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
+                    yhteensopivuudet.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
                 }
             }
         }
-    }
+        setYhteensopivuusdata(yhteensopivuudet);
+        luoEhdokaslistat();  
+    } 
     
+    public void luoEhdokaslistat() {
+        int pelaajamaara = yhteensopivuusdata.getPelaajamaara();        
+        // Luodaan pelaajille hahmoehdokaslistat
+        for (int i=1; i<=pelaajamaara; i++) {
+            Ehdokaslista ehdokaslista = new Ehdokaslista(yhteensopivuusdata, minimisopivuus, "pelaaja", i);
+            yhteensopivuusdata.setHahmoehdokaslista(i, ehdokaslista);
+        }
+        // Luodaan hahmoille pelaajaehdokaslistat
+        for (int i=1; i<=pelaajamaara; i++) {
+            Ehdokaslista ehdokaslista = new Ehdokaslista(yhteensopivuusdata, minimisopivuus, "hahmo", i);
+            yhteensopivuusdata.setPelaajaehdokaslista(i, ehdokaslista);
+        }
+    }
     
     public void teeHahmojako() {
         Tulos tulos = null;

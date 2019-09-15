@@ -18,13 +18,13 @@ public class Ehdokaslista {
     public Ehdokaslista(Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
         TreeMap<Integer, Integer> naapurit = new TreeMap<>();
         if (rooli.equals("pelaaja")) {
-            for (int i=1; i<=sopivuusprosentit.getPelaajamaara()+1; i++) {
+            for (int i=1; i<=sopivuusprosentit.getPelaajamaara(); i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(indeksi, i) >= minimisopivuus) {
                     naapurit.put(sopivuusprosentit.getSopivuusprosentti(indeksi, i), i);
                 }
             }
         } else if (rooli.equals("hahmo")) {
-            for (int i=1; i<=sopivuusprosentit.getPelaajamaara()+1; i++) {
+            for (int i=1; i<=sopivuusprosentit.getPelaajamaara(); i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(i, indeksi) >= minimisopivuus) {
                     naapurit.put(sopivuusprosentit.getSopivuusprosentti(i, indeksi), i);
                 }
@@ -39,6 +39,10 @@ public class Ehdokaslista {
     
     public int seuraavaEhdokas() {
         this.seuraava++;
-        return this.lista[this.seuraava-1];
+        if (this.seuraava > lista.length) {
+            return 0;
+        } else {
+            return this.lista[this.seuraava-1];
+        }
     }
 }
