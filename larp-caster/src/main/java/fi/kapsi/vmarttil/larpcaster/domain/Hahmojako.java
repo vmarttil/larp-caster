@@ -34,18 +34,20 @@ public class Hahmojako {
     private ArrayList<Integer> hankalatHahmot;
     // Lisätään toteutukseen myöhemmin
     private HashMap<Integer,Integer> esivalitutPelaajat;
+    private boolean ehdokaslistatOK;
    
     public Hahmojako() {
         this.yhteensopivuusdata = null;
         this.tulokset = new ArrayList<>();
         this.algoritmi = "";
-        this.minimisopivuus = 50;
+        this.minimisopivuus = 70;
         // Lisätään toteutukseen myöhemmin
         this.priorisoiHankalatHahmot = false;
         // Lisätään toteutukseen myöhemmin
         this.hankalatHahmot = new ArrayList<>();
         // Lisätään toteutukseen myöhemmin
         this.esivalitutPelaajat = new HashMap<>();
+        this.ehdokaslistatOK = true;
     }
      
     // Getters
@@ -96,6 +98,10 @@ public class Hahmojako {
     public void setPriorisoiHankalatHahmot(boolean priorisoiHankalatHahmot) {
         this.priorisoiHankalatHahmot = priorisoiHankalatHahmot;
     }
+    
+    public void setEhdokaslistatOK(boolean ok) {
+        this.ehdokaslistatOK = ok;
+    }
 
     // Lisäykset ja poistot
     
@@ -125,7 +131,8 @@ public class Hahmojako {
     
     // Operaatiot
     
-    public void lataaYhteensopivuustiedot(File xmlTiedosto) throws SAXException, ParserConfigurationException, IOException {    
+    public void lataaYhteensopivuustiedot(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
+        File xmlTiedosto = new File(tiedostonimi);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         dBuilder = dbFactory.newDocumentBuilder();
@@ -164,20 +171,26 @@ public class Hahmojako {
             }
         }
         setYhteensopivuusdata(yhteensopivuudet);
+        System.out.println("");
+        System.out.println("Yhteensopivuustiedot ladattu tiedostosta " + tiedostonimi);
         luoEhdokaslistat();  
     } 
     
     public void luoEhdokaslistat() {
+        ehdokaslistatOK = true;
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();        
         // Luodaan pelaajille hahmoehdokaslistat
         for (int i=1; i<=pelaajamaara; i++) {
-            Ehdokaslista ehdokaslista = new Ehdokaslista(yhteensopivuusdata, minimisopivuus, "pelaaja", i);
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "pelaaja", i);
             yhteensopivuusdata.setHahmoehdokaslista(i, ehdokaslista);
         }
         // Luodaan hahmoille pelaajaehdokaslistat
         for (int i=1; i<=pelaajamaara; i++) {
-            Ehdokaslista ehdokaslista = new Ehdokaslista(yhteensopivuusdata, minimisopivuus, "hahmo", i);
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "hahmo", i);
             yhteensopivuusdata.setPelaajaehdokaslista(i, ehdokaslista);
+        }
+        if (ehdokaslistatOK == true) {
+            System.out.println("Kaikille hahmoille ja pelaajille löytyy minimisopivuuden ylittävä pelaaja tai hahmo.");
         }
     }
     

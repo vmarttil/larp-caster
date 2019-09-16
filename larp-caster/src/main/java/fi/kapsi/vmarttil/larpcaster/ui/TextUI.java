@@ -32,6 +32,7 @@ public class TextUI {
         this.hahmojako = hahmojako;
         lukija = new Scanner(System.in);
         while (true) {
+            System.out.println("");
             System.out.println("LARPCaster-työkalu");
             System.out.println("");
             System.out.println("Komennot: ");
@@ -42,11 +43,11 @@ public class TextUI {
                 System.out.println(" 4 - Tulosta data");
                 System.out.println(" 5 - Laske optimoitu hahmojako");
             }
-            System.out.println(" X - Lopeta");
+            System.out.println(" x - Lopeta");
             System.out.println("");
             System.out.print("Komento: ");
             String komento = lukija.nextLine();
-            if (komento.equals("X")) {
+            if (komento.equals("x")) {
                 break;
             } else if (komento.equals("1")) {
                 lataaTiedosto();
@@ -68,16 +69,14 @@ public class TextUI {
         System.out.println("");
         System.out.print("Tiedoston nimi: ");
         String tiedostonimi = lukija.nextLine();
-        File xmlTiedosto = new File(tiedostonimi);
         try {
-            this.hahmojako.lataaYhteensopivuustiedot(xmlTiedosto);
+            this.hahmojako.lataaYhteensopivuustiedot(tiedostonimi);
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             System.out.println("");
             System.out.println("VIRHE: Yhteensopivuustietojen lataus ei onnistunut.");
             System.out.println("");
             e1.printStackTrace();
         }
-        System.out.println("Yhteensopivuustiedot ladattu tiedostosta " + tiedostonimi);
     }
     
     private void valitseAlgoritmi() {
@@ -85,27 +84,44 @@ public class TextUI {
     }
     
     private void asetaEhdot() {
-        // Käyttöliittymä reunaehtojen ja optiomointien asettamiseksi
+        while (true) {
+            System.out.println("");
+            System.out.println("Komennot: ");
+            System.out.println(" 1 - Aseta minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%)");
+            System.out.println(" x - Takaisin");
+            System.out.print("Komento: ");
+            String komento = lukija.nextLine();
+            if (komento.equals("x")) {
+                break;
+            } else if (komento.equals("1")) {
+                asetaMinimisopivuus();
+            } else {
+                System.out.println("Tuntematon komento.");
+            }
+        }
     }
     
     private void tulostaEhdokaslistat() {
-        System.out.println("");
-        System.out.println("Komennot: ");
-        System.out.println(" 1 - Tulosta pelaajien hahmoehdokaslistat");
-        System.out.println(" 2 - Tulosta hahmojen pelaajaehdokaslistat");
-        System.out.println(" 3 - Tulosta yhteensopivuusmatriisi");
-        System.out.println(" X - Takaisin");
-        System.out.print("Komento: ");
-        String komento = lukija.nextLine();
-        if (komento.equals("X")) {
-        } else if (komento.equals("1")) {
-            tulostaHahmoehdokaslistat();
-        } else if (komento.equals("2")) {
-            tulostaPelaajaehdokaslistat();
-        } else if (komento.equals("3")) {
-            tulostaYhteensopivuusmatriisi();
-        } else {
-            System.out.println("Tuntematon komento.");
+        while (true) {
+            System.out.println("");
+            System.out.println("Komennot: ");
+            System.out.println(" 1 - Tulosta pelaajien hahmoehdokaslistat");
+            System.out.println(" 2 - Tulosta hahmojen pelaajaehdokaslistat");
+            System.out.println(" 3 - Tulosta yhteensopivuusmatriisi");
+            System.out.println(" x - Takaisin");
+            System.out.print("Komento: ");
+            String komento = lukija.nextLine();
+            if (komento.equals("x")) {
+                break;
+            } else if (komento.equals("1")) {
+                tulostaHahmoehdokaslistat();
+            } else if (komento.equals("2")) {
+                tulostaPelaajaehdokaslistat();
+            } else if (komento.equals("3")) {
+                tulostaYhteensopivuusmatriisi();
+            } else {
+                System.out.println("Tuntematon komento.");
+            }
         }
     }
     
@@ -125,7 +141,7 @@ public class TextUI {
                 } else {
                     String tunnus = yhteensopivuudet.getHahmotunnus(ehdokas);
                     int sopivuus = yhteensopivuudet.getSopivuusprosentti(i, ehdokas);
-                    System.out.println("                        " + tunnus + " (" + sopivuus + "%)");
+                    System.out.println("            " + tunnus + " (" + sopivuus + "%)");
                 }
             }
             System.out.println("");
@@ -149,7 +165,7 @@ public class TextUI {
                     } else {
                         String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
                         int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
-                        System.out.println("                        " + tunnus + " (" + sopivuus + "%)");
+                        System.out.println("            " + tunnus + " (" + sopivuus + "%)");
                     }
                 }
             }
@@ -162,7 +178,19 @@ public class TextUI {
         System.out.println("");
         System.out.println("Pelaajien ja hahmojen yhteensopivuus:");
         System.out.println("");
-        
+        for (int i=1; i<=yhteensopivuudet.getPelaajamaara();i++) {
+            System.out.println(yhteensopivuudet.getPelaajatunnus(i));
+            for (int j=1; j<=yhteensopivuudet.getPelaajamaara();j++) {
+                System.out.println("   " + yhteensopivuudet.getHahmotunnus(j) + " (" + yhteensopivuudet.getSopivuusprosentti(i, j) + ")");
+            } 
+        }
+    }
+    
+    private void asetaMinimisopivuus() {
+        System.out.println("");
+        System.out.print("Uusi minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%): ");
+        int sopivuus = Integer.parseInt(lukija.nextLine().replace("%", "").replace(" ", ""));
+        hahmojako.setMinimisopivuus(sopivuus);
     }
     
     

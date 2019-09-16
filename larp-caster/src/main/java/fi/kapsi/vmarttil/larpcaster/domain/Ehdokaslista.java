@@ -5,7 +5,12 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -15,25 +20,30 @@ public class Ehdokaslista {
     private int[] lista;
     private int seuraava;
     
-    public Ehdokaslista(Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
-        TreeMap<Integer, Integer> naapurit = new TreeMap<>();
+    public Ehdokaslista(Hahmojako hahmojako, Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
+        HashMap<Integer, Integer> naapurit = new HashMap<>();
         if (rooli.equals("pelaaja")) {
             for (int i=1; i<=sopivuusprosentit.getPelaajamaara(); i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(indeksi, i) >= minimisopivuus) {
-                    naapurit.put(sopivuusprosentit.getSopivuusprosentti(indeksi, i), i);
+                    naapurit.put(i, sopivuusprosentit.getSopivuusprosentti(indeksi, i));
                 }
+            }
+            if (naapurit.size() == 0) {
+                hahmojako.setEhdokaslistatOK(false);
+                System.out.println("VAROITUS: Pelaajalle " + sopivuusprosentit.getPelaajatunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää hahmoa.");
             }
         } else if (rooli.equals("hahmo")) {
             for (int i=1; i<=sopivuusprosentit.getPelaajamaara(); i++) {
                 if (sopivuusprosentit.getSopivuusprosentti(i, indeksi) >= minimisopivuus) {
-                    naapurit.put(sopivuusprosentit.getSopivuusprosentti(i, indeksi), i);
+                    naapurit.put(i, sopivuusprosentit.getSopivuusprosentti(i, indeksi));
                 }
             }
+            if (naapurit.size() == 0) {
+                hahmojako.setEhdokaslistatOK(false);
+                System.out.println("VAROITUS: Hahmolle " + sopivuusprosentit.getHahmotunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää pelaajaa.");
+            }
         }
-        this.lista = new int[naapurit.size()];
-        for (int i=0; i < naapurit.size(); i++) {
-            this.lista[i] = naapurit.pollLastEntry().getValue();
-        }
+        this.lista = naapurit.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
         this.seuraava = 0;
     }
     
@@ -44,5 +54,9 @@ public class Ehdokaslista {
         } else {
             return this.lista[this.seuraava-1];
         }
+    }
+    
+    public void nollaaSeuraava() {
+        this.seuraava = 0;
     }
 }
