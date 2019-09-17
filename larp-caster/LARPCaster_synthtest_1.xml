@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Tämän synteettisen testitiedoston tulisi johtaa kaikilla algoritmeilla hahmojakoon, jossa pelaajat ja hahmot kohdistuvat numeroittain, 
+eli pelaaja 1 (p1) kohdistuu hahmoon 1 (h1) jne.-->
+
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+        <body>
+                <div type="character_matches">
+                        <person role="player" xml:id="p1">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="30"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="55"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="65"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p2">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="5"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="80"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="65"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p3">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="40"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p4">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="40"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p5">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="80"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="45"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p6">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="35"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="65"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="80"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p7">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="45"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="80"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="65"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p8">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="65"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="95"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p9">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="85"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="90"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="70"
+                                        /></measure></note>
+                        </person>
+                        <person role="player" xml:id="p10">
+                                <note type="character_match" n="h1"><measure
+                                                type="match_percent"><num value="45"
+                                        /></measure></note>
+                                <note type="character_match" n="h2"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h3"><measure
+                                                type="match_percent"><num value="50"
+                                        /></measure></note>
+                                <note type="character_match" n="h4"><measure
+                                                type="match_percent"><num value="45"
+                                        /></measure></note>
+                                <note type="character_match" n="h5"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h6"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h7"><measure
+                                                type="match_percent"><num value="75"
+                                        /></measure></note>
+                                <note type="character_match" n="h8"><measure
+                                                type="match_percent"><num value="0"
+                                        /></measure></note>
+                                <note type="character_match" n="h9"><measure
+                                                type="match_percent"><num value="60"
+                                        /></measure></note>
+                                <note type="character_match" n="h10"><measure
+                                                type="match_percent"><num value="80"
+                                        /></measure></note>
+                        </person>
+                </div>
+        </body>
+</TEI>

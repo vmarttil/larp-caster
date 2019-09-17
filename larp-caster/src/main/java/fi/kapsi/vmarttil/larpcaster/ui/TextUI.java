@@ -153,19 +153,15 @@ public class TextUI {
         System.out.println("");
         System.out.println("Pelaajien potentiaaliset hahmoehdokkaat");
         System.out.println("");
-        System.out.println("Pelaaja:                Hahmoehdokkaat (sopivuus):");
+        System.out.println("Pelaaja:    Hahmoehdokkaat (sopivuus):");
         for (int i=1; i<=yhteensopivuudet.getPelaajamaara();i++) {
             System.out.println(yhteensopivuudet.getPelaajatunnus(i));
             Ehdokaslista ehdokaslista = yhteensopivuudet.getHahmoehdokaslista(i);
-            while(true) {
-                int ehdokas = ehdokaslista.seuraavaEhdokas();
-                if (ehdokas == 0) {
-                    break;
-                } else {
-                    String tunnus = yhteensopivuudet.getHahmotunnus(ehdokas);
-                    int sopivuus = yhteensopivuudet.getSopivuusprosentti(i, ehdokas);
-                    System.out.println("            " + tunnus + " (" + sopivuus + "%)");
-                }
+            for (int e = 0; e < ehdokaslista.getPituus(); e++) {
+                int ehdokas = ehdokaslista.getEhdokas(e);
+                String tunnus = yhteensopivuudet.getHahmotunnus(ehdokas);
+                int sopivuus = yhteensopivuudet.getSopivuusprosentti(i, ehdokas);
+                System.out.println("            " + tunnus + " (" + sopivuus + "%)");
             }
             System.out.println("");
         }
@@ -179,21 +175,17 @@ public class TextUI {
         System.out.println("");
         System.out.println("Hahmojen potentiaaliset pelaajaehdokkaat");
         System.out.println("");
-        System.out.println("Hahmo:                  Pelaajaehdokkaat (sopivuus):");
+        System.out.println("Hahmo:      Pelaajaehdokkaat (sopivuus):");
         for (int i=1; i<=yhteensopivuudet.getPelaajamaara();i++) {
             System.out.println(yhteensopivuudet.getHahmotunnus(i));
             Ehdokaslista ehdokaslista = yhteensopivuudet.getPelaajaehdokaslista(i);
             if (!yhteensopivuudet.getHahmotunnus(i).equals("")) {
-                while(true) {
-                    int ehdokas = ehdokaslista.seuraavaEhdokas();
-                    if (ehdokas == 0) {
-                        break;
-                    } else {
-                        String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
-                        int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
-                        System.out.println("            " + tunnus + " (" + sopivuus + "%)");
-                    }
-                }
+                for (int e = 0; e < ehdokaslista.getPituus(); e++) {
+                int ehdokas = ehdokaslista.getEhdokas(e);
+                String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
+                int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
+                System.out.println("            " + tunnus + " (" + sopivuus + "%)");
+            }
             }
             System.out.println("");
         }       

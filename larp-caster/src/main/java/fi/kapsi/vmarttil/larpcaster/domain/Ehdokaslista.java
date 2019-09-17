@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  */
 public class Ehdokaslista {
     private int[] lista;
-    private int seuraava;
     
     public Ehdokaslista(Hahmojako hahmojako, Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
         HashMap<Integer, Integer> naapurit = new HashMap<>();
@@ -46,28 +45,22 @@ public class Ehdokaslista {
             }
         }
         this.lista = naapurit.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
-        this.seuraava = 0;
     }
+
+    /**
+     * Tämä metodi palauttaa ehdokaslistan pituuden.
+     * @return metodi palauttaa ehdokaslistan pituuden kokonaislukuna
+     */
+    public int getPituus() {
+        return this.lista.length;
+          }
     
     /**
-     * Tämä metodi palauttaa ehdokaslistan seuraavaksi sopivimman ehdokkaan ja 
-     * siirtää laskurin osoittamaan sitä seuraavaan ehdokkaaseen.
-     * @return metodi palauttaa seuraavan ehdokkaan indeksin kokonaislukuna
+     * Tämä metodi palauttaa indeksin osoittaman ehdokkaan.
+     * @param index indeksi joka osoittaa palautettavan ehdokkaan
+     * @return metodi palauttaa valitun ehdokkaan indeksinumeron kokonaislukuna
      */
-    public int seuraavaEhdokas() {
-        this.seuraava++;
-        if (this.seuraava > lista.length) {
-            return 0;
-        } else {
-            return this.lista[this.seuraava-1];
-        }
-    }
-    
-    /**
-     * Tämä metodi nollaa seuraavan ehdokkaan laskurin ja siirtää sen 
-     * osoittamaan ensimmäiseen eli sopivimpaan ehdokkaaseen.
-     */
-    public void nollaaSeuraava() {
-        this.seuraava = 0;
+    public int getEhdokas(int index) {
+        return this.lista[index];
     }
 }

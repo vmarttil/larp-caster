@@ -267,7 +267,7 @@ public class Hahmojako {
             for (int j = 0; j < pelaajaluettelo.getLength(); j++) {
                 if (j < hahmoluettelo.getLength()) {
                     Element hahmo = (Element) hahmoluettelo.item(j);
-                    String hahmotunnus = hahmo.getAttribute("xml:id");
+                    String hahmotunnus = hahmo.getAttribute("n");
                     // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
                     if (i == 0) {
                         yhteensopivuudet.setHahmotunnus(j + 1, hahmotunnus);
