@@ -13,8 +13,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
- * @author Ville
+ * Tämä luokka määrittelee yksittäisen hahmon tai pelaajan ehdokaslistan, 
+ * joka sisältää luettelon kaikista sopivista pelaajista tai hahmoista niiden 
+ * sopivuusjärjestyksessä sekä laskurin käsiteltyjen ehdokkaiden seuraamiseksi.
+ * @author Ville Marttila
  */
 public class Ehdokaslista {
     private int[] lista;
@@ -47,6 +49,11 @@ public class Ehdokaslista {
         this.seuraava = 0;
     }
     
+    /**
+     * Tämä metodi palauttaa ehdokaslistan seuraavaksi sopivimman ehdokkaan ja 
+     * siirtää laskurin osoittamaan sitä seuraavaan ehdokkaaseen.
+     * @return metodi palauttaa seuraavan ehdokkaan indeksin kokonaislukuna
+     */
     public int seuraavaEhdokas() {
         this.seuraava++;
         if (this.seuraava > lista.length) {
@@ -56,6 +63,10 @@ public class Ehdokaslista {
         }
     }
     
+    /**
+     * Tämä metodi nollaa seuraavan ehdokkaan laskurin ja siirtää sen 
+     * osoittamaan ensimmäiseen eli sopivimpaan ehdokkaaseen.
+     */
     public void nollaaSeuraava() {
         this.seuraava = 0;
     }

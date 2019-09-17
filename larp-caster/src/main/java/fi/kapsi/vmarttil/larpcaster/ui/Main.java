@@ -8,8 +8,8 @@ package fi.kapsi.vmarttil.larpcaster.ui;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 
 /**
- *
- * @author Ville
+ * Tämä luokka luo ja käynnistää hahmojaon ja sen käyttöliittymän.
+ * @author Ville Marttila
  */
 public class Main {
     

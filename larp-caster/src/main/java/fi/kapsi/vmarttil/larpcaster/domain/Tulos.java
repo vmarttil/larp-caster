@@ -6,8 +6,9 @@
 package fi.kapsi.vmarttil.larpcaster.domain;
 
 /**
- *
- * @author Ville
+ * Tämä luokka määrittelee hahmojaon tuloksen ja siihen liittyvien metatietojen 
+ * tallentamiseen käytettävät tietorakenteet.
+ * @author Ville Marttila
  */
 public class Tulos {
     

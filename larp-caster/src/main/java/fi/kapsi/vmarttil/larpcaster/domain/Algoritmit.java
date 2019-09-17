@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
- * @author Ville
+ * Tämä luokka määrittelee kaikki hahmojakoon käytettävissä olevat algoritmit.
+ * @author Ville Marttila
  */
 public class Algoritmit {
     

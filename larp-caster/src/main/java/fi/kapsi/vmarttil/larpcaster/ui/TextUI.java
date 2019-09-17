@@ -16,18 +16,22 @@ import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 
 /**
- *
- * @author Ville
+ * Tämä luokka määrittelee työkalun tekstikäyttöliittymän.
+ * @author Ville Marttila
  */
 public class TextUI {
     
     Hahmojako hahmojako;
     Scanner lukija;
     
-    public TextUI() {
-        
+    public TextUI() { 
     }
     
+    /**
+     * Tämä metodi käynnistää työkalun tekstikäyttöliittymän.
+     * @param hahmojako Hahmojako-olio, joka ohjaa työkalun toimintalogiikkaa 
+     * ja sisältää kulloiseenkin hahmojakoon liittyvät tiedot.  
+     */
     public void kaynnista(Hahmojako hahmojako) throws Exception {
         this.hahmojako = hahmojako;
         lukija = new Scanner(System.in);
@@ -64,7 +68,11 @@ public class TextUI {
             }
         }
     }
-            
+    
+    /**
+     * Tämä metodi määrittelee tekstikäyttöliittymän yhteensopivuustiedoston 
+     * lataamiselle ja kutsuu latausmetodia.
+     */
     private void lataaTiedosto() { 
         System.out.println("");
         System.out.print("Tiedoston nimi: ");
@@ -79,10 +87,18 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi määrittelee tekstikäyttöliittymän hahmojaon laskentaan käytettävän 
+     * algoritmin valitsemiselle. 
+     */
     private void valitseAlgoritmi() {
         // Käyttöliittymä algoritmin valitsemiseksi
     }
     
+    /**
+     * Tämä metodi määrittelee tekstikäyttöliittymän hahmojakoa ohjaavien ehtojen 
+     * ja parametrien määrittämiselle.
+     */
     private void asetaEhdot() {
         while (true) {
             System.out.println("");
@@ -101,6 +117,10 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi määrittelee tekstikäyttöliittymän ladattujen yhteensopivuus-
+     * tietojen tulostamiseen näytölle.
+     */
     private void tulostaEhdokaslistat() {
         while (true) {
             System.out.println("");
@@ -125,6 +145,9 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi tulostaa pelaajien hahmoehdokaslistat näytölle.
+     */
     private void tulostaHahmoehdokaslistat() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
@@ -148,6 +171,9 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi tulostaa hahmojen pelaajaehdokaslistat näytölle.
+     */
     private void tulostaPelaajaehdokaslistat() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
@@ -173,6 +199,9 @@ public class TextUI {
         }       
     }
     
+    /**
+     * Tämä metodi tulostaa yhteensopivuusmatriisin sisällön näytölle pelaajittain.
+     */
     private void tulostaYhteensopivuusmatriisi() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
@@ -186,6 +215,9 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi määrittää käyttöliittymän minimisopivuuden asettamiselle.
+     */
     private void asetaMinimisopivuus() {
         System.out.println("");
         System.out.print("Uusi minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%): ");
