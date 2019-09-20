@@ -17,17 +17,79 @@ public class Tulos {
     private HashMap<String,String> pelaajienHahmot;
     private HashMap<String,String> hahmojenPelaajat;
     private ArrayList<String> hahmottomatPelaajat;
+    private ArrayList<String> pelaajattomatHahmot;
+    private String algoritmi;
     private int kierroksia;
     int minimiyhteensopivuus;
     double kulunutAika;
     
-    public Tulos(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat, int kierroksia, int minimiyhteensopivuus, double kulunutAika) {
+    public Tulos() {
         this.pelaajienHahmot = new HashMap<>();
         this.hahmojenPelaajat = new HashMap<>();
         this.hahmottomatPelaajat = new ArrayList<>();
+    }
+    
+    // Getters
+
+    public HashMap<String,String> getHahmojenPelaajat() { 
+        return this.hahmojenPelaajat;
+    }
+
+    public String getHahmonPelaaja(String hahmo) {
+        return this.hahmojenPelaajat.get(hahmo);
+    }
+    
+    public HashMap<String,String> getPelaajienHahmot() { 
+        return this.pelaajienHahmot;
+    }
+
+    public String getPelaajanHahmo(String pelaaja) {
+        return this.pelaajienHahmot.get(pelaaja);
+    }
+    
+    public ArrayList<String> getHahmottomatPelaajat() {
+        return this.hahmottomatPelaajat;
+    }
+    
+        public ArrayList<String> getPelaajattomatHahmot() {
+        return this.pelaajattomatHahmot;
+    }
+
+    public String getAlgoritmi() {
+        return this.algoritmi;
+    }
+    
+    public int getKierroksia() {
+        return this.kierroksia;
+    }
+
+    public int getMinimiyhteensopivuus() {
+        return this.minimiyhteensopivuus;
+    }
+
+    public double getKulunutAika() {
+        return this.kulunutAika;
+    }
+
+    // Setters
+
+    public void setAlgoritmi(String algoritmi) {
+        this.algoritmi = algoritmi;
+    }    
+    
+    public void setKierroksia(int kierroksia) {
         this.kierroksia = kierroksia;
+    }
+
+    public void setMinimiyhteensopivuus(int minimiyhteensopivuus) {
         this.minimiyhteensopivuus = minimiyhteensopivuus;
+    }
+
+    public void setKulunutAika(double kulunutAika) {
         this.kulunutAika = kulunutAika;
+    }
+    
+    public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
         for (int i = 1; i <= pelaajienValinnat.length; i++) {
             if (pelaajienValinnat[i] == 0) {
                 hahmottomatPelaajat.add(sopivuusmatriisi.getPelaajatunnus(i));
@@ -36,42 +98,11 @@ public class Tulos {
             }
         }
         for (int i = 1; i <= hahmojenValinnat.length; i++) {
-            hahmojenPelaajat.put(sopivuusmatriisi.getHahmotunnus(i), sopivuusmatriisi.getPelaajatunnus(hahmojenValinnat[i]));
+            if (hahmojenValinnat[i] == 0) {
+                pelaajattomatHahmot.add(sopivuusmatriisi.getHahmotunnus(i));
+            } else {
+                hahmojenPelaajat.put(sopivuusmatriisi.getHahmotunnus(i), sopivuusmatriisi.getPelaajatunnus(hahmojenValinnat[i]));
+            }
         }
     }
-    
-    // Getters
-
-    public HashMap<String,String> getHahmojenPelaajat() { 
-        return hahmojenPelaajat;
-    }
-
-    public String getHahmonPelaaja(String hahmo) {
-        return hahmojenPelaajat.get(hahmo);
-    }
-    
-    public HashMap<String,String> getPelaajienHahmot() { 
-        return pelaajienHahmot;
-    }
-
-    public String getPelaajanHahmo(String pelaaja) {
-        return pelaajienHahmot.get(pelaaja);
-    }
-    
-    public ArrayList<String> getHahmottomatPelaajat() {
-        return hahmottomatPelaajat;
-    }
-
-    public int getKierroksia() {
-        return kierroksia;
-    }
-
-    public int getMinimiyhteensopivuus() {
-        return minimiyhteensopivuus;
-    }
-
-    public double getKulunutAika() {
-        return kulunutAika;
-    }
-    
 }

@@ -18,4 +18,6 @@ public class Main {
         TextUI kayttoliittyma = new TextUI();
         kayttoliittyma.kaynnista(hahmojako);
     }   
+    
+    
 }

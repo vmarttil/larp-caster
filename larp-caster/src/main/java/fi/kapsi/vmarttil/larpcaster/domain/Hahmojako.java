@@ -320,12 +320,12 @@ public class Hahmojako {
      */
     public void teeHahmojako() {
         Tulos tulos = null;
-        if (this.algoritmi.equals("galeShapleyPelaajaKosii")) {
+        if (this.algoritmi.equals("galeShapleyHahmoKosii")) {
             tulos = Algoritmit.galeShapleyHahmoKosii(this.yhteensopivuusdata, this.minimisopivuus);
         } else if (this.algoritmi.equals("galeShapleyPelaajaKosii")) {
             tulos = Algoritmit.galeShapleyPelaajaKosii(this.yhteensopivuusdata, this.minimisopivuus);
         }
-        this.tulokset.add(tulos);
+        lisaaTulos(tulos);
     }
     
     

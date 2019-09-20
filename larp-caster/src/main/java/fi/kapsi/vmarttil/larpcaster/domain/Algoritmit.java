@@ -31,6 +31,7 @@ public class Algoritmit {
      * hahmojen ja pelaajien parituksen, käytetyn algoritmin ja sen parametrien 
      * tiedot sekä analyyttista metadataa tuloksista
      */
+    
     public static Tulos galeShapleyHahmoKosii(Sopivuusmatriisi yhteensopivuusdata, int minimisopivuus) {
         long aloitusAika = System.nanoTime();
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();
@@ -85,7 +86,7 @@ public class Algoritmit {
         long lopetusAika = System.nanoTime();
         double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
         // Tallennetaan tulokset Tulos-olioon ja tarkistetaan onko kaikille hahmoille löytynyt pelaaja
-        Tulos tulos = new Tulos(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, kierrokset, minimisopivuus, kulunutAika);               
+        Tulos tulos = tallennaTulokset("galeShapleyHahmoKosii", yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, minimisopivuus, kierrokset, kulunutAika);               
         return tulos;
     }
     
@@ -160,17 +161,20 @@ public class Algoritmit {
         long lopetusAika = System.nanoTime();
         double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
         // Tallennetaan tulokset Tulos-olioon ja tarkistetaan onko kaikille hahmoille löytynyt pelaaja
-        Tulos tulos = new Tulos(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, kierrokset, minimisopivuus, kulunutAika);               
+        Tulos tulos = tallennaTulokset("galeShapleyPelaajaKosii" ,yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, minimisopivuus, kierrokset, kulunutAika);               
         return tulos;
     }
       
-    
-    
-    
-    
-    
     // Algoritmien käyttämät apumenetelmät
     
-
+    private static Tulos tallennaTulokset(String algoritmi, Sopivuusmatriisi yhteensopivuusdata, int[] pelaajienValinnat, int[] hahmojenValinnat, int minimisopivuus, int kierrokset, double kulunutAika) {
+        Tulos tulos = new Tulos();
+        tulos.setAlgoritmi(algoritmi);
+        tulos.setKierroksia(kierrokset);
+        tulos.setKulunutAika(kulunutAika);
+        tulos.setMinimiyhteensopivuus(minimisopivuus);
+        tulos.taytaTulokset(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
+        return tulos;
+    }
     
 }

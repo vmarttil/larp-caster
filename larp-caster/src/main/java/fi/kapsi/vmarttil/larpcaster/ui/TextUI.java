@@ -9,6 +9,7 @@ import java.util.Scanner;
 import fi.kapsi.vmarttil.larpcaster.domain.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.*;
@@ -21,6 +22,7 @@ import org.w3c.dom.Document;
  */
 public class TextUI {
     
+    static HashMap<String, String> tulostettavatNimet;
     Hahmojako hahmojako;
     Scanner lukija;
     
@@ -33,6 +35,7 @@ public class TextUI {
      * ja sisältää kulloiseenkin hahmojakoon liittyvät tiedot.  
      */
     public void kaynnista(Hahmojako hahmojako) throws Exception {
+        alustaTulostettavatNimet();
         this.hahmojako = hahmojako;
         lukija = new Scanner(System.in);
         while (true) {
@@ -44,8 +47,11 @@ public class TextUI {
             System.out.println(" 2 - Valitse algoritmi");
             System.out.println(" 3 - Aseta reunaehdot ja optimoinnit");
             if (hahmojako.getYhteensopivuusdata() != null) {
-                System.out.println(" 4 - Tulosta data");
+                System.out.println(" 4 - Näytä lähtödata");
                 System.out.println(" 5 - Laske optimoitu hahmojako");
+            }
+            if (!hahmojako.getTulokset().isEmpty()) {
+                System.out.println(" 6 - Näytä tulokset");
             }
             System.out.println(" x - Lopeta");
             System.out.println("");
@@ -60,9 +66,11 @@ public class TextUI {
             } else if (komento.equals("3")) {
                 asetaEhdot();
             } else if (komento.equals("4") && hahmojako.getYhteensopivuusdata() != null) {
-                tulostaEhdokaslistat();
+                naytaEhdokaslistat();
             } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null) {
                 this.hahmojako.teeHahmojako();
+            } else if (komento.equals("6") && !hahmojako.getTulokset().isEmpty()) {
+                naytaTulokset();
             } else {
                 System.out.println("Tuntematon komento.");
             }
@@ -92,7 +100,32 @@ public class TextUI {
      * algoritmin valitsemiselle. 
      */
     private void valitseAlgoritmi() {
-        // Käyttöliittymä algoritmin valitsemiseksi
+        String nykyinen = "";
+        while (true) {
+            if (hahmojako.getAlgoritmi().equals("")) {
+                nykyinen = "ei valittu";
+            } else if (hahmojako.getAlgoritmi().equals("galeShapleyHahmoKosii")) {
+                nykyinen = "1";
+            } else if (hahmojako.getAlgoritmi().equals("galeShapleyPelaajaKosii")) {
+                nykyinen = "2";
+            }
+            System.out.println("");
+            System.out.println("Vaihtoehdot (nykyinen: " + nykyinen + "): ");
+            System.out.println(" 1 - " + tulostettavatNimet.get("galeShapleyHahmoKosii"));
+            System.out.println(" 2 - " + tulostettavatNimet.get("galeShapleyPelaajaKosii"));
+            System.out.println(" x - Takaisin");
+            System.out.print("Komento: ");
+            String komento = lukija.nextLine();
+            if (komento.equals("x")) {
+                break;
+            } else if (komento.equals("1")) {
+                hahmojako.setAlgoritmi("galeShapleyHahmoKosii");
+            } else if (komento.equals("2")) {
+                hahmojako.setAlgoritmi("galeShapleyPelaajaKosii");
+            } else {
+                System.out.println("Tuntematon vaihtoehto.");
+            }
+        }
     }
     
     /**
@@ -118,27 +151,37 @@ public class TextUI {
     }
     
     /**
+     * Tämä metodi määrittää käyttöliittymän minimisopivuuden asettamiselle.
+     */
+    private void asetaMinimisopivuus() {
+        System.out.println("");
+        System.out.print("Uusi minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%): ");
+        int sopivuus = Integer.parseInt(lukija.nextLine().replace("%", "").replace(" ", ""));
+        hahmojako.setMinimisopivuus(sopivuus);
+    }
+    
+    /**
      * Tämä metodi määrittelee tekstikäyttöliittymän ladattujen yhteensopivuus-
      * tietojen tulostamiseen näytölle.
      */
-    private void tulostaEhdokaslistat() {
+    private void naytaEhdokaslistat() {
         while (true) {
             System.out.println("");
             System.out.println("Komennot: ");
-            System.out.println(" 1 - Tulosta pelaajien hahmoehdokaslistat");
-            System.out.println(" 2 - Tulosta hahmojen pelaajaehdokaslistat");
-            System.out.println(" 3 - Tulosta yhteensopivuusmatriisi");
+            System.out.println(" 1 - Näytä pelaajien hahmoehdokaslistat");
+            System.out.println(" 2 - Näytä hahmojen pelaajaehdokaslistat");
+            System.out.println(" 3 - Näytä yhteensopivuusmatriisi");
             System.out.println(" x - Takaisin");
             System.out.print("Komento: ");
             String komento = lukija.nextLine();
             if (komento.equals("x")) {
                 break;
             } else if (komento.equals("1")) {
-                tulostaHahmoehdokaslistat();
+                naytaHahmoehdokaslistat();
             } else if (komento.equals("2")) {
-                tulostaPelaajaehdokaslistat();
+                naytaPelaajaehdokaslistat();
             } else if (komento.equals("3")) {
-                tulostaYhteensopivuusmatriisi();
+                naytaYhteensopivuusmatriisi();
             } else {
                 System.out.println("Tuntematon komento.");
             }
@@ -148,7 +191,7 @@ public class TextUI {
     /**
      * Tämä metodi tulostaa pelaajien hahmoehdokaslistat näytölle.
      */
-    private void tulostaHahmoehdokaslistat() {
+    private void naytaHahmoehdokaslistat() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
         System.out.println("Pelaajien potentiaaliset hahmoehdokkaat");
@@ -170,7 +213,7 @@ public class TextUI {
     /**
      * Tämä metodi tulostaa hahmojen pelaajaehdokaslistat näytölle.
      */
-    private void tulostaPelaajaehdokaslistat() {
+    private void naytaPelaajaehdokaslistat() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
         System.out.println("Hahmojen potentiaaliset pelaajaehdokkaat");
@@ -194,7 +237,7 @@ public class TextUI {
     /**
      * Tämä metodi tulostaa yhteensopivuusmatriisin sisällön näytölle pelaajittain.
      */
-    private void tulostaYhteensopivuusmatriisi() {
+    private void naytaYhteensopivuusmatriisi() {
         Sopivuusmatriisi yhteensopivuudet = this.hahmojako.getYhteensopivuusdata();
         System.out.println("");
         System.out.println("Pelaajien ja hahmojen yhteensopivuus:");
@@ -208,15 +251,68 @@ public class TextUI {
     }
     
     /**
-     * Tämä metodi määrittää käyttöliittymän minimisopivuuden asettamiselle.
+     * Tämä metodi määrittää tekstikäyttöliittymän saatujen tulosten tulostamiseen näytölle.
      */
-    private void asetaMinimisopivuus() {
+    private void naytaTulokset() {
+        while (true) {
+            System.out.println("");
+            System.out.println("Tehdyt hahmojaot: ");
+            for (int i=1; i<hahmojako.getTulokset().size(); i++) {
+                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i).getAlgoritmi()) + "(minimisopivuus: " + hahmojako.getTulokset().get(i).getMinimiyhteensopivuus() + "%)");
+            }
+            System.out.println(" x - Takaisin");
+            System.out.print("Valinta: ");
+            String komento = lukija.nextLine();
+            if (komento.equals("x")) {
+                break;
+            } else {
+                naytaTulos(Integer.parseInt(komento) - 1);
+            }
+        }
+    }
+    
+    private void naytaTulos(int tulosNumero) {
+        Tulos tulos = hahmojako.getTulokset().get(tulosNumero);
         System.out.println("");
-        System.out.print("Uusi minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%): ");
-        int sopivuus = Integer.parseInt(lukija.nextLine().replace("%", "").replace(" ", ""));
-        hahmojako.setMinimisopivuus(sopivuus);
+        System.out.println("Hahmojaon tulokset");
+        System.out.println("");
+        if (!tulos.getPelaajattomatHahmot().isEmpty()) {
+            System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa!");
+            System.out.println("");
+        }        
+        System.out.println("Hahmo:                  Pelaaja:");
+        for (String hahmo : tulos.getHahmojenPelaajat().keySet()) {
+            System.out.print(hahmo);
+            int valeja = 24 - hahmo.length();
+            for (int i = 0; i < valeja;i++) {
+                System.out.print(" ");
+            }
+            System.out.print(tulos.getHahmojenPelaajat().get(hahmo));
+        }
+        System.out.println("");
+        System.out.println("Pelaajat joille ei löytynyt hahmoa:");
+        for (String pelaaja : tulos.getHahmottomatPelaajat()) {
+            System.out.println(pelaaja);
+        }
+        System.out.println("");
+        System.out.println("Hahmot joille ei löytynyt pelaajaa:");
+        for (String hahmo : tulos.getPelaajattomatHahmot()) {
+            System.out.println(hahmo);
+        }
+        System.out.println("Käytetty algoritmi: " + tulostettavatNimet.get(tulos.getAlgoritmi()));
+        System.out.println("Käytetty minimisopivuus: " + tulos.getMinimiyhteensopivuus() + "%");
+        System.out.println("Iterointikierroksia: " + tulos.getKierroksia());
+        System.out.println("Hahmojaon vaatima aika: " + tulos.getKulunutAika() + " s");
+        System.out.println("");
     }
     
     
+    /**
+     * Tämä metodi määrittää algoritmien tulostettavat nimet käyttöliittymää varten
+     */
+    private void alustaTulostettavatNimet() {
+        tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
+        tulostettavatNimet.put("galeShapleypelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
+    }
     
 }
