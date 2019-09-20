@@ -313,7 +313,7 @@ public class TextUI {
     private void alustaTulostettavatNimet() {
         this.tulostettavatNimet = new HashMap<>();
         tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
-        tulostettavatNimet.put("galeShapleypelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
+        tulostettavatNimet.put("galeShapleyPelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
     }
     
 }
