@@ -50,9 +50,9 @@ public class Algoritmit {
         for (int i = 1; i <= pelaajamaara; i++) {
             pelaajienValinnat[i] = 0;
         }
-        int kierrokset = 0;
+        int kierrokset = -1;
         boolean vapaitaHahmoja = true;
-        while (vapaitaHahmoja = true) {
+        while (vapaitaHahmoja == true) {
             vapaitaHahmoja = false;
             // Kukin vapaa hahmo kosii vuorollaan seuraavaa listallaan olevaa pelaajaa 
             for (int hahmo = 1; hahmo <= pelaajamaara; hahmo++) {

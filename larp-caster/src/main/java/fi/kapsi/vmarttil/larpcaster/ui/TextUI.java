@@ -257,8 +257,8 @@ public class TextUI {
         while (true) {
             System.out.println("");
             System.out.println("Tehdyt hahmojaot: ");
-            for (int i=1; i<hahmojako.getTulokset().size(); i++) {
-                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i).getAlgoritmi()) + "(minimisopivuus: " + hahmojako.getTulokset().get(i).getMinimiyhteensopivuus() + "%)");
+            for (int i=1; i <= hahmojako.getTulokset().size(); i++) {
+                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i-1).getAlgoritmi()) + "(minimisopivuus: " + hahmojako.getTulokset().get(i-1).getMinimiyhteensopivuus() + "%)");
             }
             System.out.println(" x - Takaisin");
             System.out.print("Valinta: ");
@@ -287,7 +287,7 @@ public class TextUI {
             for (int i = 0; i < valeja;i++) {
                 System.out.print(" ");
             }
-            System.out.print(tulos.getHahmojenPelaajat().get(hahmo));
+            System.out.println(tulos.getHahmojenPelaajat().get(hahmo));
         }
         System.out.println("");
         System.out.println("Pelaajat joille ei löytynyt hahmoa:");
@@ -311,6 +311,7 @@ public class TextUI {
      * Tämä metodi määrittää algoritmien tulostettavat nimet käyttöliittymää varten
      */
     private void alustaTulostettavatNimet() {
+        this.tulostettavatNimet = new HashMap<>();
         tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
         tulostettavatNimet.put("galeShapleypelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
     }

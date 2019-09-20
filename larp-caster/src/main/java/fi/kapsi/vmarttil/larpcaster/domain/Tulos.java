@@ -27,6 +27,7 @@ public class Tulos {
         this.pelaajienHahmot = new HashMap<>();
         this.hahmojenPelaajat = new HashMap<>();
         this.hahmottomatPelaajat = new ArrayList<>();
+        this.pelaajattomatHahmot = new ArrayList<>();
     }
     
     // Getters
@@ -90,14 +91,14 @@ public class Tulos {
     }
     
     public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
-        for (int i = 1; i <= pelaajienValinnat.length; i++) {
+        for (int i = 1; i < pelaajienValinnat.length; i++) {
             if (pelaajienValinnat[i] == 0) {
                 hahmottomatPelaajat.add(sopivuusmatriisi.getPelaajatunnus(i));
             } else {
                 pelaajienHahmot.put(sopivuusmatriisi.getPelaajatunnus(i), sopivuusmatriisi.getHahmotunnus(pelaajienValinnat[i]));
             }
         }
-        for (int i = 1; i <= hahmojenValinnat.length; i++) {
+        for (int i = 1; i < hahmojenValinnat.length; i++) {
             if (hahmojenValinnat[i] == 0) {
                 pelaajattomatHahmot.add(sopivuusmatriisi.getHahmotunnus(i));
             } else {
