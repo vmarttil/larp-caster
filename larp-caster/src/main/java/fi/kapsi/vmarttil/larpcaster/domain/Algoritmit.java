@@ -32,6 +32,7 @@ public class Algoritmit {
      * tiedot sekä analyyttista metadataa tuloksista
      */
     public static Tulos galeShapleyHahmoKosii(Sopivuusmatriisi yhteensopivuusdata, int minimisopivuus) {
+        long aloitusAika = System.nanoTime();
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();
         // Taulukko johon on merkitty kuinka montaa ehdokaslistansa ehdokasta kukin hahmo on kosinut
         int[] ehdokkaitaKosittu = new int[pelaajamaara+1];
@@ -81,10 +82,10 @@ public class Algoritmit {
             }
             kierrokset++;
         }
+        long lopetusAika = System.nanoTime();
+        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
         // Tallennetaan tulokset Tulos-olioon ja tarkistetaan onko kaikille hahmoille löytynyt pelaaja
-        Tulos tulos = new Tulos();
-               
-        
+        Tulos tulos = new Tulos(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, kierrokset, minimisopivuus, kulunutAika);               
         return tulos;
     }
     
@@ -106,10 +107,60 @@ public class Algoritmit {
      * tiedot sekä analyyttista metadataa tuloksista
      */
     public static Tulos galeShapleyPelaajaKosii(Sopivuusmatriisi yhteensopivuusdata, int minimisopivuus) {
-        Tulos tulos = new Tulos();
-        
-        // Lisätään algoritmin koodi
-        
+        long aloitusAika = System.nanoTime();
+        int pelaajamaara = yhteensopivuusdata.getPelaajamaara();
+        // Taulukko johon on merkitty kuinka montaa ehdokaslistansa ehdokasta kukin pelaaja on kosinut
+        int[] ehdokkaitaKosittu = new int[pelaajamaara+1];
+        for (int i = 1; i <= pelaajamaara; i++) {
+            ehdokkaitaKosittu[i] = 0;
+        }
+        // Taulukko johon on merkitty hahmo, joka on hyväksynyt pelaajan kosinnan (0 = ei hyväksyttyä kosintaa)
+        int[] pelaajienValinnat = new int[pelaajamaara+1];
+        for (int i = 1; i <= pelaajamaara; i++) {
+            pelaajienValinnat[i] = 0;
+        }        
+        // Taulukko johon on merkitty pelaaja, jolta kukin hahmo on hyväksynyt kosinnan (0 = ei hyväksyttyä kosintaa)
+        int[] hahmojenValinnat = new int[pelaajamaara+1];
+        for (int i = 1; i <= pelaajamaara; i++) {
+            hahmojenValinnat[i] = 0;
+        }
+        int kierrokset = 0;
+        boolean vapaitaPelaajia = true;
+        while (vapaitaPelaajia = true) {
+            vapaitaPelaajia = false;
+            // Kukin vapaa pelaaja kosii vuorollaan seuraavaa listallaan olevaa hahmoa 
+            for (int pelaaja = 1; pelaaja <= pelaajamaara; pelaaja++) {
+                // Tarkistetaan onko pelaaja edelleen vapaa ja onko sillä listallaan vielä kosimattomia hahmoja
+                if (pelaajienValinnat[pelaaja] == 0 && ehdokkaitaKosittu[pelaaja] < yhteensopivuusdata.getHahmoehdokaslista(pelaaja).getPituus()) {
+                    vapaitaPelaajia = true;
+                    // Tarkistetaan onko kosittava hahmo edelleen vapaa ja jos on, yhdistetään pelaaja ja hahmo
+                    int seuraavaEhdokas = yhteensopivuusdata.getHahmoehdokaslista(pelaaja).getEhdokas(ehdokkaitaKosittu[pelaaja]);
+                    ehdokkaitaKosittu[pelaaja] = ehdokkaitaKosittu[pelaaja] + 1;
+                    if (hahmojenValinnat[seuraavaEhdokas] == 0) {
+                        hahmojenValinnat[seuraavaEhdokas] = pelaaja;
+                        pelaajienValinnat[pelaaja] = seuraavaEhdokas;
+                    // Jos kosittava hahmo on varattu, tarkistetaan onko kosiva pelaaja sopivampi kuin aiempi; jos on, vaihdetaan
+                    } else if (yhteensopivuusdata.getSopivuusprosentti(pelaaja, seuraavaEhdokas) > yhteensopivuusdata.getSopivuusprosentti(hahmojenValinnat[seuraavaEhdokas], seuraavaEhdokas)) {
+                        pelaajienValinnat[hahmojenValinnat[seuraavaEhdokas]] = 0;
+                        pelaajienValinnat[pelaaja] = seuraavaEhdokas;
+                        hahmojenValinnat[seuraavaEhdokas] = pelaaja;
+                    // Jos kosiva pelaaja on yhtä sopiva kuin aiempi, valitaan se, joka sopii harvemmalle hahmolle eli jolla on lyhyempi ehdokaslista
+                    } else if (yhteensopivuusdata.getSopivuusprosentti(pelaaja, seuraavaEhdokas) == yhteensopivuusdata.getSopivuusprosentti(hahmojenValinnat[seuraavaEhdokas], seuraavaEhdokas)) {
+                        if (yhteensopivuusdata.getHahmoehdokaslista(pelaaja).getPituus() < yhteensopivuusdata.getHahmoehdokaslista(hahmojenValinnat[seuraavaEhdokas]).getPituus()) {
+                            pelaajienValinnat[hahmojenValinnat[seuraavaEhdokas]] = 0;
+                            pelaajienValinnat[pelaaja] = seuraavaEhdokas;
+                            hahmojenValinnat[seuraavaEhdokas] = pelaaja;
+                        }
+                    }
+                    // Jos kosiva pelaaja ei ole yhtä sopiva kuin aiempi, mitään ei tapahdu ja siirrytään seuraavaan pelaajaan
+                }
+            }
+            kierrokset++;
+        }
+        long lopetusAika = System.nanoTime();
+        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
+        // Tallennetaan tulokset Tulos-olioon ja tarkistetaan onko kaikille hahmoille löytynyt pelaaja
+        Tulos tulos = new Tulos(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat, kierrokset, minimisopivuus, kulunutAika);               
         return tulos;
     }
       
@@ -120,14 +171,6 @@ public class Algoritmit {
     
     // Algoritmien käyttämät apumenetelmät
     
-    private Ehdokaslista[] luoHahmojenVieruslistat(Sopivuusmatriisi yhteensopivuusdata, int minimisopivuus) {
-        Ehdokaslista[] hahmojenVieruslistat = new Ehdokaslista[yhteensopivuusdata.getHahmomaara() + 1];
-        
-        
-        
-        
-        
-        return hahmojenVieruslistat;
-    }
+
     
 }
