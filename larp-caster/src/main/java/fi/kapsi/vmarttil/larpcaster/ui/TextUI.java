@@ -7,14 +7,10 @@ package fi.kapsi.vmarttil.larpcaster.ui;
 
 import java.util.Scanner;
 import fi.kapsi.vmarttil.larpcaster.domain.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.*;
 import org.xml.sax.SAXException;
-import org.w3c.dom.Document;
 
 /**
  * Tämä luokka määrittelee työkalun tekstikäyttöliittymän.
@@ -102,11 +98,11 @@ public class TextUI {
     private void valitseAlgoritmi() {
         String nykyinen = "";
         while (true) {
-            if (hahmojako.getAlgoritmi().equals("")) {
+            if (hahmojako.getKaytettavaAlgoritmi().equals("")) {
                 nykyinen = "ei valittu";
-            } else if (hahmojako.getAlgoritmi().equals("galeShapleyHahmoKosii")) {
+            } else if (hahmojako.getKaytettavaAlgoritmi().equals("galeShapleyHahmoKosii")) {
                 nykyinen = "1";
-            } else if (hahmojako.getAlgoritmi().equals("galeShapleyPelaajaKosii")) {
+            } else if (hahmojako.getKaytettavaAlgoritmi().equals("galeShapleyPelaajaKosii")) {
                 nykyinen = "2";
             }
             System.out.println("");
@@ -119,9 +115,9 @@ public class TextUI {
             if (komento.equals("x")) {
                 break;
             } else if (komento.equals("1")) {
-                hahmojako.setAlgoritmi("galeShapleyHahmoKosii");
+                hahmojako.setKaytettavaAlgoritmi("galeShapleyHahmoKosii");
             } else if (komento.equals("2")) {
-                hahmojako.setAlgoritmi("galeShapleyPelaajaKosii");
+                hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
             } else {
                 System.out.println("Tuntematon vaihtoehto.");
             }
@@ -224,11 +220,11 @@ public class TextUI {
             Ehdokaslista ehdokaslista = yhteensopivuudet.getPelaajaehdokaslista(i);
             if (!yhteensopivuudet.getHahmotunnus(i).equals("")) {
                 for (int e = 0; e < ehdokaslista.getPituus(); e++) {
-                int ehdokas = ehdokaslista.getEhdokas(e);
-                String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
-                int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
-                System.out.println("            " + tunnus + " (" + sopivuus + "%)");
-            }
+                    int ehdokas = ehdokaslista.getEhdokas(e);
+                    String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
+                    int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
+                    System.out.println("            " + tunnus + " (" + sopivuus + "%)");
+                }
             }
             System.out.println("");
         }       
@@ -280,25 +276,39 @@ public class TextUI {
             System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa!");
             System.out.println("");
         }        
-        System.out.println("Hahmo:                  Pelaaja:");
-        for (String hahmo : tulos.getHahmojenPelaajat().keySet()) {
+        System.out.println("Hahmo:                  Pelaaja:                Sopivuus:");
+        for (Integer hahmoindeksi : tulos.getHahmojenPelaajat().keySet()) {
+            String hahmo = hahmojako.getYhteensopivuusdata().getHahmotunnus(hahmoindeksi);
             System.out.print(hahmo);
             int valeja = 24 - hahmo.length();
             for (int i = 0; i < valeja;i++) {
                 System.out.print(" ");
             }
-            System.out.println(tulos.getHahmojenPelaajat().get(hahmo));
-        }
-        System.out.println("");
-        System.out.println("Pelaajat joille ei löytynyt hahmoa:");
-        for (String pelaaja : tulos.getHahmottomatPelaajat()) {
+            String pelaaja = hahmojako.getYhteensopivuusdata().getHahmotunnus(tulos.getHahmojenPelaajat().get(hahmoindeksi));
             System.out.println(pelaaja);
+            valeja = 24 - pelaaja.length();
+            for (int i = 0; i < valeja;i++) {
+                System.out.print(" ");
+            }
+            System.out.println(hahmojako.getYhteensopivuusdata().getSopivuusprosentti(hahmoindeksi, tulos.getHahmojenPelaajat().get(hahmoindeksi)) + " %");
+        }
+        if (!tulos.getHahmottomatPelaajat().isEmpty()) {
+            System.out.println("");
+            System.out.println("Pelaajat joille ei löytynyt hahmoa:");
+            for (Integer pelaajaindeksi : tulos.getHahmottomatPelaajat()) {
+                String pelaaja = hahmojako.getYhteensopivuusdata().getPelaajatunnus(pelaajaindeksi);
+                System.out.println(pelaaja);
+            }
+        }
+        if (!tulos.getPelaajattomatHahmot().isEmpty()) {
+            System.out.println("");
+            System.out.println("Hahmot joille ei löytynyt pelaajaa:");
+            for (Integer hahmoindeksi : tulos.getPelaajattomatHahmot()) {
+                String hahmo = hahmojako.getYhteensopivuusdata().getHahmotunnus(hahmoindeksi);
+                System.out.println(hahmo);
+            }
         }
         System.out.println("");
-        System.out.println("Hahmot joille ei löytynyt pelaajaa:");
-        for (String hahmo : tulos.getPelaajattomatHahmot()) {
-            System.out.println(hahmo);
-        }
         System.out.println("Käytetty algoritmi: " + tulostettavatNimet.get(tulos.getAlgoritmi()));
         System.out.println("Käytetty minimisopivuus: " + tulos.getMinimiyhteensopivuus() + "%");
         System.out.println("Iterointikierroksia: " + tulos.getKierroksia());

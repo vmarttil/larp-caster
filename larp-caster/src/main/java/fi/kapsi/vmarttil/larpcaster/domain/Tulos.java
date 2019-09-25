@@ -7,6 +7,8 @@ package fi.kapsi.vmarttil.larpcaster.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * Tämä luokka määrittelee hahmojaon tuloksen ja siihen liittyvien metatietojen 
@@ -14,45 +16,37 @@ import java.util.HashMap;
  * @author Ville Marttila
  */
 public class Tulos {
-    private HashMap<String,String> pelaajienHahmot;
-    private HashMap<String,String> hahmojenPelaajat;
-    private ArrayList<String> hahmottomatPelaajat;
-    private ArrayList<String> pelaajattomatHahmot;
+    private TreeMap<Integer,Integer> pelaajienHahmot;
+    private TreeMap<Integer,Integer> hahmojenPelaajat;
+    private TreeSet<Integer> hahmottomatPelaajat;
+    private TreeSet<Integer> pelaajattomatHahmot;
     private String algoritmi;
     private int kierroksia;
     int minimiyhteensopivuus;
     double kulunutAika;
     
     public Tulos() {
-        this.pelaajienHahmot = new HashMap<>();
-        this.hahmojenPelaajat = new HashMap<>();
-        this.hahmottomatPelaajat = new ArrayList<>();
-        this.pelaajattomatHahmot = new ArrayList<>();
+        this.pelaajienHahmot = new TreeMap<>();
+        this.hahmojenPelaajat = new TreeMap<>();
+        this.hahmottomatPelaajat = new TreeSet<>();
+        this.pelaajattomatHahmot = new TreeSet<>();
     }
     
     // Getters
 
-    public HashMap<String,String> getHahmojenPelaajat() { 
+    public TreeMap<Integer,Integer> getHahmojenPelaajat() { 
         return this.hahmojenPelaajat;
     }
 
-    public String getHahmonPelaaja(String hahmo) {
-        return this.hahmojenPelaajat.get(hahmo);
-    }
-    
-    public HashMap<String,String> getPelaajienHahmot() { 
+    public TreeMap<Integer,Integer> getPelaajienHahmot() { 
         return this.pelaajienHahmot;
     }
-
-    public String getPelaajanHahmo(String pelaaja) {
-        return this.pelaajienHahmot.get(pelaaja);
-    }
     
-    public ArrayList<String> getHahmottomatPelaajat() {
+    public TreeSet<Integer> getHahmottomatPelaajat() {
         return this.hahmottomatPelaajat;
     }
     
-        public ArrayList<String> getPelaajattomatHahmot() {
+    public TreeSet<Integer> getPelaajattomatHahmot() {
         return this.pelaajattomatHahmot;
     }
 
@@ -93,16 +87,16 @@ public class Tulos {
     public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
         for (int i = 1; i < pelaajienValinnat.length; i++) {
             if (pelaajienValinnat[i] == 0) {
-                hahmottomatPelaajat.add(sopivuusmatriisi.getPelaajatunnus(i));
+                hahmottomatPelaajat.add(i);
             } else {
-                pelaajienHahmot.put(sopivuusmatriisi.getPelaajatunnus(i), sopivuusmatriisi.getHahmotunnus(pelaajienValinnat[i]));
+                pelaajienHahmot.put(i, pelaajienValinnat[i]);
             }
         }
         for (int i = 1; i < hahmojenValinnat.length; i++) {
             if (hahmojenValinnat[i] == 0) {
-                pelaajattomatHahmot.add(sopivuusmatriisi.getHahmotunnus(i));
+                pelaajattomatHahmot.add(i);
             } else {
-                hahmojenPelaajat.put(sopivuusmatriisi.getHahmotunnus(i), sopivuusmatriisi.getPelaajatunnus(hahmojenValinnat[i]));
+                hahmojenPelaajat.put(i, hahmojenValinnat[i]);
             }
         }
     }

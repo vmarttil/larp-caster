@@ -5,6 +5,7 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
+import fi.kapsi.vmarttil.larpcaster.algorithms.GaleShapley;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,20 +28,23 @@ public class Hahmojako {
     
     private Sopivuusmatriisi yhteensopivuusdata;
     private ArrayList<Tulos> tulokset;
-    private String algoritmi;
+    private String kaytettavaAlgoritmi;
     private int minimisopivuus;
     // Lisätään toteutukseen myöhemmin
     private boolean priorisoiHankalatHahmot;
     // Lisätään toteutukseen myöhemmin
     private ArrayList<Integer> hankalatHahmot;
     // Lisätään toteutukseen myöhemmin
-    private HashMap<Integer,Integer> esivalitutPelaajat;
+    private HashMap<Integer, Integer> esivalitutPelaajat;
     private boolean ehdokaslistatOK;
    
+    /**
+     * 
+     */
     public Hahmojako() {
         this.yhteensopivuusdata = null;
         this.tulokset = new ArrayList<>();
-        this.algoritmi = "";
+        this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 70;
         // Lisätään toteutukseen myöhemmin
         this.priorisoiHankalatHahmot = false;
@@ -75,8 +79,8 @@ public class Hahmojako {
      * Tämä metodi palauttaa hahmojakoon käytettävän algoritmin.
      * @return metodi palauttaa käytetyn algoritmin tunnuksen merkkijonona
      */
-    public String getAlgoritmi() {
-        return algoritmi;
+    public String getKaytettavaAlgoritmi() {
+        return kaytettavaAlgoritmi;
     }
 
     /**
@@ -143,8 +147,8 @@ public class Hahmojako {
      * Tämä metodi asettaa hahmojaossa käytettävän algoritmin.
      * @param algoritmi käytettävän algoritmin tunnus merkkijonona
      */
-    public void setAlgoritmi(String algoritmi) {
-        this.algoritmi = algoritmi;
+    public void setKaytettavaAlgoritmi(String algoritmi) {
+        this.kaytettavaAlgoritmi = algoritmi;
     }
 
     /**
@@ -319,14 +323,11 @@ public class Hahmojako {
      * valitun algoritmin ja asetettujen ehtojen ja parametrien perusteella.
      */
     public void teeHahmojako() {
-        Tulos tulos = null;
-        if (this.algoritmi.equals("galeShapleyHahmoKosii")) {
-            tulos = Algoritmit.galeShapleyHahmoKosii(this.yhteensopivuusdata, this.minimisopivuus);
-        } else if (this.algoritmi.equals("galeShapleyPelaajaKosii")) {
-            tulos = Algoritmit.galeShapleyPelaajaKosii(this.yhteensopivuusdata, this.minimisopivuus);
-        }
-        lisaaTulos(tulos);
+        if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
+            GaleShapley algoritmi = new GaleShapley(this);
+            Tulos tulos = algoritmi.laskeHahmojako();
+            lisaaTulos(tulos);
+        }   
+            
     }
-    
-    
 }
