@@ -22,18 +22,23 @@ public class Sopivuusmatriisi {
     final private int[][] sopivuusprosentit;
     final private int pelaajamaara;
     final private int hahmomaara;
-    private Ehdokaslista[] pelaajienHahmoehdokkaat;
-    private Ehdokaslista[] hahmojenPelaajaehdokkaat;
+    final private Ehdokaslista[] pelaajienHahmoehdokkaat;
+    final private Ehdokaslista[] hahmojenPelaajaehdokkaat;
      
-    
+    /**
+     * Tämä metodi luo Sopivuusmatriisi-olion, johon tallennetaan hahmojaossa 
+     * käytettävät yhteensopivuustiedot ja niihin liittyvät metatiedot.
+     * @param pelaajamaara pelaajien määrä ladatuissa yhteensopivuustiedoissa
+     * @param hahmomaara hahmojen määrä ladatuissa yhteensopivuustiedoissa
+     */
     public Sopivuusmatriisi(int pelaajamaara, int hahmomaara) {
-        this.pelaajatunnukset = new String[pelaajamaara+1];
-        this.hahmotunnukset = new String[pelaajamaara+1];
-        this.sopivuusprosentit = new int[pelaajamaara+1][pelaajamaara+1];
+        this.pelaajatunnukset = new String[pelaajamaara + 1];
+        this.hahmotunnukset = new String[pelaajamaara + 1];
+        this.sopivuusprosentit = new int[pelaajamaara + 1][pelaajamaara + 1];
         this.pelaajamaara = pelaajamaara;
         this.hahmomaara = hahmomaara;
-        this.pelaajienHahmoehdokkaat = new Ehdokaslista[pelaajamaara+1];
-        this.hahmojenPelaajaehdokkaat = new Ehdokaslista[pelaajamaara+1];
+        this.pelaajienHahmoehdokkaat = new Ehdokaslista[pelaajamaara + 1];
+        this.hahmojenPelaajaehdokkaat = new Ehdokaslista[pelaajamaara + 1];
     }
 
     // Getters
@@ -109,7 +114,7 @@ public class Sopivuusmatriisi {
     
     /**
      * Tämä metodi lisää annetun pelaajatunnuksen pelaajatunnusluetteloon 
-     * indeksin osoittamalle kohdalle
+     * indeksin osoittamalle kohdalle.
      * @param pelaajaindeksi kokonaisluku, joka osoittaa indeksin johon
      * pelaajatunnus yhdistetään
      * @param pelaajatunnus lisättävä pelaajatunnus merkkijonona
@@ -120,7 +125,7 @@ public class Sopivuusmatriisi {
 
     /**
      * Tämä metodi lisää annetun hahmotunnuksen hahmotunnusluetteloon 
-     * indeksin osoittamalle kohdalle
+     * indeksin osoittamalle kohdalle.
      * @param hahmoindeksi kokonaisluku, joka osoittaa indeksin johon 
      * hahmotunnus yhdistetään
      * @param hahmotunnus lisättävä hahmotunnus merkkijonona
@@ -143,7 +148,7 @@ public class Sopivuusmatriisi {
     
     /**
      * Tämä metodi lisää valitun pelaajan hahmoehdokaslistan hahmoehdokas-
-     * listojen luetteloon
+     * listojen luetteloon.
      * @param pelaaja kokonaisluku joka osoittaa valitun pelaajan indeksin
      * @param hahmoehdokkaat Ehdokaslista-olio joka sisältää pelaajan hahmo-
      * ehdokaslistan
@@ -154,7 +159,7 @@ public class Sopivuusmatriisi {
 
     /**
      * Tämä metodi lisää valitun hahmon pelaajaehdokaslistan pelaajaehdokas-
-     * listojen luetteloon
+     * listojen luetteloon.
      * @param hahmo kokonaisluku joka osoittaa valitun hahmon indeksin
      * @param pelaajaehdokkaat Ehdokaslista-olio joka sisältää hahmon pelaaja-
      * ehdokaslistan

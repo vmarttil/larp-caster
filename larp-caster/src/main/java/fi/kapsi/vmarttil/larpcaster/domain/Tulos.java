@@ -16,8 +16,8 @@ import java.util.TreeSet;
  * @author Ville Marttila
  */
 public class Tulos {
-    private TreeMap<Integer,Integer> pelaajienHahmot;
-    private TreeMap<Integer,Integer> hahmojenPelaajat;
+    private TreeMap<Integer, Integer> pelaajienHahmot;
+    private TreeMap<Integer, Integer> hahmojenPelaajat;
     private TreeSet<Integer> hahmottomatPelaajat;
     private TreeSet<Integer> pelaajattomatHahmot;
     private String algoritmi;
@@ -25,6 +25,10 @@ public class Tulos {
     int minimiyhteensopivuus;
     double kulunutAika;
     
+    /**
+     * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset 
+     * ja siihen liittyvät metatiedot.
+     */
     public Tulos() {
         this.pelaajienHahmot = new TreeMap<>();
         this.hahmojenPelaajat = new TreeMap<>();
@@ -34,11 +38,12 @@ public class Tulos {
     
     // Getters
 
-    public TreeMap<Integer,Integer> getHahmojenPelaajat() { 
+    
+    public TreeMap<Integer, Integer> getHahmojenPelaajat() { 
         return this.hahmojenPelaajat;
     }
 
-    public TreeMap<Integer,Integer> getPelaajienHahmot() { 
+    public TreeMap<Integer, Integer> getPelaajienHahmot() { 
         return this.pelaajienHahmot;
     }
     
@@ -84,6 +89,16 @@ public class Tulos {
         this.kulunutAika = kulunutAika;
     }
     
+    /**
+     * Tämä metodi tallentaa valitun algoritmin laskemat hahmojaon tulokset 
+     * Tulos-olion taulukoihin.
+     * @param sopivuusmatriisi hahmojaossa käytetyt yhteensopivuustiedot 
+     * sisältävä Sopivuusmatriisi-olio
+     * @param pelaajienValinnat taulukko, joka sisältää kullekin pelaajalle 
+     * hahmojaossa valitun hahmon
+     * @param hahmojenValinnat taulukko, joka sisältää kullekin hahmolle 
+     * hahmojaossa valitun pelaajan
+     */
     public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
         for (int i = 1; i < pelaajienValinnat.length; i++) {
             if (pelaajienValinnat[i] == 0) {

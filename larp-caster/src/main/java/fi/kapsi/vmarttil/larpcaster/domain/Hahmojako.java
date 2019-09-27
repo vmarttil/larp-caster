@@ -39,7 +39,8 @@ public class Hahmojako {
     private boolean ehdokaslistatOK;
    
     /**
-     * 
+     * Tämä metodi luo Hahmojako-olion, joka ohjaa hahmojaon laskentaa ja siihen 
+     * käytettäviä tietorakenteita.
      */
     public Hahmojako() {
         this.yhteensopivuusdata = null;
@@ -135,15 +136,6 @@ public class Hahmojako {
     // Setters
     
     /**
-     * Täme metodi asettaa annetun sopivuusmatriisin käytettäväksi hahmojaossa.
-     * @param yhteensopivuusdata Sopivuusmatriisi-olio, joka sisältää XML-
-     * tiedostosta ladatut pelaajien ja hahmojen yhteensopivuustiedot
-     */
-    public void setYhteensopivuusdata(Sopivuusmatriisi yhteensopivuusdata) {
-        this.yhteensopivuusdata = yhteensopivuusdata;
-    }
-
-    /**
      * Tämä metodi asettaa hahmojaossa käytettävän algoritmin.
      * @param algoritmi käytettävän algoritmin tunnus merkkijonona
      */
@@ -159,6 +151,7 @@ public class Hahmojako {
      */
     public void setMinimisopivuus(int minimisopivuus) {
         this.minimisopivuus = minimisopivuus;
+        paivitaSopivuusmatriisi();
         luoEhdokaslistat();
     }
 
@@ -175,7 +168,7 @@ public class Hahmojako {
     /**
      * Tämä metodi kertoo sisältääkö jokaisen pelaajan ja hahmon ehdokaslista 
      * vähintään yhden sopivan hahmon tai pelaajan.
-     * @param ehdokaslistatOK totuusarvo, joka on totta jos kaikkien pelaajien 
+     * @param ok totuusarvo, joka on totta jos kaikkien pelaajien 
      * ja hahmojen ehdokaslistat vähintään yhden sopivan ehdokkaan
      */
     public void setEhdokaslistatOK(boolean ok) {
@@ -251,6 +244,24 @@ public class Hahmojako {
      * @throws IOException 
      */
     public void lataaYhteensopivuustiedot(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
+        NodeList pelaajaluettelo = lataaSolmuluettelo(tiedostonimi);
+        int pelaajamaara = pelaajaluettelo.getLength();
+        for (int i = 0; i < pelaajamaara; i++) {
+            Element pelaaja = (Element) pelaajaluettelo.item(i);
+            String pelaajatunnus = pelaaja.getAttribute("xml:id");
+            // Pelaajatunnukset kirjoitetaan indeksitaulukkoon
+            this.yhteensopivuusdata.setPelaajatunnus(i + 1, pelaajatunnus);
+            NodeList hahmoluettelo = pelaaja.getElementsByTagName("note");
+            // Lisätään yhteensopivuustiedot kaikille hahmoille ja tarvittavalle määrälle tyhjiä täytehahmoja
+            lisaaYhteensopivuustiedot(i, pelaajamaara, hahmoluettelo);
+        }
+        System.out.println("");
+        System.out.println("Yhteensopivuustiedot ladattu tiedostosta " + tiedostonimi);
+        System.out.println(this.yhteensopivuusdata.getHahmomaara() + " hahmoa, " + this.yhteensopivuusdata.getPelaajamaara() + " pelaajaa");
+        luoEhdokaslistat();  
+    } 
+    
+    private NodeList lataaSolmuluettelo(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
         File xmlTiedosto = new File(tiedostonimi);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -258,42 +269,50 @@ public class Hahmojako {
         Document dokumentti = dBuilder.parse(xmlTiedosto);
         dokumentti.getDocumentElement().normalize();
         NodeList pelaajaluettelo = dokumentti.getElementsByTagName("person");
-        int pelaajamaara = pelaajaluettelo.getLength();
-        int hahmomaara = pelaajaluettelo.item(0).getChildNodes().getLength();
-        Sopivuusmatriisi yhteensopivuudet = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
-        for (int i = 0; i < pelaajamaara; i++) {
-            Element pelaaja = (Element) pelaajaluettelo.item(i);
-            String pelaajatunnus = pelaaja.getAttribute("xml:id");
-            // Pelaajatunnukset kirjoitetaan indeksitaulukkoon
-            yhteensopivuudet.setPelaajatunnus(i + 1, pelaajatunnus);
-            NodeList hahmoluettelo = pelaaja.getElementsByTagName("note");
-            // Lisätään yhteensopivuustiedot kaikille hahmoille ja tarvittavalle määrälle tyhjiä täytehahmoja
-            for (int j = 0; j < pelaajaluettelo.getLength(); j++) {
-                if (j < hahmoluettelo.getLength()) {
-                    Element hahmo = (Element) hahmoluettelo.item(j);
-                    String hahmotunnus = hahmo.getAttribute("n");
-                    // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
-                    if (i == 0) {
-                        yhteensopivuudet.setHahmotunnus(j + 1, hahmotunnus);
-                    }
-                    Element yhteensopivuus = (Element) hahmo.getElementsByTagName("num").item(0);
-                    int yhteensopivuusprosentti = Integer.parseInt(yhteensopivuus.getAttribute("value"));
-                    // Yhteensopivuusprosentti kirjoitetaan matriisiin
-                    yhteensopivuudet.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
-                } else {
-                    // Lisätään täytehahmoja kunnes hahmoja on yhtä monta kuin pelaajia
-                    if (i == 0) {
-                        yhteensopivuudet.setHahmotunnus(j + 1, "");
-                    }
-                    yhteensopivuudet.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
+        luoSopivuusmatriisi(dokumentti);        
+        return pelaajaluettelo;
+    }
+    
+    private void luoSopivuusmatriisi(Document dokumentti) {
+        int pelaajamaara = dokumentti.getElementsByTagName("person").getLength();
+        int hahmomaara = dokumentti.getElementsByTagName("note").getLength() / dokumentti.getElementsByTagName("person").getLength();
+        this.yhteensopivuusdata = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
+    }
+    
+    private void lisaaYhteensopivuustiedot(int i, int pelaajamaara, NodeList hahmoluettelo) {
+        for (int j = 0; j < pelaajamaara; j++) {
+            if (j < hahmoluettelo.getLength()) {
+                Element hahmo = (Element) hahmoluettelo.item(j);
+                String hahmotunnus = hahmo.getAttribute("n");
+                // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
+                if (i == 0) {
+                    this.yhteensopivuusdata.setHahmotunnus(j + 1, hahmotunnus);
                 }
+                Element yhteensopivuus = (Element) hahmo.getElementsByTagName("num").item(0);
+                int yhteensopivuusprosentti = Integer.parseInt(yhteensopivuus.getAttribute("value"));
+                // Yhteensopivuusprosentti kirjoitetaan matriisiin
+                this.yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
+            } else {
+                // Lisätään täytehahmoja kunnes hahmoja on yhtä monta kuin pelaajia
+                if (i == 0) {
+                    this.yhteensopivuusdata.setHahmotunnus(j + 1, "");
+                }
+                this.yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
             }
         }
-        setYhteensopivuusdata(yhteensopivuudet);
-        System.out.println("");
-        System.out.println("Yhteensopivuustiedot ladattu tiedostosta " + tiedostonimi);
-        luoEhdokaslistat();  
-    } 
+    }
+    
+    /**
+     * Tämä metodi päivittää nykyisen minimisopivuuden sopivuusmatriisin 
+     * mahdollisiin täytehahmoihin.
+     */
+    private void paivitaSopivuusmatriisi() {        
+        for (int i = 1; i <= yhteensopivuusdata.getPelaajamaara(); i++) {
+            for (int j = yhteensopivuusdata.getHahmomaara() + 1; j <= yhteensopivuusdata.getPelaajamaara(); j++) {          
+                this.yhteensopivuusdata.setSopivuusprosentti(i, j, this.minimisopivuus);
+            }
+        }
+    }
     
     /**
      * Tämä metodi luo jokaiselle pelaajalle hahmoehdokaslistan ja jokaiselle 
@@ -304,12 +323,12 @@ public class Hahmojako {
         ehdokaslistatOK = true;
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();        
         // Luodaan pelaajille hahmoehdokaslistat
-        for (int i=1; i<=pelaajamaara; i++) {
+        for (int i = 1; i <= pelaajamaara; i++) {
             Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "pelaaja", i);
             yhteensopivuusdata.setHahmoehdokaslista(i, ehdokaslista);
         }
         // Luodaan hahmoille pelaajaehdokaslistat
-        for (int i=1; i<=pelaajamaara; i++) {
+        for (int i = 1; i <= pelaajamaara; i++) {
             Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "hahmo", i);
             yhteensopivuusdata.setPelaajaehdokaslista(i, ehdokaslista);
         }
