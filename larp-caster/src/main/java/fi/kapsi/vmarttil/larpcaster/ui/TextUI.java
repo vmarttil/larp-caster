@@ -18,9 +18,9 @@ import org.xml.sax.SAXException;
  */
 public class TextUI {
     
-    static HashMap<String, String> tulostettavatNimet;
-    Hahmojako hahmojako;
-    Scanner lukija;
+    private static HashMap<String, String> tulostettavatNimet;
+    private Hahmojako hahmojako;
+    private Scanner lukija;
     
     /**
      * Tämä metodi luo tekstikäyttöliittymän määrittävän TextUI-olion.
@@ -391,8 +391,6 @@ public class TextUI {
             }
         }
     }
-    
-    
     
     /**
      * Tämä metodi määrittää algoritmien tulostettavat nimet käyttöliittymää varten

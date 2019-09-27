@@ -46,7 +46,7 @@ public class Hahmojako {
         this.yhteensopivuusdata = null;
         this.tulokset = new ArrayList<>();
         this.kaytettavaAlgoritmi = "";
-        this.minimisopivuus = 70;
+        this.minimisopivuus = 50;
         // Lisätään toteutukseen myöhemmin
         this.priorisoiHankalatHahmot = false;
         // Lisätään toteutukseen myöhemmin

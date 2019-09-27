@@ -18,16 +18,16 @@ import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 
 public class GaleShapley {
     
-    Hahmojako hahmojako;
-    String kaytettavaAlgoritmi;
-    Sopivuusmatriisi yhteensopivuusdata;
-    int minimisopivuus;
-    int pelaajamaara;
-    int hahmomaara;
-    int[] ehdokkaitaKosittu;
-    int[] pelaajienValinnat;
-    int[] hahmojenValinnat;
-    Tulos tulos;
+    private Hahmojako hahmojako;
+    private String kaytettavaAlgoritmi;
+    private Sopivuusmatriisi yhteensopivuusdata;
+    private int minimisopivuus;
+    private int pelaajamaara;
+    private int hahmomaara;
+    private int[] ehdokkaitaKosittu;
+    private int[] pelaajienValinnat;
+    private int[] hahmojenValinnat;
+    private Tulos tulos;
     
     /**
      * Tämä metodi luo GaleShapley-olion joka laskee hahmojaon käyttämällä 
@@ -67,7 +67,7 @@ public class GaleShapley {
      * asettamien vaatimusten suhteen.
      */
     
-    public void galeShapleyHahmoKosii() {
+    private void galeShapleyHahmoKosii() {
         long aloitusAika = System.nanoTime();
         int kierrokset = -1;
         boolean vapaitaHahmoja = true;
@@ -116,7 +116,7 @@ public class GaleShapley {
      * toiveiden suhteen.
      */
     
-    public void galeShapleyPelaajaKosii() {
+    private void galeShapleyPelaajaKosii() {
         long aloitusAika = System.nanoTime();
         int kierrokset = -1;
         boolean vapaitaPelaajia = true;
