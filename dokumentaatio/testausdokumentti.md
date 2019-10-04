@@ -20,12 +20,12 @@ Teoreettinen aikavaativuus on O(n^2), jossa n on pelaajien määrä; hahmojen m�
 Verrattuna Galen-Shapleyn-algoritmiin peruuttavaan hakuun perustuva algoritmi - joka perustuu raakaan laskentatehoon - on valtavan epätehokas, koska se laskee kaikki sallitut hahmojaot, joita hiemankaan suuremmalla datajoukolla ja väljillä minimivaatimuksilla kertyy helposti miljoonia. Algoritmin mukaan ottamisen tarkoitus on testata, onko tällaista algoritmia mahdollista optimoida datan ominaispiirteitä ja rajoitteita hyödyntäen siten, että se toimisi riittävän tehokkaasti vaadittavan kokoisilla syötteillä. Toistaiseksi algoritmia on optimoitu ainoastaan siten, että se käyttää mahdollisuuksien läpikäynnissä kullekin hahmolle laskettua mahdollisten pelaajien joukkoa, joka on (hieman minimisopivuusasetuksesta riippuen) selvästi kaikkien pelaajien määrää pienempi joukko, ja siten, että algoritmi käy vaihtoehdot läpi sopivimmasta alkaen. Tässä muodossaan algoritmi on käytössä olevista datajoukoista käyttökelpoinen ainoastaan synteettisen testidatan (LARPCaster_synthtest_1.xml) sekä pienimmän todellisen datan alijoukon LARPCaster_odytest_1_13_13.xml tapauksessa, joissa se tuottaa seuraavanlaiset tulokset:
 
 ~~~~
-  **Datajoukko:** LARPCaster_synthtest_1.xml (10 hahmoa, 10 pelaajaa)
-  **Minimisopivuus:** 50%
-  **Ratkaisuja yhteensä:** 22 830
-  **Laskennan kesto:** 2 s
+  Datajoukko: LARPCaster_synthtest_1.xml (10 hahmoa, 10 pelaajaa)
+  Minimisopivuus: 50%
+  Ratkaisuja yhteensä: 22 830
+  Laskennan kesto: 2 s
 
-#### 50 parasta laskettua ratkaisua ja niiden laskentajärjestys: ####
+50 parasta laskettua ratkaisua ja niiden laskentajärjestys:
   1 - (1. laskettu) - ka. sop. 86.0%
   2 - (3. laskettu) - ka. sop. 84.0%
   3 - (18467. laskettu) - ka. sop. 83.5%
@@ -78,11 +78,12 @@ Verrattuna Galen-Shapleyn-algoritmiin peruuttavaan hakuun perustuva algoritmi - 
   50 - (4788. laskettu) - ka. sop. 81.5% 
 ~~~~
 ~~~~
-  **Datajoukko:** LARPCaster_odytest_1_13_26.xml (13 hahmoa, 26 pelaajaa)
-  **Minimisopivuus:** 50%
-  **Ratkaisuja yhteensä:** 635 923 (katkaisu kun peräkkäisten ratkaisujen löytämiseen menee yli 2 s)
-  **Laskennan kesto:** 42 s
-#### 50 parasta laskettua ratkaisua ja niiden laskentajärjestys: ####
+  Datajoukko: LARPCaster_odytest_1_13_26.xml (13 hahmoa, 26 pelaajaa)
+  Minimisopivuus: 50%
+  Ratkaisuja yhteensä: 635 923 (katkaisu kun peräkkäisten ratkaisujen löytämiseen menee yli 2 s)
+  Laskennan kesto: 42 s
+  
+50 parasta laskettua ratkaisua ja niiden laskentajärjestys:
   1 - (5127. laskettu) - ka. sop. 76.69%
   2 - (308209. laskettu) - ka. sop. 76.61%
   3 - (5105. laskettu) - ka. sop. 76.46%
@@ -144,8 +145,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
 
 #### LARPCaster_synthtest_1.xml
 ~~~~
-  **Peruuttava haku**
-  **Hahmo:                  Pelaaja:                Sopivuus:**
+  Peruuttava haku
+  Hahmo:                  Pelaaja:                Sopivuus:
   h1                      p1                      90 %
   h2                      p2                      80 %
   h3                      p3                      75 %
@@ -158,8 +159,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   h10                     p10                     80 %
 ~~~~
 ~~~~
-  **Gale-Shapley**
-  **Hahmo:                  Pelaaja:                Sopivuus:**
+  Gale-Shapley
+  Hahmo:                  Pelaaja:                Sopivuus:
   h1                      p1                      90 %
   h2                      p2                      80 %
   h3                      p3                      75 %
@@ -173,8 +174,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
 ~~~~
 #### LARPCaster_odytest_1_13_26.xml
 ~~~~
-  **Peruuttava haku**
-  **Hahmo:                  Pelaaja:                Sopivuus:**
+  Peruuttava haku
+  Hahmo:                  Pelaaja:                Sopivuus:
   jin_komatsu             22                      77 %
   dallan_jordan           26                      83 %
   yera_romero             3                       78 %
@@ -190,8 +191,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   the_guardian            5                       78 %
 ~~~~
 ~~~~
-  **Gale-Shapley**
-  **Hahmo:                  Pelaaja:                Sopivuus:**
+  Gale-Shapley
+  Hahmo:                  Pelaaja:                Sopivuus:
   jin_komatsu             22                      77 %
   dallan_jordan           26                      83 %
   yera_romero             3                       78 %
