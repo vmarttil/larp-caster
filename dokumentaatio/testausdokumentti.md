@@ -19,6 +19,7 @@ Teoreettinen aikavaativuus on O(n^2), jossa n on pelaajien määrä; hahmojen m�
 ### Peruuttava haku
 Verrattuna Galen-Shapleyn-algoritmiin peruuttavaan hakuun perustuva algoritmi - joka perustuu raakaan laskentatehoon - on valtavan epätehokas, koska se laskee kaikki sallitut hahmojaot, joita hiemankaan suuremmalla datajoukolla ja väljillä minimivaatimuksilla kertyy helposti miljoonia. Algoritmin mukaan ottamisen tarkoitus on testata, onko tällaista algoritmia mahdollista optimoida datan ominaispiirteitä ja rajoitteita hyödyntäen siten, että se toimisi riittävän tehokkaasti vaadittavan kokoisilla syötteillä. Toistaiseksi algoritmia on optimoitu ainoastaan siten, että se käyttää mahdollisuuksien läpikäynnissä kullekin hahmolle laskettua mahdollisten pelaajien joukkoa, joka on (hieman minimisopivuusasetuksesta riippuen) selvästi kaikkien pelaajien määrää pienempi joukko, ja siten, että algoritmi käy vaihtoehdot läpi sopivimmasta alkaen. Tässä muodossaan algoritmi on käytössä olevista datajoukoista käyttökelpoinen ainoastaan synteettisen testidatan (LARPCaster_synthtest_1.xml) sekä pienimmän todellisen datan alijoukon LARPCaster_odytest_1_13_13.xml tapauksessa, joissa se tuottaa seuraavanlaiset tulokset:
 
+~~~~
   **Datajoukko:** LARPCaster_synthtest_1.xml (10 hahmoa, 10 pelaajaa)
   **Minimisopivuus:** 50%
   **Ratkaisuja yhteensä:** 22 830
@@ -75,7 +76,8 @@ Verrattuna Galen-Shapleyn-algoritmiin peruuttavaan hakuun perustuva algoritmi - 
   48 - (5021. laskettu) - ka. sop. 81.5%
   49 - (4791. laskettu) - ka. sop. 81.5%
   50 - (4788. laskettu) - ka. sop. 81.5% 
-
+~~~~
+~~~~
   **Datajoukko:** LARPCaster_odytest_1_13_26.xml (13 hahmoa, 26 pelaajaa)
   **Minimisopivuus:** 50%
   **Ratkaisuja yhteensä:** 635 923 (katkaisu kun peräkkäisten ratkaisujen löytämiseen menee yli 2 s)
@@ -131,7 +133,7 @@ Verrattuna Galen-Shapleyn-algoritmiin peruuttavaan hakuun perustuva algoritmi - 
   48 - (309452. laskettu) - ka. sop. 75.76%
   49 - (15354. laskettu) - ka. sop. 75.76%
   50 - (6996. laskettu) - ka. sop. 75.76% 
-  
+~~~~
 Suuremmilla testidatajoukoilla suoritusaika kasvaa niin suureksi, ettei algoritmi ole tämänhetkisessä tilassaan käyttökelpoinen. Tuloksia tutkittaessa ja laskentaprosessia väliaikatulosteiden avulla seuratessa käy kuitenkin selväksi, että ratkaisujen laskenta tapahtuu huomattavan nopeasti tiettyyn pisteeseen saakka (useimmilla syötteillä n. 1 min), jonka jälkeen helpot ratkaisut on käyty läpi ja yksittäisen ratkaisun laskuaika nousee radikaalisti. Jos laskenta keskeytetään tässä vaiheessa ja asetetaan lasketut ratkaisut sopivuusjärjestykseen, huomataan, että jo tässä vaiheessa algoritmi on löytänyt huomattavan määrän (10-100) ratkaisuja, joiden sopivuus selvästi lähestyy maksimia (ja on usein hieman suurempi kuin Gale-Shapleyn algoritmilla lasketun ratkaisun sopivuus. Näin ollen saattaa olla järkevää luopua kaikkien mahdollisten tulosten laskentayrityksestä ja laskea sen sijaan vain "helpot" eli kohtuullisessa ajassa laskettavat ratkaisut, sillä jo ne tuottavat niin suuren määrän sopivuudeltaan lähellä maksimia olevia ratkaisuja, ettei suuremmasta määrästä ole juurikaan käytännön hyötyä. Tämä tarjoaa yhden mahdollisuuden algoritmin optimointiin ja asettaa luonnolliseksi seuraavaksi askeleeksi sen selvittämisen, miten algoritmi saataisiin laskemaan parhaat ratkaisut laskennan alkupäässä siten, että ratkaisujen sopivuus laskisi laskennan edetessä jolloin riittää x:n ensimmäisen ratkaisun laskeminen. 
 
 ### Vertailua
@@ -141,7 +143,7 @@ Tässä vaiheessa tulosten mielekäs suorituskykyvertailu ei vielä ole mahdolli
 Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo tässä vaiheessa, joten alla on esitetty peruuttavaan hakuun perustuvan algoritmin sopivin ratkaisu ja Galen-Shapleyn algoritmin tuottama ratkaisu molemmissa yllä kuvatuista tapauksista:
 
 #### LARPCaster_synthtest_1.xml
-
+~~~~
   **Peruuttava haku**
   **Hahmo:                  Pelaaja:                Sopivuus:**
   h1                      p1                      90 %
@@ -154,7 +156,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   h8                      p8                      95 %
   h9                      p9                      90 %
   h10                     p10                     80 %
-
+~~~~
+~~~~
   **Gale-Shapley**
   **Hahmo:                  Pelaaja:                Sopivuus:**
   h1                      p1                      90 %
@@ -167,9 +170,9 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   h8                      p8                      95 %
   h9                      p9                      90 %
   h10                     p10                     80 %
-
+~~~~
 #### LARPCaster_odytest_1_13_26.xml
-
+~~~~
   **Peruuttava haku**
   **Hahmo:                  Pelaaja:                Sopivuus:**
   jin_komatsu             22                      77 %
@@ -185,7 +188,8 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   zyra_lee                4                       81 %
   malak_kovalenko         10                      75 %
   the_guardian            5                       78 %
-
+~~~~
+~~~~
   **Gale-Shapley**
   **Hahmo:                  Pelaaja:                Sopivuus:**
   jin_komatsu             22                      77 %
@@ -201,3 +205,4 @@ Algoritmien tuottamien tulosten suhteen voidaan kuitenkin tehdä vertailua jo t�
   zyra_lee                4                       81 %
   malak_kovalenko         10                      75 %
   the_guardian            18                      84 %
+~~~~
