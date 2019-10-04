@@ -137,4 +137,40 @@ public class HahmojakoTest {
         int pelaaja = this.hahmojako.getTulokset().get(0).getHahmojenPelaajat().get(15);
         assertEquals(85, pelaaja);
     }
+    
+    @Test
+    public void hahmojakoGaleShapleyPelaajaOdyDatallaPelaajattomiaHahmoja() {
+        this.hahmojako = new Hahmojako();
+        try {
+            hahmojako.lataaYhteensopivuustiedot("LARPCaster_odytest_all.xml");
+        } catch (SAXException | ParserConfigurationException | IOException e1) {
+            System.out.println("");
+            System.out.println("VIRHE: Yhteensopivuustietojen lataus ei onnistunut.");
+            System.out.println("");
+            e1.printStackTrace();
+        }
+        this.hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
+        this.hahmojako.setMinimisopivuus(80);
+        this.hahmojako.teeHahmojako();
+        int pelaaja = this.hahmojako.getTulokset().get(0).getPelaajattomatHahmot().first();
+        assertEquals(21, pelaaja);
+    }
+    
+    @Test
+    public void hahmojakoPeruuttavaSyntDatalla50ToimiiOikein() {
+        this.hahmojako.setKaytettavaAlgoritmi("peruuttava");
+        this.hahmojako.setMinimisopivuus(50);
+        this.hahmojako.teeHahmojako();
+        int pelaaja = this.hahmojako.getTulokset().get(0).getHahmojenPelaajat().get(3);
+        assertEquals(3, pelaaja);
+    }
+    
+    @Test
+    public void hahmojakoPeruuttavaSyntDatalla80ToimiiOikein() {
+        this.hahmojako.setKaytettavaAlgoritmi("peruuttava");
+        this.hahmojako.setMinimisopivuus(70);
+        this.hahmojako.teeHahmojako();
+        int pelaaja = this.hahmojako.getTulokset().get(0).getHahmojenPelaajat().get(3);
+        assertEquals(3, pelaaja);
+    }
 }
