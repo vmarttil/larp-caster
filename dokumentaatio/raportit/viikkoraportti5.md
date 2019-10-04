@@ -4,4 +4,4 @@ Viidennen viikon aikana olen hionut päivittänyt ja täydentänyt ohjelman peru
 
 Seuraavaksi aion toteuttaa edellä mainitut unkarilaisen algoritmin ja optimoida peruuttavaan hakuun perustuvaa algoritmia lisää, jotta on mahdollista vertailla kaikkien kolmen eri algoritmin tuloksia ja tehokkuutta. Testikattavuutta pidetään yllä kirjoittamalla uusille algoritmeille testejä sitä mukaa kuin ne valmistuvat. Lisäksi aion täydentää ohjelman toteutusdokumenttia kattavammaksi ja aloittaa käyttöohjeen kirjoittamisen.
 
-4. viikon aikana työhön käytetty aika: 16 h
+5. viikon aikana työhön käytetty aika: 16 h
