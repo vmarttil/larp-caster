@@ -1,11 +1,7 @@
-# Viikkoraportti 4 (28.9.2019)
+# Viikkoraportti 5 (4.10.2019)
 
-Neljännen viikon aikana olen muokannut ja selkiyttänyt ohjelman perustoiminnsta vastaavia luokkia ja täydentänyt JavaDoc-dokumentaation uusien luokkien osalta. Olen myös hionut, testannut ja korjannut ensimmäisiä algoritmeja, eli Galen-Shapleyn algoritmin kahta versiota, joista ensimmäisessä hahmot toimivat "kosivana" osapuolena ja toisessa pelaaja ja manuaalisesti testannut algoritmien toimintaa sekä synteettisellä testiaineistolla että todellisella käyttöaineistolla. Lisäksi olen kirjoittanut joukon testejä sekä ohjelman perustoimintalogiikan että algoritmien testaamiseksi ja varmistanut, että ohjelman eri osat toimivat kuten pitää. 
+Viidennen viikon aikana olen hionut päivittänyt ja täydentänyt ohjelman perustoiminnsta vastaavia luokkia ja täydentänyt JavaDoc-dokumentaatiota uusien luokkien osalta (loput uudet luokat dokumentoidaan tulevalla viikolla). Sen lisäksi olen kirjoittanut toisen työkalun kolmesta suunnitellusta algoritmista eli raakaan laskentatehoon ja syötekohtaiseen optimointiin perustuvan peruuttavaa hakua käyttävän algoritmin, tehnyt siihen ensimmäiset optimoinnit, kirjoittanut automaattiset yksikkötestit sen toiminnan varmistamiseksi ja testannut sitä runsaasti eri syötteillä tulevia optimointeja varten. Olen myös kirjoittanut testausdokumentin ensimmäisen version ja analysoinut siihen joitakin ensimmäisten testien antamia tuloksia. Tämän ohella olen jatkanut perehtymistä unkarilaiseen algoritmiin ja suunnitellut sen toteutusta.
 
-Olen myös tarkistanut ohjelman checkstylen avulla ja korjannut sen löytämät virheet (checkstyle raportoi jostakin syystä muutaman virheen joiden ei pitäisi olla virheitä). Lisäksi olen piirtänyt ohjelman tämänhetkisestä versiosta luokkakaavion ja sen toimintalogiikkaa kuvaavan kaavion ja kirjoittanut niiden ympärille toteutusdokumentin ensimmäisen version.
+Seuraavaksi aion toteuttaa edellä mainitut unkarilaisen algoritmin ja optimoida peruuttavaan hakuun perustuvaa algoritmia lisää, jotta on mahdollista vertailla kaikkien kolmen eri algoritmin tuloksia ja tehokkuutta. Testikattavuutta pidetään yllä kirjoittamalla uusille algoritmeille testejä sitä mukaa kuin ne valmistuvat. Lisäksi aion täydentää ohjelman toteutusdokumenttia kattavammaksi ja aloittaa käyttöohjeen kirjoittamisen.
 
-Olen jatkanut perehtymistä unkarilaiseen algoritmiin ja suunnitellut sen toteutusta ja päättänyt toteuttaa ohjelmaan vertailun vuoksi myös raakaan laskentaan, peruuttavaan etsintään ja branch-and-bound-optimointiin perustuvan algoritmin nähdäkseni minkä kkokoisilla syötteillä sen käyttö on vielä järkevää. 
-
-Seuraavaksi aion toteuttaa edellä mainitut unkarilaisen algoritmin ja peruuttavan etsinnän algoritmin, jotta on mahdollista vertailla eri algoritmien tuloksia ja tehokkuutta. Testikattavuutta pidetään yllä kirjoittamalla uusille algoritmeille testejä sitä mukaa kuin ne valmistuvat. Lisäksi aion täydentää ohjelman toteutusdokumenttia kattavammaksi ja aloittaa käyttöohjeen kirjoittamisen.
-
-4. viikon aikana työhön käytetty aika: 14 h
+4. viikon aikana työhön käytetty aika: 16 h
