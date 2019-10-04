@@ -72,6 +72,7 @@ public class Peruuttava {
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
         List<Tulos> tulosluettelo = null;
+        System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
         if (this.tulokset.size() > 100) {
             tulosluettelo = this.tulokset.subList(0, 99);
         } else {
@@ -116,9 +117,9 @@ public class Peruuttava {
         if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 2) {
             this.lopetus = true;
         }
-        // Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);
-        // System.out.println(this.jarjestysnumero + " tulosta löydetty ajassa " + tuloksenLoytoaika.getSeconds() + " sekuntia");
-        // this.edellinenLoytohetki = tuloksenLoytohetki;
+         Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);
+         System.out.println(this.jarjestysnumero + " tulosta löydetty ajassa " + tuloksenLoytoaika.getSeconds() + " sekuntia");
+         this.edellinenLoytohetki = tuloksenLoytohetki;
         this.askelet = 0;
     }
     
