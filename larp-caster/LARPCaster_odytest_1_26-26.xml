@@ -1,0 +1,1411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <body>
+        <div type="character_matches">
+            <person role="player" xml:id="1">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="2">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="65"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="70"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="76"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="65"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="65"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="57"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="54"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="61"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="61"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="3">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="78"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="52"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="57"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="58"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="4">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="68"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="63"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="60"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="81"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="65"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="58"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="62"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="51"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="76"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="55"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="5">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="68"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="58"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="70"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="78"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="55"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="64"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="55"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="54"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="57"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="6">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="64"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="70"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="76"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="59"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="71"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="74"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="58"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="81"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="55"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="7">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="69"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="63"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="55"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="8">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="50"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="87"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="82"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="65"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="52"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="9">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="57"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="70"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="66"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="80"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="73"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="10">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="66"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="69"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="73"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="11">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="51"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="58"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="12">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="56"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="76"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="64"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="78"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="76"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="69"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="13">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="64"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="63"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="59"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="60"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="14">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="65"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="64"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="59"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="78"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="83"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="56"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="67"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="74"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="15">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="64"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="86"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="81"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="83"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="16">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="17">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="57"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="18">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="53"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="62"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="58"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="84"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="59"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="74"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="69"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="76"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="63"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="63"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="80"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="70"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="70"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="61"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="56"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="19">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="57"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="68"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="84"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="82"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="71"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="69"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="20">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="63"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="21">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="68"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="63"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="65"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="22">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="73"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="72"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="75"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="58"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="65"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="51"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="64"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="60"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="54"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="23">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="61"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="57"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="72"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="74"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="59"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="24">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="76"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="66"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="79"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="56"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="57"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="63"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="52"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="53"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="25">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="66"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="64"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="64"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="66"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="77"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="74"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="68"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="58"
+                        /></measure></note>
+            </person>
+            <person role="player" xml:id="26">
+                <note type="character_match" n="jin_komatsu"><measure type="match_percent"><num
+                            value="74"/></measure></note>
+                <note type="character_match" n="dallan_jordan"><measure type="match_percent"><num
+                            value="83"/></measure></note>
+                <note type="character_match" n="yera_romero"><measure type="match_percent"><num
+                            value="67"/></measure></note>
+                <note type="character_match" n="kai_rogers"><measure type="match_percent"><num
+                            value="66"/></measure></note>
+                <note type="character_match" n="cal_allen"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="idris_kalashnik"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="skye_duran"><measure type="match_percent"><num
+                            value="63"/></measure></note>
+                <note type="character_match" n="tyler_carrillo"><measure type="match_percent"><num
+                            value="58"/></measure></note>
+                <note type="character_match" n="xavier_blake"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="alia_swanson"><measure type="match_percent"><num
+                            value="56"/></measure></note>
+                <note type="character_match" n="zyra_lee"><measure type="match_percent"><num
+                            value="0"/></measure></note>
+                <note type="character_match" n="malak_kovalenko"><measure type="match_percent"><num
+                            value="66"/></measure></note>
+                <note type="character_match" n="the_guardian"><measure type="match_percent"><num
+                            value="54"/></measure></note>
+                <note type="character_match" n="jardan"><measure type="match_percent"><num
+                            value="61"/></measure></note>
+                <note type="character_match" n="zaera"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="mael"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="naethan"><measure type="match_percent"><num
+                            value="54"/></measure></note>
+                <note type="character_match" n="jaeco"><measure type="match_percent"><num value="61"
+                        /></measure></note>
+                <note type="character_match" n="briya"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="karin_alexandrov"><measure type="match_percent"><num
+                            value="56"/></measure></note>
+                <note type="character_match" n="tarai"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="keana"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="saria"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="aedan"><measure type="match_percent"><num value="62"
+                        /></measure></note>
+                <note type="character_match" n="nayel"><measure type="match_percent"><num value="0"
+                        /></measure></note>
+                <note type="character_match" n="anix"><measure type="match_percent"><num value="51"
+                        /></measure></note>
+            </person>
+        </div>
+    </body>
+</TEI>

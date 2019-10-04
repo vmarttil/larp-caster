@@ -82,7 +82,7 @@ public class GaleShapley {
             kierrokset++;
         }
         long lopetusAika = System.nanoTime();
-        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
+        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000) / 100;
         // Tallennetaan tulokset Tulos-olioon
         tallennaTulokset("galeShapleyHahmoKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus, kierrokset, kulunutAika);               
     }
@@ -131,7 +131,7 @@ public class GaleShapley {
             kierrokset++;
         }
         long lopetusAika = System.nanoTime();
-        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000000) / 100;
+        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000) / 100;
         // Tallennetaan tulokset Tulos-olioon
         tallennaTulokset("galeShapleyPelaajaKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus, kierrokset, kulunutAika);               
     }
@@ -205,6 +205,8 @@ public class GaleShapley {
         this.tulos.setKierroksia(kierrokset);
         this.tulos.setKulunutAika(kulunutAika);
         this.tulos.setMinimiyhteensopivuus(minimisopivuus);
+        this.tulos.setPrioriteetti(1);
+        this.tulos.setJarjestysnumero(1);
         this.tulos.taytaTulokset(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
     }
     

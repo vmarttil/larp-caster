@@ -6,10 +6,17 @@
 package fi.kapsi.vmarttil.larpcaster.domain;
 
 import fi.kapsi.vmarttil.larpcaster.algorithms.GaleShapley;
+import fi.kapsi.vmarttil.larpcaster.algorithms.Peruuttava;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,6 +44,7 @@ public class Hahmojako {
     // Lisätään toteutukseen myöhemmin
     private HashMap<Integer, Integer> esivalitutPelaajat;
     private boolean ehdokaslistatOK;
+    Instant suorituksenAloitus;
    
     /**
      * Tämä metodi luo Hahmojako-olion, joka ohjaa hahmojaon laskentaa ja siihen 
@@ -132,6 +140,11 @@ public class Hahmojako {
     public boolean getEhdokaslistatOK() {
         return ehdokaslistatOK;
     }
+    
+    public Instant getSuorituksenAloitus() {
+        return this.suorituksenAloitus;
+    }
+    
     
     // Setters
     
@@ -341,12 +354,26 @@ public class Hahmojako {
      * Tämä metodi laskee optimaalisen hahmojaon yhteesopivuusmatriisin, 
      * valitun algoritmin ja asetettujen ehtojen ja parametrien perusteella.
      */
-    public void teeHahmojako() {
+    public long teeHahmojako() {
+        this.suorituksenAloitus = Instant.now();
         if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
             GaleShapley algoritmi = new GaleShapley(this);
             Tulos tulos = algoritmi.laskeHahmojako();
             lisaaTulos(tulos);
-        }   
-            
+        } else if (this.kaytettavaAlgoritmi.contains("peruuttava")) {
+            Peruuttava algoritmi = new Peruuttava(this);
+            List<Tulos> tulokset = algoritmi.laskeHahmojako();
+            int prioriteetti = 1;
+            for (Tulos tulos : tulokset) {
+                tulos.setPrioriteetti(prioriteetti);
+                lisaaTulos(tulos);
+                prioriteetti++;
+            }
+        }
+        Instant suorituksenLopetus = Instant.now();
+        Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
+        long suoritusaika = suorituksenKesto.getSeconds();
+        return suoritusaika;
     }
+    
 }

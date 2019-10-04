@@ -57,7 +57,8 @@ public class TextUI {
             } else if (komento.equals("4") && hahmojako.getYhteensopivuusdata() != null) {
                 naytaEhdokaslistat();
             } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null) {
-                this.hahmojako.teeHahmojako();
+                double suoritusaika = this.hahmojako.teeHahmojako();
+                System.out.println("Suoritusaika: " + suoritusaika + " s");
             } else if (komento.equals("6") && !hahmojako.getTulokset().isEmpty()) {
                 naytaTulokset();
             } else {
@@ -126,6 +127,8 @@ public class TextUI {
                 hahmojako.setKaytettavaAlgoritmi("galeShapleyHahmoKosii");
             } else if (komento.equals("2")) {
                 hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
+            } else if (komento.equals("3")) {
+                hahmojako.setKaytettavaAlgoritmi("peruuttava");
             } else {
                 System.out.println("Tuntematon vaihtoehto.");
             }
@@ -140,6 +143,7 @@ public class TextUI {
         System.out.println("Vaihtoehdot (nykyinen: " + nykyinen + "): ");
         System.out.println(" 1 - " + tulostettavatNimet.get("galeShapleyHahmoKosii"));
         System.out.println(" 2 - " + tulostettavatNimet.get("galeShapleyPelaajaKosii"));
+        System.out.println(" 3 - " + tulostettavatNimet.get("peruuttava"));
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -154,6 +158,8 @@ public class TextUI {
             return "1";
         } else if (hahmojako.getKaytettavaAlgoritmi().equals("galeShapleyPelaajaKosii")) {
             return "2";
+        } else if (hahmojako.getKaytettavaAlgoritmi().equals("peruuttava")) {
+            return "3";
         } else {
             return "ei valittu";
         }
@@ -303,7 +309,7 @@ public class TextUI {
             System.out.println("");
             System.out.println("Tehdyt hahmojaot: ");
             for (int i = 1; i <= hahmojako.getTulokset().size(); i++) {
-                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i - 1).getAlgoritmi()) + "(minimisopivuus: " + hahmojako.getTulokset().get(i - 1).getMinimiyhteensopivuus() + "%)");
+                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i - 1).getAlgoritmi()) + "(" + hahmojako.getTulokset().get(i - 1).getMinimiyhteensopivuus() + "%): " + hahmojako.getTulokset().get(i - 1).getPrioriteetti() + " (" + hahmojako.getTulokset().get(i - 1).getJarjestysnumero() + ". laskettu) - ka. sop." + ((int) (hahmojako.getTulokset().get(i - 1).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
             }
             System.out.println(" x - Takaisin");
             System.out.print("Valinta: ");
@@ -332,7 +338,11 @@ public class TextUI {
         System.out.println("Käytetty algoritmi: " + tulostettavatNimet.get(tulos.getAlgoritmi()));
         System.out.println("Käytetty minimisopivuus: " + tulos.getMinimiyhteensopivuus() + "%");
         System.out.println("Iterointikierroksia: " + tulos.getKierroksia());
-        System.out.println("Hahmojaon vaatima aika: " + tulos.getKulunutAika() + " s");
+        System.out.println("Hahmojaon vaatima aika: " + tulos.getKulunutAika() + " ms");
+        System.out.println("Huonoin sopivuus: " + tulos.getHuonoinSopivuus() + "%");
+        System.out.println("Paras sopivuus: " + tulos.getParasSopivuus() + "%");
+        System.out.println("Keskimääräinen sopivuus: " + ((int) (tulos.getSopivuuskeskiarvo() * 100) / 100.0) + "%");
+        System.out.println("Mediaanisopivuus: " + ((int) (tulos.getMediaanisopivuus() * 100) / 100.0) + "%");
         System.out.println("");
     }
     
@@ -399,6 +409,7 @@ public class TextUI {
         this.tulostettavatNimet = new HashMap<>();
         tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
         tulostettavatNimet.put("galeShapleyPelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
+        tulostettavatNimet.put("peruuttava", "Peruuttava hakualgoritmi");
     }
     
 }

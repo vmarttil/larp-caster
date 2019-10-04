@@ -6,6 +6,7 @@
 package fi.kapsi.vmarttil.larpcaster.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -15,7 +16,7 @@ import java.util.TreeSet;
  * tallentamiseen käytettävät tietorakenteet.
  * @author Ville Marttila
  */
-public class Tulos {
+public class Tulos implements Comparable<Tulos> {
     private TreeMap<Integer, Integer> pelaajienHahmot;
     private TreeMap<Integer, Integer> hahmojenPelaajat;
     private TreeSet<Integer> hahmottomatPelaajat;
@@ -24,6 +25,12 @@ public class Tulos {
     private int kierroksia;
     int minimiyhteensopivuus;
     double kulunutAika;
+    int huonoinSopivuus;
+    double sopivuuskeskiarvo;
+    double mediaanisopivuus;
+    int parasSopivuus;
+    int jarjestysnumero;
+    int prioriteetti;
     
     /**
      * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset 
@@ -34,6 +41,10 @@ public class Tulos {
         this.hahmojenPelaajat = new TreeMap<>();
         this.hahmottomatPelaajat = new TreeSet<>();
         this.pelaajattomatHahmot = new TreeSet<>();
+        this.huonoinSopivuus = 100;
+        this.sopivuuskeskiarvo = 0;
+        this.mediaanisopivuus = 0;
+        this.parasSopivuus = 0;
     }
     
     // Getters
@@ -110,6 +121,34 @@ public class Tulos {
         return this.kulunutAika;
     }
 
+    public double getHuonoinSopivuus() {
+        return this.huonoinSopivuus;
+    }
+    
+    /**
+     * Tämä metodi palauttaa hahmojaon keskimääräisen sopivuuden.
+     * @return metodi palauttaa keskimääräisen sopivuuden liukulukuna
+     */
+    public double getSopivuuskeskiarvo() {
+        return this.sopivuuskeskiarvo;
+    }
+
+    public double getMediaanisopivuus() {
+        return this.mediaanisopivuus;
+    }
+    
+    public double getParasSopivuus() {
+        return this.parasSopivuus;
+    }
+    
+    public int getPrioriteetti() {
+        return this.prioriteetti;
+    }
+    
+    public int getJarjestysnumero() {
+        return this.jarjestysnumero;
+    }
+    
     // Setters
 
     /**
@@ -147,6 +186,14 @@ public class Tulos {
         this.kulunutAika = kulunutAika;
     }
     
+    public void setPrioriteetti(int prioriteetti) {
+        this.prioriteetti = prioriteetti;
+    }
+    
+    public void setJarjestysnumero(int jarjestysnumero) {
+        this.jarjestysnumero = jarjestysnumero;
+    }
+    
     /**
      * Tämä metodi tallentaa valitun algoritmin laskemat hahmojaon tulokset 
      * Tulos-olion taulukoihin.
@@ -158,19 +205,44 @@ public class Tulos {
      * hahmojaossa valitun pelaajan
      */
     public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
+        int[] sopivuudet = new int[sopivuusmatriisi.getHahmomaara()];
+        int kokonaissopivuus = 0;
         for (int i = 1; i < pelaajienValinnat.length; i++) {
-            if (pelaajienValinnat[i] == 0) {
+            if (pelaajienValinnat[i] > sopivuusmatriisi.getHahmomaara() || pelaajienValinnat[i] == 0) {
                 hahmottomatPelaajat.add(i);
             } else {
                 pelaajienHahmot.put(i, pelaajienValinnat[i]);
             }
         }
         for (int i = 1; i < hahmojenValinnat.length; i++) {
-            if (hahmojenValinnat[i] == 0) {
+            if (i > sopivuusmatriisi.getHahmomaara()) {  
+            } else if  (hahmojenValinnat[i] == 0) {
                 pelaajattomatHahmot.add(i);
             } else {
                 hahmojenPelaajat.put(i, hahmojenValinnat[i]);
+                int sopivuus = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[i], i);
+                sopivuudet[i - 1] = sopivuus;
+                kokonaissopivuus = kokonaissopivuus + sopivuus;
+                if (sopivuus < this.huonoinSopivuus) {
+                    this.huonoinSopivuus = sopivuus;
+                }
+                if (sopivuus > this.parasSopivuus) {
+                    this.parasSopivuus = sopivuus;
+                }
             }
         }
+        this.sopivuuskeskiarvo = (double) kokonaissopivuus / sopivuusmatriisi.getHahmomaara();
+        Arrays.sort(sopivuudet);
+        
+        if (sopivuudet.length % 2 == 0) {
+            this.mediaanisopivuus = (sopivuudet[sopivuudet.length / 2 - 1] + sopivuudet[sopivuudet.length / 2]) / 2.0;
+        } else {
+            this.mediaanisopivuus = sopivuudet[sopivuudet.length / 2];
+        }
+    }
+    
+    @Override
+    public int compareTo( final Tulos o) {
+        return Double.compare(this.sopivuuskeskiarvo, o.sopivuuskeskiarvo);
     }
 }
