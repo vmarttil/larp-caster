@@ -7,6 +7,7 @@ package fi.kapsi.vmarttil.larpcaster.domain;
 
 import fi.kapsi.vmarttil.larpcaster.algorithms.GaleShapley;
 import fi.kapsi.vmarttil.larpcaster.algorithms.Peruuttava;
+import fi.kapsi.vmarttil.larpcaster.algorithms.Unkarilainen;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
@@ -369,7 +370,17 @@ public class Hahmojako {
                 lisaaTulos(tulos);
                 prioriteetti++;
             }
+        } else if (this.kaytettavaAlgoritmi.contains("unkarilainen")) {
+            Unkarilainen algoritmi = new Unkarilainen(this);
+            List<Tulos> tulokset = algoritmi.laskeHahmojako();
+            int prioriteetti = 1;
+            for (Tulos tulos : tulokset) {
+                tulos.setPrioriteetti(prioriteetti);
+                lisaaTulos(tulos);
+                prioriteetti++;
+            }
         }
+        
         Instant suorituksenLopetus = Instant.now();
         Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
         long suoritusaika = suorituksenKesto.getSeconds();

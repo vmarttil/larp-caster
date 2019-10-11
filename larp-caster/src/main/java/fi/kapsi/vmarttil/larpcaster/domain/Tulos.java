@@ -22,9 +22,7 @@ public class Tulos implements Comparable<Tulos> {
     private TreeSet<Integer> hahmottomatPelaajat;
     private TreeSet<Integer> pelaajattomatHahmot;
     private String algoritmi;
-    private int kierroksia;
     int minimiyhteensopivuus;
-    double kulunutAika;
     int huonoinSopivuus;
     double sopivuuskeskiarvo;
     double mediaanisopivuus;
@@ -95,15 +93,7 @@ public class Tulos implements Comparable<Tulos> {
     public String getAlgoritmi() {
         return this.algoritmi;
     }
-    
-    /**
-     * Tämä metodi palauttaa hahmojakoon tarvittujen iterointikierrosten määrän.
-     * @return metodi palauttaa iterointikierrosten määrän kokonaislukuna
-     */
-    public int getKierroksia() {
-        return this.kierroksia;
-    }
-
+ 
     /**
      * Tämä metodi palauttaa tuloksen edustamassa hahmojaossa käytetyn 
      * minimiyhteensopivuuden.
@@ -111,14 +101,6 @@ public class Tulos implements Comparable<Tulos> {
      */
     public int getMinimiyhteensopivuus() {
         return this.minimiyhteensopivuus;
-    }
-
-    /**
-     * Tämä metodi palauttaa hahmojakoon kuluneen ajan.
-     * @return metodi palauttaa kuluneen ajan sekunteja kuvaavana liukulukuna
-     */
-    public double getKulunutAika() {
-        return this.kulunutAika;
     }
 
     public double getHuonoinSopivuus() {
@@ -161,15 +143,6 @@ public class Tulos implements Comparable<Tulos> {
     }    
 
     /**
-     * Tämä metodi tallentaa tulokseen sen edustamaan hahmojakoon tarvittujen 
-     * iterointikierrosten määrän.
-     * @param kierroksia tarvittujen iterointikierrosten määrä
-     */
-    public void setKierroksia(int kierroksia) {
-        this.kierroksia = kierroksia;
-    }
-
-    /**
      * Tämä metodi tallentaa tulokseen sen edustamassa hahmojaossa käytetyn 
      * minimiyhteensopivuusprosentin.
      * @param minimiyhteensopivuus käytetyn algoritmin tunnus
@@ -178,14 +151,6 @@ public class Tulos implements Comparable<Tulos> {
         this.minimiyhteensopivuus = minimiyhteensopivuus;
     }
 
-    /**
-     * Tämä metodi tallentaa tulokseen sen edustamaan hahmojakoon kuluneen ajan. 
-     * @param kulunutAika kulunut aika sekunteina
-     */
-    public void setKulunutAika(double kulunutAika) {
-        this.kulunutAika = kulunutAika;
-    }
-    
     public void setPrioriteetti(int prioriteetti) {
         this.prioriteetti = prioriteetti;
     }

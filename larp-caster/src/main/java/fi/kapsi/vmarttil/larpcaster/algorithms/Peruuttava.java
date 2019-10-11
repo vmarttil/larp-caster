@@ -29,8 +29,6 @@ public class Peruuttava {
     private long aloitusAika;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
-    private int askelet;
-    private int kierrokset;
     private int jarjestysnumero;
     private Instant edellinenLoytohetki;
     private ArrayList<Tulos> tulokset;
@@ -50,8 +48,6 @@ public class Peruuttava {
         this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
         this.tulokset = new ArrayList<>();
-        //this.tulokset = new TreeMap<>(Collections.reverseOrder());
-        this.askelet = 0;
         this.jarjestysnumero = 0;
         this.lopetus = false;
         alustaTaulukot();
@@ -65,7 +61,7 @@ public class Peruuttava {
      * lasketun hahmojaon
      */
     public List<Tulos> laskeHahmojako() {
-        long aloitusAika = System.nanoTime();
+        this.aloitusAika = System.nanoTime();
         int hahmo = 1;
         this.edellinenLoytohetki = hahmojako.getSuorituksenAloitus();
         etsiRatkaisu(hahmo);
@@ -97,7 +93,6 @@ public class Peruuttava {
         }
         for (int i = 0; i < this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getPituus(); i++) {
             if (this.vapaatPelaajat[this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i)] == true) {
-                this.askelet++;
                 this.hahmojenValinnat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i);
                 this.vapaatPelaajat[this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i)] = false;
                 etsiRatkaisu(hahmo + 1);
@@ -111,8 +106,7 @@ public class Peruuttava {
         long lopetusAika = System.nanoTime();
         double kulunutAika = (double) ((int) (lopetusAika - this.aloitusAika) / 10000) / 100;
         this.jarjestysnumero++;
-        int kierrokset = this.askelet / this.hahmomaara;
-        tallennaTulos(kierrokset, kulunutAika);
+        tallennaTulos();
         Instant tuloksenLoytohetki = Instant.now();
         if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 2) {
             this.lopetus = true;
@@ -120,7 +114,6 @@ public class Peruuttava {
          Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);
          System.out.println(this.jarjestysnumero + " tulosta löydetty ajassa " + tuloksenLoytoaika.getSeconds() + " sekuntia");
          this.edellinenLoytohetki = tuloksenLoytohetki;
-        this.askelet = 0;
     }
     
     
@@ -135,7 +128,7 @@ public class Peruuttava {
         }
     }
     
-    private void tallennaTulos(int kierrokset, double kulunutAika) {
+    private void tallennaTulos() {
         int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
         for (int i = 1; i <= this.pelaajamaara; i++) {
             pelaajienValinnat[i] = 0;
@@ -146,8 +139,6 @@ public class Peruuttava {
         }
         Tulos tulos = new Tulos();
         tulos.setAlgoritmi("peruuttava");
-        tulos.setKierroksia(kierrokset);
-        tulos.setKulunutAika(kulunutAika);
         tulos.setMinimiyhteensopivuus(this.minimisopivuus);
         tulos.setJarjestysnumero(this.jarjestysnumero);
         tulos.taytaTulokset(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);

@@ -68,8 +68,6 @@ public class GaleShapley {
      */
     
     private void galeShapleyHahmoKosii() {
-        long aloitusAika = System.nanoTime();
-        int kierrokset = -1;
         boolean vapaitaHahmoja = true;
         while (vapaitaHahmoja == true) {
             vapaitaHahmoja = false;
@@ -79,12 +77,9 @@ public class GaleShapley {
                     vapaitaHahmoja = true;
                 }
             }
-            kierrokset++;
         }
-        long lopetusAika = System.nanoTime();
-        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000) / 100;
         // Tallennetaan tulokset Tulos-olioon
-        tallennaTulokset("galeShapleyHahmoKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus, kierrokset, kulunutAika);               
+        tallennaTulokset("galeShapleyHahmoKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus);               
     }
     
     private boolean kosiPelaajaa(int hahmo) {
@@ -117,8 +112,6 @@ public class GaleShapley {
      */
     
     private void galeShapleyPelaajaKosii() {
-        long aloitusAika = System.nanoTime();
-        int kierrokset = -1;
         boolean vapaitaPelaajia = true;
         while (vapaitaPelaajia == true) {
             vapaitaPelaajia = false;
@@ -128,12 +121,9 @@ public class GaleShapley {
                     vapaitaPelaajia = true;
                 }
             }
-            kierrokset++;
         }
-        long lopetusAika = System.nanoTime();
-        double kulunutAika = (double) ((int) (lopetusAika - aloitusAika) / 10000) / 100;
         // Tallennetaan tulokset Tulos-olioon
-        tallennaTulokset("galeShapleyPelaajaKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus, kierrokset, kulunutAika);               
+        tallennaTulokset("galeShapleyPelaajaKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus);               
     }
     
     private boolean kosiHahmoa(int pelaaja) {
@@ -200,10 +190,8 @@ public class GaleShapley {
         this.hahmojenValinnat[seuraavaEhdokas] = pelaaja;
     }
     
-    private void tallennaTulokset(String algoritmi, Sopivuusmatriisi yhteensopivuusdata, int[] pelaajienValinnat, int[] hahmojenValinnat, int minimisopivuus, int kierrokset, double kulunutAika) {
+    private void tallennaTulokset(String algoritmi, Sopivuusmatriisi yhteensopivuusdata, int[] pelaajienValinnat, int[] hahmojenValinnat, int minimisopivuus) {
         this.tulos.setAlgoritmi(algoritmi);
-        this.tulos.setKierroksia(kierrokset);
-        this.tulos.setKulunutAika(kulunutAika);
         this.tulos.setMinimiyhteensopivuus(minimisopivuus);
         this.tulos.setPrioriteetti(1);
         this.tulos.setJarjestysnumero(1);

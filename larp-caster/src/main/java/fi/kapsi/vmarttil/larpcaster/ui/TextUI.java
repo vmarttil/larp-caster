@@ -129,6 +129,8 @@ public class TextUI {
                 hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
             } else if (komento.equals("3")) {
                 hahmojako.setKaytettavaAlgoritmi("peruuttava");
+            } else if (komento.equals("4")) {
+                hahmojako.setKaytettavaAlgoritmi("unkarilainen");
             } else {
                 System.out.println("Tuntematon vaihtoehto.");
             }
@@ -144,6 +146,7 @@ public class TextUI {
         System.out.println(" 1 - " + tulostettavatNimet.get("galeShapleyHahmoKosii"));
         System.out.println(" 2 - " + tulostettavatNimet.get("galeShapleyPelaajaKosii"));
         System.out.println(" 3 - " + tulostettavatNimet.get("peruuttava"));
+        System.out.println(" 4 - " + tulostettavatNimet.get("unkarilainen"));
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -160,6 +163,8 @@ public class TextUI {
             return "2";
         } else if (hahmojako.getKaytettavaAlgoritmi().equals("peruuttava")) {
             return "3";
+        } else if (hahmojako.getKaytettavaAlgoritmi().equals("unkarilainen")) {
+            return "4";
         } else {
             return "ei valittu";
         }
@@ -337,8 +342,6 @@ public class TextUI {
         System.out.println("");
         System.out.println("Käytetty algoritmi: " + tulostettavatNimet.get(tulos.getAlgoritmi()));
         System.out.println("Käytetty minimisopivuus: " + tulos.getMinimiyhteensopivuus() + "%");
-        System.out.println("Iterointikierroksia: " + tulos.getKierroksia());
-        System.out.println("Hahmojaon vaatima aika: " + tulos.getKulunutAika() + " ms");
         System.out.println("Huonoin sopivuus: " + tulos.getHuonoinSopivuus() + "%");
         System.out.println("Paras sopivuus: " + tulos.getParasSopivuus() + "%");
         System.out.println("Keskimääräinen sopivuus: " + ((int) (tulos.getSopivuuskeskiarvo() * 100) / 100.0) + "%");
@@ -410,6 +413,7 @@ public class TextUI {
         tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
         tulostettavatNimet.put("galeShapleyPelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
         tulostettavatNimet.put("peruuttava", "Peruuttava hakualgoritmi");
+        tulostettavatNimet.put("unkarilainen", "Unkarilainen menetelmä (Kuhnin-Munkresin algoritmi)");
     }
     
 }
