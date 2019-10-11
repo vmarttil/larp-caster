@@ -1,0 +1,7 @@
+# Viikkoraportti 6 (12.10.2019)
+
+Kuudennen viikon aikana olen suunnitellut ja toteuttanut työkaluun kolmannen ratkaisualgoritmin - unkarilaisen menetelmän eli Kuhnin-Munkresin algoritmin - ja integroinut sen osaksi työkalua. Uuden algoritmin testaus ja automaattisten testien ja JavaDoc-dokumentaation kirjoittaminen, samoin kuin toteutusdokumentin päivittäminen ja täydentäminen on edelleen työn alla ja jatkuu viikonloppuna, koska olin alkuviikon sairaana mikä verotti merkittävästi tällä viikolla käytettävissä olleita työtunteja.  
+
+Seuraavaksi aion tehdä lisäoptimointeja kaikkiin algoritmeihin ja muokata Galen-Shapleyn algoritmia siten, että se tuottaa kaikki vakaat ratkaisut (tässä käyttötarkoituksessa on tarkoituksenmukaista saada mahdollisimman monta hyvin sopivaa ratkaisua) sekä toteuttaa työkaluun tulostustoiminnon, jolla tulokset on mahdollista viedä XML-dokumentiksi. Ajan salliessa sekä datan tuontia että tulosten vientiä varten määritetään DAO-luokat jotka mahdollistavat uusien tuonti- ja vientiformaattien ja tietokantayhteyden helpon lisäämisen myöhemmin. Kaikkien kolmen algoritmin optimoinnin valmistuttua toteutan myös kattavammat suorituskykyvertailut testidokumenttia varten ja kirjoitan käyttöohjeen työkalua varten. Lisättäviin toiminnallisuuksiin kuuluu vielä mahdollisuus valittujen hahmojen ja pelaajien manuaaliseen yhdistämiseen ennen hahmojaon laskemista.
+
+6. viikon aikana työhön käytetty aika: 10 h
