@@ -77,4 +77,15 @@ public class Ehdokaslista {
     public int getEhdokas(int index) {
         return this.lista[index];
     }
+    
+    /**
+     * Tämä metodi korvaa ehdokaslistan sisällön uusilla ehdokkailla
+     * @param ehdokkaat HashMap-objekti joka sisältää avaimina ehdokkaiden
+     * indeksit ja arvoina niiden yhteensopivuusarvot
+     */
+    public void korvaaLista(HashMap<Integer,Integer> ehdokkaat) {
+        this.lista = ehdokkaat.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
+    }
+    
 }
+

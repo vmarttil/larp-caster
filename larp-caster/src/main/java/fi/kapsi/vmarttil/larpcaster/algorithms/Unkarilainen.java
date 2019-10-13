@@ -36,7 +36,7 @@ public class Unkarilainen {
     private Set<Integer> pystylinjat;
     private int[] hahmojenValinnat;
     private int jarjestysnumero;
-    private ArrayList<Tulos> tulokset;
+    private List<Tulos> tulokset;
 
  
     /**
@@ -70,7 +70,7 @@ public class Unkarilainen {
      * @return tämä metodi palauttaa Tulos-olion joka sisältää kokonais-
      * yhteensopivuudeltaan maksimoidun hahmojaon
      */
-    public ArrayList<Tulos> laskeHahmojako() {
+    public List<Tulos> laskeHahmojako() {
         vahennaRivienPienimmatArvot();
         vahennaSarakkeidenPienimmatArvot();
         while (true) {
@@ -85,66 +85,41 @@ public class Unkarilainen {
             vahennaPieninArvoRiveilta(pienin);            
             lisaaPieninArvoSarakkeisiin(pienin);
         }
-        ArrayList<Tulos> tulosluettelo = new ArrayList<>();
-        // Käydään kustannusmatriisin nollat läpi ja etsitään peruuttavalla haulla kaikki vaihtoehdot joissa kaikkien rivien nollat ovat eri sarakkeissa
-        int rivi = 0;
-        etsiRatkaisu(rivi);
-        Collections.sort(tulosluettelo);
-        Collections.reverse(tulosluettelo);
-        return tulosluettelo;
-    }
-    
-    
-    
-    /**
-     * Tämä metodi suorittaa löydettyjen optimiratkaisujen rekursiivisen läpikäynnin kutsumalla itseään
-     * @param hahmo sen hahmon indeksi, jolle etsitään pelaajaa
-     */
-    private void etsiRatkaisu(int rivi) {
-        if (rivi == this.hahmomaara) {
-            this.jarjestysnumero++;
-            tallennaTulos();
-            return;
-        }
-        for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-            if (this.kustannusmatriisi[rivi][sarake] == 0 && this.hahmojenValinnat[sarake + 1] == 0) {
-                this.hahmojenValinnat[sarake + 1] = rivi + 1;
-                etsiRatkaisu(rivi + 1);
-                this.hahmojenValinnat[sarake + 1] = 0;
+        // Välituloste
+//        for (int i = 0; i < this.pelaajamaara; i++) {
+//            String tuloste = ""
+//            for (int j = 0; j < this.hahmomaara; j++) {
+//                tuloste = tuloste + " " + this.kustannusmatriisi[i][j]
+//            }
+//            System.out.println(tuloste);
+//        }
+        
+        
+        
+        // Rakennetaan hahmojen ehdokaslistat uusiksi optimaalisten vaihtoehtojen perusteella
+        for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
+            HashMap<Integer, Integer> ehdokkaat = new HashMap<>();
+            for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
+                if (this.kustannusmatriisi[rivi][sarake] == 0) {
+                    ehdokkaat.put(rivi + 1, this.yhteensopivuusdata.getSopivuusprosentti(rivi + 1, sarake + 1));
+                }
             }
-        } 
+            this.yhteensopivuusdata.getPelaajaehdokaslista(sarake + 1).korvaaLista(ehdokkaat);
+        }
+        // Välitulostus
+//        for (int i = 1; i <= this.hahmomaara; i++) {
+//            String tulostus = String.valueOf(i) + ": ";
+//            for (int j = 0; j < this.yhteensopivuusdata.getPelaajaehdokaslista(i).getPituus(); j++) {
+//                tulostus = tulostus + " " + this.yhteensopivuusdata.getPelaajaehdokaslista(i).getEhdokas(j);
+//            }
+//            System.out.println(tulostus);
+//        }
+        
+        // Haetaan peruuttavalla haulla kaikki eri vaihtoehdot joissa kaikkien rivien nollat ovat eri sarakkeissa
+        Peruuttava peruuttavaHaku = new Peruuttava(this.hahmojako);
+        this.tulokset = peruuttavaHaku.laskeHahmojako();
+        return this.tulokset;
     }
-
-    /**
-     * Tämä metodi tallentaa löydetyn hahmojaon Tulos-olioon ja lisää olion tulosluetteloon.
-     */
-    private void tallennaTulos() {
-        int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
-        for (int i = 1; i <= this.pelaajamaara; i++) {
-            pelaajienValinnat[i] = 0;
-        }
-        for (int i = 1; i <= this.hahmomaara; i++) {
-            int pelaaja = this.hahmojenValinnat[i];
-            pelaajienValinnat[pelaaja] = i;
-        }
-        Tulos tulos = new Tulos();
-        tulos.setAlgoritmi("unkarilainen");
-        tulos.setMinimiyhteensopivuus(this.minimisopivuus);
-        tulos.setJarjestysnumero(this.jarjestysnumero);
-        tulos.taytaTulokset(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
-        this.tulokset.add(tulos);
-    }    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     // Luokan metodien käyttämät yksityiset apumetodit
@@ -215,9 +190,11 @@ public class Unkarilainen {
      * tai pystylinjalla.
      */
     private void lisaaLinjat() {
+        this.vaakalinjat.clear();
+        this.pystylinjat.clear();
         for (int i = 0; i < this.pelaajamaara; i++) {
             for (int j = 0; j < this.pelaajamaara; j++) {
-                if (this.kustannusmatriisi[i][j] == 0 && !this.vaakalinjat.contains(i) && !this.pystylinjat.contains(j)) {
+                if (this.kustannusmatriisi[i][j] == 0) {
                     if (laskeRivinNollat(i) >= laskeSarakkeenNollat(j)) {
                         this.vaakalinjat.add(i);
                     } else {
@@ -230,13 +207,12 @@ public class Unkarilainen {
     
     
     /**
-     * Tämä metodi laskee annetun rivin sellaisten nollien määrän, jotka eivät 
-     * ole aiemmin lisätyllä pystylinjalla.
+     * Tämä metodi laskee annetun rivin nollien määrän.
      */
     private int laskeRivinNollat(int rivi) {
         int nollia = 0;
         for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-            if (this.kustannusmatriisi[rivi][sarake] == 0 && !this.pystylinjat.contains(sarake)) {
+            if (this.kustannusmatriisi[rivi][sarake] == 0) {
                  nollia++;
             }
         }
@@ -244,13 +220,12 @@ public class Unkarilainen {
     } 
     
     /**
-     * Tämä metodi laskee annetun sarakkeen sellaisten nollien määrän, jotka eivät 
-     * ole aiemmin lisätyllä vaakalinjalla.
+     * Tämä metodi laskee annetun sarakkeen nollien määrän.
      */
     private int laskeSarakkeenNollat(int sarake) {
         int nollia = 0;
         for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-            if (this.kustannusmatriisi[rivi][sarake] == 0 && !this.vaakalinjat.contains(rivi)) {
+            if (this.kustannusmatriisi[rivi][sarake] == 0) {
                  nollia++;
             }
         }
@@ -306,5 +281,22 @@ public class Unkarilainen {
         }
     }
     
+    /**
+     * Tämä metodi laskee kelvollisten tulosrivien, eli niiden rivien joilla on 
+     * nolla oikean hahmon kohdalla
+     * @return 
+     */
+    private int laskeTulosrivit() {
+        int tulosriveja = 0;
+        for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
+            for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
+                if (this.kustannusmatriisi[rivi][sarake] == 0) {
+                    tulosriveja++;
+                    break;
+                }
+            }
+        }
+        return tulosriveja;
+    }
     
 }

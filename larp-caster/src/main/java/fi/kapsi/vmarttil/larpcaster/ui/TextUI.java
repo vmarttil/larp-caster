@@ -314,7 +314,7 @@ public class TextUI {
             System.out.println("");
             System.out.println("Tehdyt hahmojaot: ");
             for (int i = 1; i <= hahmojako.getTulokset().size(); i++) {
-                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i - 1).getAlgoritmi()) + "(" + hahmojako.getTulokset().get(i - 1).getMinimiyhteensopivuus() + "%): " + hahmojako.getTulokset().get(i - 1).getPrioriteetti() + " (" + hahmojako.getTulokset().get(i - 1).getJarjestysnumero() + ". laskettu) - ka. sop." + ((int) (hahmojako.getTulokset().get(i - 1).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
+                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i - 1).getAlgoritmi()) + "(" + hahmojako.getTulokset().get(i - 1).getMinimiyhteensopivuus() + "%): " + hahmojako.getTulokset().get(i - 1).getPrioriteetti() + " (" + hahmojako.getTulokset().get(i - 1).getJarjestysnumero() + ". laskettu) - ka. sop. " + ((int) (hahmojako.getTulokset().get(i - 1).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
             }
             System.out.println(" x - Takaisin");
             System.out.print("Valinta: ");

@@ -70,7 +70,7 @@ public class Peruuttava {
         List<Tulos> tulosluettelo = null;
         System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
         if (this.tulokset.size() > 100) {
-            tulosluettelo = this.tulokset.subList(0, 99);
+            tulosluettelo = this.tulokset.subList(0, 19);
         } else {
             tulosluettelo = this.tulokset;
         }
