@@ -12,3 +12,4 @@ Työkalu liveroolipelien pelaajavalinnan ja hahmojaon optimoimiseksi ilmoittautu
 * [Viikkoraportti 3](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/raportit/viikkoraportti3.md)
 * [Viikkoraportti 4](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/raportit/viikkoraportti4.md)
 * [Viikkoraportti 5](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/raportit/viikkoraportti5.md)
+* [Viikkoraportti 6](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/raportit/viikkoraportti6.md)
