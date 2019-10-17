@@ -86,16 +86,14 @@ public class Unkarilainen {
             lisaaPieninArvoSarakkeisiin(pienin);
         }
         // Välituloste
-//        for (int i = 0; i < this.pelaajamaara; i++) {
-//            String tuloste = ""
-//            for (int j = 0; j < this.hahmomaara; j++) {
-//                tuloste = tuloste + " " + this.kustannusmatriisi[i][j]
-//            }
-//            System.out.println(tuloste);
-//        }
-        
-        
-        
+        for (int i = 0; i < this.pelaajamaara; i++) {
+            String tuloste = "";
+            for (int j = 0; j < this.hahmomaara; j++) {
+                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
+            }
+            System.out.println(tuloste);
+        }
+
         // Rakennetaan hahmojen ehdokaslistat uusiksi optimaalisten vaihtoehtojen perusteella
         for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
             HashMap<Integer, Integer> ehdokkaat = new HashMap<>();
@@ -107,20 +105,19 @@ public class Unkarilainen {
             this.yhteensopivuusdata.getPelaajaehdokaslista(sarake + 1).korvaaLista(ehdokkaat);
         }
         // Välitulostus
-//        for (int i = 1; i <= this.hahmomaara; i++) {
-//            String tulostus = String.valueOf(i) + ": ";
-//            for (int j = 0; j < this.yhteensopivuusdata.getPelaajaehdokaslista(i).getPituus(); j++) {
-//                tulostus = tulostus + " " + this.yhteensopivuusdata.getPelaajaehdokaslista(i).getEhdokas(j);
-//            }
-//            System.out.println(tulostus);
-//        }
+        for (int i = 1; i <= this.hahmomaara; i++) {
+            String tulostus = String.valueOf(i) + ": ";
+            for (int j = 0; j < this.yhteensopivuusdata.getPelaajaehdokaslista(i).getPituus(); j++) {
+                tulostus = tulostus + " " + this.yhteensopivuusdata.getPelaajaehdokaslista(i).getEhdokas(j);
+            }
+            System.out.println(tulostus);
+        }
         
         // Haetaan peruuttavalla haulla kaikki eri vaihtoehdot joissa kaikkien rivien nollat ovat eri sarakkeissa
         Peruuttava peruuttavaHaku = new Peruuttava(this.hahmojako);
         this.tulokset = peruuttavaHaku.laskeHahmojako();
         return this.tulokset;
     }
-    
     
     // Luokan metodien käyttämät yksityiset apumetodit
     
