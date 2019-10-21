@@ -441,7 +441,7 @@ public class TextUI {
         for (int i = 0; i < ((leveys + this.pisinHahmotunnus - 9) / 2) / 10; i++) {
             System.out.print("          ");    
         }
-        for (int i = 0; i < ((leveys + this.pisinHahmotunnus - 9) / 2) % 10; i++) {
+        for (int i = 0; i < ((leveys + this.pisinHahmotunnus - 9) / 2) % 10 + 1; i++) {
             System.out.print(" ");    
         }
         System.out.println("Pelaajat:");
@@ -457,7 +457,7 @@ public class TextUI {
                 System.out.print(" ");
             }
             System.out.print(i);
-            for (int j = 0; j < valeja + 1; j++) {
+            for (int j = 0; j < valeja ; j++) {
                 System.out.print(" ");    
             }
             System.out.print("|");
