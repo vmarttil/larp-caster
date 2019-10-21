@@ -60,17 +60,17 @@ public class Peruuttava {
      * sopivuusjärjestyksessä joukon Tulos-olioita joista kukin sisältää 
      * lasketun hahmojaon
      */
-    public List<Tulos> laskeHahmojako() {
+    public ArrayList<Tulos> laskeHahmojako() {
         this.aloitusAika = System.nanoTime();
         int hahmo = 1;
         this.edellinenLoytohetki = hahmojako.getSuorituksenAloitus();
         etsiRatkaisu(hahmo);
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
-        List<Tulos> tulosluettelo = null;
+        ArrayList<Tulos> tulosluettelo;
         System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
         if (this.tulokset.size() > 100) {
-            tulosluettelo = this.tulokset.subList(0, 19);
+            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
         } else {
             tulosluettelo = this.tulokset;
         }
@@ -108,7 +108,13 @@ public class Peruuttava {
         this.jarjestysnumero++;
         tallennaTulos();
         Instant tuloksenLoytohetki = Instant.now();
-        if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 2) {
+        if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 1) {
+            this.lopetus = true;
+        }
+        if (kulunutAika > 1.0) {
+            this.lopetus = true;
+        }
+        if (this.tulokset.size() > 30000) {
             this.lopetus = true;
         }
          Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);
@@ -137,11 +143,19 @@ public class Peruuttava {
             int pelaaja = this.hahmojenValinnat[i];
             pelaajienValinnat[pelaaja] = i;
         }
-        Tulos tulos = new Tulos();
-        tulos.setAlgoritmi("peruuttava");
-        tulos.setMinimiyhteensopivuus(this.minimisopivuus);
-        tulos.setJarjestysnumero(this.jarjestysnumero);
-        tulos.taytaTulokset(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
-        this.tulokset.add(tulos);
+        Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
+        boolean kopio = false;
+        for (Tulos vanhaTulos : this.tulokset) {
+            if (tulos.equals(vanhaTulos)) {
+                kopio = true;
+                break;
+            }
+        }
+        if (kopio == false) {
+            tulos.setAlgoritmi("peruuttava");
+            tulos.setMinimiyhteensopivuus(this.minimisopivuus);
+            tulos.setJarjestysnumero(this.jarjestysnumero);
+            this.tulokset.add(tulos);
+        }
     }    
 }

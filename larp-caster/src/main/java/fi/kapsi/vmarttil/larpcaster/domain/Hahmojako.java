@@ -33,11 +33,13 @@ import org.xml.sax.SAXException;
  * @author Ville Marttila
  */
 public class Hahmojako {
-    
     private Sopivuusmatriisi yhteensopivuusdata;
-    private ArrayList<Tulos> tulokset;
+    private ArrayList<ArrayList<Tulos>> tulokset;
+    private ArrayList<Tulos> yhteistulokset;
     private String kaytettavaAlgoritmi;
     private int minimisopivuus;
+    private int tuloksiaEnintaanLaskentaaKohden;
+    private int tuloksiaEnintaanYhteensa;
     // Lisätään toteutukseen myöhemmin
     private boolean priorisoiHankalatHahmot;
     // Lisätään toteutukseen myöhemmin
@@ -54,8 +56,11 @@ public class Hahmojako {
     public Hahmojako() {
         this.yhteensopivuusdata = null;
         this.tulokset = new ArrayList<>();
+        this.yhteistulokset = new ArrayList<>();
         this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 50;
+        this.tuloksiaEnintaanLaskentaaKohden = 20;
+        this.tuloksiaEnintaanYhteensa = 20;
         // Lisätään toteutukseen myöhemmin
         this.priorisoiHankalatHahmot = false;
         // Lisätään toteutukseen myöhemmin
@@ -73,24 +78,36 @@ public class Hahmojako {
      * pelaajien ja hahmojen väliset yhteensopivuusprosentit
      */
     public Sopivuusmatriisi getYhteensopivuusdata() {
-        return yhteensopivuusdata;
+        return this.yhteensopivuusdata;
     }
 
     /**
-     * Tämä metodi palauttaa hahmojakojen tulokset.
-     * @return metodi palauttaa taulukkolistan Tulos-olioita, joista kukin 
-     * edustaa yhden hahmojaon tuloksia metatietoineen.
+     * Tämä metodi palauttaa kaikkien hahmojakolaskentojen tulokset.
+     * @return metodi palauttaa taulukkolistan Tulos-olioita sisältäviä 
+     * taulukolistoja, joista kukin taulukkolista sisältää yhden hahmojaon 
+     * laskennan tulokset metatietoineen.
      */
-    public ArrayList<Tulos> getTulokset() {
-        return tulokset;
+    public ArrayList<ArrayList<Tulos>> getTulokset() {
+        return this.tulokset;
     }
 
     /**
-     * Tämä metodi palauttaa hahmojakoon käytettävän algoritmin.
+     * Tämä metodi palauttaa annetun indeksinumeron mukaisen hahmojaon laskennan 
+     * tulokset.
+     * @param haku palautettavan laskennan indeksinumero
+     * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan 
+     */
+    public ArrayList<Tulos> getHaunTulokset(int haku) {
+        return this.tulokset.get(haku);
+    }
+    
+    /**
+     * Tämä metodi palauttaa tällä hetkellä hahmojakoon käytettäväksi määritetyn
+     * algoritmin.
      * @return metodi palauttaa käytetyn algoritmin tunnuksen merkkijonona
      */
     public String getKaytettavaAlgoritmi() {
-        return kaytettavaAlgoritmi;
+        return this.kaytettavaAlgoritmi;
     }
 
     /**
@@ -100,9 +117,27 @@ public class Hahmojako {
      * kokonaislukuna
      */
     public int getMinimisopivuus() {
-        return minimisopivuus;
+        return this.minimisopivuus;
     }
-
+    
+    /**
+     * Tämä metodi palauttaa yksittäistä laskentaa kohden näytettävien tulosten 
+     * enimmäismäärän.
+     * @return metodi palauttaa suurimman näytettävän laskentakohtaisen tulosmäärän 
+     * kokonaislukuna
+     */
+    public int getTuloksiaEnintaanLaskentaaKohden() {
+        return this.tuloksiaEnintaanLaskentaaKohden;
+    }
+    
+    /**
+     * Tämä metodi palauttaa yhteensä näytettävien tulosten enimmäismäärän.
+     * @return metodi palauttaa suurimman näytettäväntulosmäärän kokonaislukuna
+     */
+    public int getTuloksiaEnintaanYhteensa() {
+        return this.tuloksiaEnintaanYhteensa;
+    }
+   
     /**
      * Tämä metodi palauttaa hankalasti jaettavien hahmojen priorisoinnin 
      * asetuksen.
@@ -110,7 +145,7 @@ public class Hahmojako {
      * hahmojaossa hankalasti jaettavia hahmoja
      */
     public boolean isPriorisoiHankalatHahmot() {
-        return priorisoiHankalatHahmot;
+        return this.priorisoiHankalatHahmot;
     }
 
     /**
@@ -119,7 +154,7 @@ public class Hahmojako {
      * @return metodi palauttaa hahmoindeksit sisältävän taulukkolistan
      */
     public ArrayList<Integer> getHankalatHahmot() {
-        return hankalatHahmot;
+        return this.hankalatHahmot;
     }
     
     /**
@@ -129,7 +164,7 @@ public class Hahmojako {
      * hajautustaulun
      */
     public HashMap<Integer, Integer> getEsivalitutPelaajat() {
-        return esivalitutPelaajat;
+        return this.esivalitutPelaajat;
     }
     
     /**
@@ -139,13 +174,17 @@ public class Hahmojako {
      * ehdokaslistat vähintään yhden ehdokkaan
      */
     public boolean getEhdokaslistatOK() {
-        return ehdokaslistatOK;
+        return this.ehdokaslistatOK;
     }
     
+    /**
+     * Tämä metodi palauttaa käynnissä olevan hahmojaon aloitushetken Instant-
+     * olion muodossa.
+     * @return 
+     */
     public Instant getSuorituksenAloitus() {
         return this.suorituksenAloitus;
     }
-    
     
     // Setters
     
@@ -170,6 +209,24 @@ public class Hahmojako {
     }
 
     /**
+     * Tämä metodi asettaa yksittäistä laskentaa kohden näytettävien tulosten 
+     * enimmäismäärän.
+     * @param enimmaismaara suurin näytettävä laskentakohtainen tulosmäärä 
+     * kokonaislukuna
+     */
+    public void setTuloksiaEnintaanLaskentaaKohden(int enimmaismaara) {
+        this.tuloksiaEnintaanLaskentaaKohden = enimmaismaara;
+    }
+    
+    /**
+     * Tämä metodi asettaa yhteensä näytettävien tulosten enimmäismäärän.
+     * @param enimmaismaara suurin näytettävä tulosmäärä kokonaislukuna
+     */
+    public void setTuloksiaEnintaanYhteensa(int enimmaismaara) {
+        this.tuloksiaEnintaanYhteensa = enimmaismaara;
+    } 
+    
+    /**
      * Tämä metodi määrittää hankalasti jaettavien hahmojen (joilla on vain yksi 
      * sopiva pelaajaehdokas) priorisoinnin käyttöön tai pois käytöstä.
      * @param priorisoiHankalatHahmot totuusarvo, joka määrittää priorisoidaanko 
@@ -192,17 +249,17 @@ public class Hahmojako {
     // Lisäykset ja poistot
     
     /**
-     * Tämä metodi lisää jollakin algoritmilla lasketun hahmojaon tuloksen 
+     * Tämä metodi lisää jollakin algoritmilla lasketun hahmojaon tulokset 
      * tulosluetteloon.
-     * @param tulos Tulos-olio joka sisältää hahmojaon tuloksen ja siihen 
-     * liittyvät metatiedot
+     * @param tulos Tulos-olioita sisältävä ArrayList-olio joka sisältää 
+     * hahmojaon tulokset ja niihin liittyvät metatiedot
      */
-    public void lisaaTulos(Tulos tulos) {
+    public void lisaaTulos(ArrayList<Tulos> tulos) {
         this.tulokset.add(tulos);
     }
     
     /**
-     * Tämä metodi poistaa tulosluettelosta yhden hahmojaon tuloksen. 
+     * Tämä metodi poistaa tulosluettelosta yhden hahmojaon tulokset. 
      * @param tuloksenIndeksi kokonaisluku, joka osoittaa poistettavan 
      * tuloksen indeksin
      */
@@ -354,37 +411,37 @@ public class Hahmojako {
     /**
      * Tämä metodi laskee optimaalisen hahmojaon yhteesopivuusmatriisin, 
      * valitun algoritmin ja asetettujen ehtojen ja parametrien perusteella.
+     * @return metodi palauttaa hahmojaon laskentaan kuluneen ajan sekunteina
      */
     public long teeHahmojako() {
         this.suorituksenAloitus = Instant.now();
+        ArrayList<Tulos> tulokset = new ArrayList<>();
         if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
             GaleShapley algoritmi = new GaleShapley(this);
-            Tulos tulos = algoritmi.laskeHahmojako();
-            lisaaTulos(tulos);
+            tulokset = algoritmi.laskeHahmojako();
         } else if (this.kaytettavaAlgoritmi.contains("peruuttava")) {
             Peruuttava algoritmi = new Peruuttava(this);
-            List<Tulos> tulokset = algoritmi.laskeHahmojako();
-            int prioriteetti = 1;
-            for (Tulos tulos : tulokset) {
-                tulos.setPrioriteetti(prioriteetti);
-                lisaaTulos(tulos);
-                prioriteetti++;
-            }
+            tulokset = algoritmi.laskeHahmojako();
         } else if (this.kaytettavaAlgoritmi.contains("unkarilainen")) {
             Unkarilainen algoritmi = new Unkarilainen(this);
-            List<Tulos> tulokset = algoritmi.laskeHahmojako();
-            int prioriteetti = 1;
-            for (Tulos tulos : tulokset) {
-                tulos.setPrioriteetti(prioriteetti);
-                lisaaTulos(tulos);
-                prioriteetti++;
-            }
+            tulokset = algoritmi.laskeHahmojako();    
         }
-        
+        lisaaTulos(tulokset);
+        paivitaYhteistulokset(tulokset);
         Instant suorituksenLopetus = Instant.now();
         Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
         long suoritusaika = suorituksenKesto.getSeconds();
         return suoritusaika;
     }
     
+    private void paivitaYhteistulokset(ArrayList<Tulos> tulokset) {
+        for (Tulos tulos : tulokset) {
+            this.yhteistulokset.add(tulos);
+        }
+        Collections.sort(this.yhteistulokset);
+        Collections.reverse(this.yhteistulokset);
+        if (this.yhteistulokset.size() > this.tuloksiaEnintaanYhteensa) {
+            this.yhteistulokset = new ArrayList<Tulos>(this.yhteistulokset.subList(0, this.tuloksiaEnintaanYhteensa));
+        }
+    }
 }

@@ -5,9 +5,15 @@
  */
 package fi.kapsi.vmarttil.larpcaster.algorithms;
 
+import fi.kapsi.vmarttil.larpcaster.domain.Ehdokaslista;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 
 /**
@@ -24,10 +30,14 @@ public class GaleShapley {
     private int minimisopivuus;
     private int pelaajamaara;
     private int hahmomaara;
+    //private List<Ehdokaslista[]> jarjestysvariaatiot;
+    private Ehdokaslista[] ehdokaslistat;
+    private int variaationumero;
+    private int jarjestysnumero;
     private int[] ehdokkaitaKosittu;
     private int[] pelaajienValinnat;
     private int[] hahmojenValinnat;
-    private Tulos tulos;
+    private ArrayList<Tulos> tulokset;
     
     /**
      * Tämä metodi luo GaleShapley-olion joka laskee hahmojaon käyttämällä 
@@ -40,9 +50,12 @@ public class GaleShapley {
         this.kaytettavaAlgoritmi = this.hahmojako.getKaytettavaAlgoritmi();
         this.yhteensopivuusdata = this.hahmojako.getYhteensopivuusdata();
         this.pelaajamaara = this.yhteensopivuusdata.getPelaajamaara();
+        this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
-        this.tulos = new Tulos();
-        alustaTaulukot();
+        this.jarjestysnumero = 0;
+        this.variaationumero = 0;
+        //this.jarjestysvariaatiot = new ArrayList<Ehdokaslista[]>();
+        this.tulokset = new ArrayList<>();
     }
     
     /**
@@ -51,13 +64,28 @@ public class GaleShapley {
      * @return tämä metodi palauttaa Tulos-olion joka sisältää lasketun
      * hahmojaon tiedot
      */
-    public Tulos laskeHahmojako() {
-        if (this.kaytettavaAlgoritmi.equals("galeShapleyHahmoKosii")) {
-            galeShapleyHahmoKosii();
-        } else if (this.kaytettavaAlgoritmi.equals("galeShapleyPelaajaKosii")) {
-            galeShapleyPelaajaKosii();
+    public ArrayList<Tulos> laskeHahmojako() {
+        laskeVariaatiot();
+//        System.out.println(jarjestysvariaatiot.size());
+//        if (this.kaytettavaAlgoritmi.equals("galeShapleyHahmoKosii")) {
+//            for (int variaatio = 0; variaatio < jarjestysvariaatiot.size();variaatio++) {
+//                alustaTaulukot();
+//                this.ehdokaslistat = jarjestysvariaatiot.get(variaatio);
+//                galeShapleyHahmoKosii();
+//            }
+//        } else if (this.kaytettavaAlgoritmi.equals("galeShapleyPelaajaKosii")) {
+//            galeShapleyPelaajaKosii();
+//        }
+        Collections.sort(this.tulokset);
+        Collections.reverse(this.tulokset);
+        ArrayList<Tulos> tulosluettelo;
+        System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
+        if (this.tulokset.size() > 100) {
+            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
+        } else {
+            tulosluettelo = this.tulokset;
         }
-        return this.tulos;
+        return tulosluettelo;
     }
     
     /**
@@ -79,14 +107,15 @@ public class GaleShapley {
             }
         }
         // Tallennetaan tulokset Tulos-olioon
-        tallennaTulokset("galeShapleyHahmoKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus);               
+        this.jarjestysnumero++;
+        tallennaTulos();               
     }
     
     private boolean kosiPelaajaa(int hahmo) {
         // Tarkistetaan onko hahmo edelleen vapaa ja onko sillä listallaan vielä kosimattomia pelaajia
-        if (this.hahmojenValinnat[hahmo] == 0 && this.ehdokkaitaKosittu[hahmo] < yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getPituus()) {
+        if (this.hahmojenValinnat[hahmo] == 0 && this.ehdokkaitaKosittu[hahmo] < this.ehdokaslistat[hahmo].getPituus()) {
             // Tarkistetaan onko kosittava pelaaja edelleen vapaa ja jos on, yhdistetään hahmo ja pelaaja
-            int seuraavaEhdokas = yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(this.ehdokkaitaKosittu[hahmo]);
+            int seuraavaEhdokas = this.ehdokaslistat[hahmo].getEhdokas(this.ehdokkaitaKosittu[hahmo]);
             this.ehdokkaitaKosittu[hahmo] = this.ehdokkaitaKosittu[hahmo] + 1;
             if (this.pelaajienValinnat[seuraavaEhdokas] == 0) {
                 lisaaHahmo(hahmo, seuraavaEhdokas);                
@@ -95,7 +124,7 @@ public class GaleShapley {
                 vaihdaHahmo(hahmo, seuraavaEhdokas);                
             // Jos kosiva hahmo on yhtä sopiva kuin aiempi, valitaan se, joka sopii harvemmalle pelaajalle eli jolla on lyhyempi ehdokaslista
             } else if (yhteensopivuusdata.getSopivuusprosentti(seuraavaEhdokas, hahmo) == yhteensopivuusdata.getSopivuusprosentti(seuraavaEhdokas, this.pelaajienValinnat[seuraavaEhdokas])) {
-                if (yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getPituus() < yhteensopivuusdata.getPelaajaehdokaslista(this.pelaajienValinnat[seuraavaEhdokas]).getPituus()) {
+                if (this.ehdokaslistat[hahmo].getPituus() < this.ehdokaslistat[this.pelaajienValinnat[seuraavaEhdokas]].getPituus()) {
                     vaihdaHahmo(hahmo, seuraavaEhdokas);
                 }
             }
@@ -123,7 +152,7 @@ public class GaleShapley {
             }
         }
         // Tallennetaan tulokset Tulos-olioon
-        tallennaTulokset("galeShapleyPelaajaKosii", this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat, this.minimisopivuus);               
+        tallennaTulos();               
     }
     
     private boolean kosiHahmoa(int pelaaja) {
@@ -168,6 +197,85 @@ public class GaleShapley {
         }
     }
     
+    private void laskeVariaatiot() {
+        if (this.kaytettavaAlgoritmi.contains("HahmoKosii")) {
+            Ehdokaslista[] hahmojenEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
+            for (int hahmo = 1; hahmo <= this.pelaajamaara; hahmo++) {
+                hahmojenEhdokaslistat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo);
+            }
+            //this.jarjestysvariaatiot.add(hahmojenEhdokaslistat);
+            laskePelaajaehdokasvariaatiot(hahmojenEhdokaslistat);
+        } 
+        if (this.kaytettavaAlgoritmi.contains("PelaajaKosii")) {
+            Ehdokaslista[] pelaajienEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
+            for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
+                pelaajienEhdokaslistat[pelaaja] = this.yhteensopivuusdata.getHahmoehdokaslista(pelaaja);
+            }
+            //this.jarjestysvariaatiot.add(hahmojenEhdokaslistat);
+            laskeHahmoehdokasvariaatiot(pelaajienEhdokaslistat);
+        }
+        
+    }
+        
+    /**
+     * Tämä metodi laskee variaatiot, jotka syntyvät vaihtamalla kaikkien pelaajaehdokaslistojen sellaisten kahden ensimmäisen ehdokkaan paikkoja, joiden sopivuudet ovat samat, ja laskee hahmojaon kullakin variaatiolla.
+     * @param hahmojenEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
+     */
+    private void laskePelaajaehdokasvariaatiot(Ehdokaslista[] hahmojenEhdokaslistat) {
+        for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
+            if (hahmojenEhdokaslistat[hahmo].getPituus() > 1) {
+                if (this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
+                        Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
+                        for (int i = 1; i < hahmojenEhdokaslistat.length; i++) {
+                            uudetEhdokaslistat[i] = new Ehdokaslista(hahmojenEhdokaslistat[i]);
+                        }
+                        uudetEhdokaslistat[hahmo].poistaEhdokas(0);
+                        // Lasketaan hahmojako tällä variaatiolla
+                        alustaTaulukot();
+                        this.ehdokaslistat = uudetEhdokaslistat;
+                        galeShapleyHahmoKosii();
+                        this.variaationumero++;
+                        System.out.println(this.variaationumero + " variaatiota laskettu");
+                        if (this.variaationumero > 10000) {
+                            break;
+                        }
+                        laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
+                    }
+                
+            }
+        }
+    }
+    
+    /**
+     * Tämä metodi laskee variaatiot, jotka syntyvät vaihtamalla kaikkien hahmoehdokaslistojen sellaisten kahden ensimmäisen ehdokkaan paikkoja, joiden sopivuudet ovat samat, ja laskee hahmojaon kullakin variaatiolla.
+     * @param pelaajienEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
+     */
+    private void laskeHahmoehdokasvariaatiot(Ehdokaslista[] pelaajienEhdokaslistat) {
+        for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
+            if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1) {
+                if (this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
+                        Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
+                        for (int i = 1; i < pelaajienEhdokaslistat.length; i++) {
+                            uudetEhdokaslistat[i] = new Ehdokaslista(pelaajienEhdokaslistat[i]);
+                        }
+                        uudetEhdokaslistat[pelaaja].poistaEhdokas(0);
+                        // Lasketaan hahmojako tällä variaatiolla
+                        alustaTaulukot();
+                        this.ehdokaslistat = uudetEhdokaslistat;
+                        galeShapleyPelaajaKosii();
+                        this.variaationumero++;
+                        System.out.println(this.variaationumero + " variaatiota laskettu");
+                        if (this.variaationumero > 10000) {
+                            break;
+                        }
+                        laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
+                    }
+                
+            }
+        }
+    }
+    
+    
     private void lisaaHahmo(int hahmo, int seuraavaEhdokas) {
         this.pelaajienValinnat[seuraavaEhdokas] = hahmo;
         this.hahmojenValinnat[hahmo] = seuraavaEhdokas;
@@ -190,12 +298,29 @@ public class GaleShapley {
         this.hahmojenValinnat[seuraavaEhdokas] = pelaaja;
     }
     
-    private void tallennaTulokset(String algoritmi, Sopivuusmatriisi yhteensopivuusdata, int[] pelaajienValinnat, int[] hahmojenValinnat, int minimisopivuus) {
-        this.tulos.setAlgoritmi(algoritmi);
-        this.tulos.setMinimiyhteensopivuus(minimisopivuus);
-        this.tulos.setPrioriteetti(1);
-        this.tulos.setJarjestysnumero(1);
-        this.tulos.taytaTulokset(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
+//    private void tallennaTulokset(String algoritmi, Sopivuusmatriisi yhteensopivuusdata, int[] pelaajienValinnat, int[] hahmojenValinnat, int minimisopivuus) {
+//        this.tulos.setAlgoritmi(algoritmi);
+//        this.tulos.setMinimiyhteensopivuus(minimisopivuus);
+//        this.tulos.setPrioriteetti(1);
+//        this.tulos.setJarjestysnumero(1);
+//        this.tulos.taytaTulokset(yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
+//    }
+    
+    private void tallennaTulos() {
+        Tulos tulos = new Tulos(this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat);
+        boolean kopio = false;
+        for (Tulos vanhaTulos : this.tulokset) {
+            if (tulos.equals(vanhaTulos)) {
+                kopio = true;
+                break;
+            }
+        }
+        if (kopio == false) {
+            tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
+            tulos.setMinimiyhteensopivuus(this.minimisopivuus);
+            tulos.setJarjestysnumero(this.jarjestysnumero);
+            this.tulokset.add(tulos);
+        }
     }
     
 }

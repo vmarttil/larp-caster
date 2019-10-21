@@ -17,10 +17,10 @@ import java.util.TreeSet;
  * @author Ville Marttila
  */
 public class Tulos implements Comparable<Tulos> {
-    private TreeMap<Integer, Integer> pelaajienHahmot;
-    private TreeMap<Integer, Integer> hahmojenPelaajat;
-    private TreeSet<Integer> hahmottomatPelaajat;
-    private TreeSet<Integer> pelaajattomatHahmot;
+    private int[] pelaajienHahmot;
+    private int[] hahmojenPelaajat;
+    private int[] hahmottomatPelaajat;
+    private int[] pelaajattomatHahmot;
     private String algoritmi;
     int minimiyhteensopivuus;
     int huonoinSopivuus;
@@ -28,63 +28,155 @@ public class Tulos implements Comparable<Tulos> {
     double mediaanisopivuus;
     int parasSopivuus;
     int jarjestysnumero;
-    int prioriteetti;
     
     /**
      * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset 
      * ja siihen liittyvät metatiedot.
      */
-    public Tulos() {
-        this.pelaajienHahmot = new TreeMap<>();
-        this.hahmojenPelaajat = new TreeMap<>();
-        this.hahmottomatPelaajat = new TreeSet<>();
-        this.pelaajattomatHahmot = new TreeSet<>();
+    public Tulos(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
         this.huonoinSopivuus = 100;
         this.sopivuuskeskiarvo = 0;
         this.mediaanisopivuus = 0;
         this.parasSopivuus = 0;
+        int[] sopivuudet = taytaHahmojenPelaajat(sopivuusmatriisi, hahmojenValinnat);
+        taytaPelaajienHahmot(sopivuusmatriisi, pelaajienValinnat);
+        laskeSopivuudet(sopivuudet);
+    }
+    
+    // Luokan konstruktorin käyttämät apumetodit
+
+    /**
+     * Tämä metodi täyttää taulukot jotka sisältävät tiedon kullekin hahmolle valitusta pelaajasta ja pelaajattomista hahmoista ja tallentaa samalla tiedon hahmojaon sopivuuksista.
+     * @param sopivuusmatriisi hahmojaon laskennassa käytetty Sopivuusmatriisi-olio
+     * @param hahmojenValinnat kokonaislukutaulukko joka sisältää hahmojaon hahmoille valitsemat pelaajat, mukaan lukien täytehahmot 
+     * @return metodi palauttaa kokonaislukutaulukon, joka sisältää hahmo-pelaaja-parien yhteensopivuudet
+     */
+    private int[] taytaHahmojenPelaajat(Sopivuusmatriisi sopivuusmatriisi, int[] hahmojenValinnat) {
+        this.hahmojenPelaajat = new int[sopivuusmatriisi.getHahmomaara() + 1];
+        int[] sopivuudet = new int[sopivuusmatriisi.getHahmomaara()];
+        int pelaajattomat = 0;
+        for (int hahmo = 1; hahmo <= sopivuusmatriisi.getHahmomaara(); hahmo++) {
+            this.hahmojenPelaajat[hahmo] = hahmojenValinnat[hahmo];
+            if (this.hahmojenPelaajat[hahmo] == 0) {
+                sopivuudet[hahmo - 1] = 0;
+                pelaajattomat++;
+            } else {
+                sopivuudet[hahmo - 1] = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[hahmo], hahmo);
+            }
+        }
+        taytaPelaajattomatHahmot(pelaajattomat);
+        return sopivuudet;
+    }
+
+    /**
+     * Tämä metodi luo ja täyttää kokonaislukutaulukon joka sisältää listan hahmosita joille ei löytynyt pelaajaa.
+     * @param pelaajattomat ilman pelaajaa jääneiden hahmojen määrä
+     */    
+    private void taytaPelaajattomatHahmot(int pelaajattomat) {
+        this.pelaajattomatHahmot = new int[pelaajattomat];
+        for (int hahmo = 1; hahmo < this.hahmojenPelaajat.length; hahmo++) {
+            if (this.hahmojenPelaajat[hahmo] == 0) {
+                this.pelaajattomatHahmot[this.pelaajattomatHahmot.length - pelaajattomat] = hahmo;
+                pelaajattomat--;
+            }
+        }
+    }
+    
+    /**
+     * Tämä metodi täyttää taulukot jotka sisältävät tiedon kullekin pelaajalle valitusta hahmosta ja hahmottomista pelaajista.
+     * @param sopivuusmatriisi hahmojaon laskennassa käytetty Sopivuusmatriisi-olio
+     * @param pelaajienValinnat kokonaislukutaulukko joka sisältää hahmojaon pelaajille valitsemat hahmot, mukaan lukien täytehahmot
+     */
+    private void taytaPelaajienHahmot(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat) {
+        this.pelaajienHahmot = new int[sopivuusmatriisi.getPelaajamaara() + 1];
+        int hahmottomat = 0;
+        for (int pelaaja = 1; pelaaja <= sopivuusmatriisi.getHahmomaara(); pelaaja++) {
+            this.pelaajienHahmot[pelaaja] = pelaajienValinnat[pelaaja];
+            if (this.pelaajienHahmot[pelaaja] == 0) {
+                hahmottomat++;
+            }
+        }
+        this.hahmottomatPelaajat = new int[hahmottomat];
+    }
+    
+    /**
+     * Tämä metodi luo ja täyttää kokonaislukutaulukon joka sisältää listan pelaajista joille ei löytynyt hahmoa.
+     * @param hahmottomat ilman hahmoa jääneiden pelaajien määrä
+     */
+    private void taytaHahmottomatPelaajat(int hahmottomat) {
+        this.hahmottomatPelaajat = new int[hahmottomat];
+        for (int pelaaja = 1; pelaaja < this.pelaajienHahmot.length; pelaaja++) {
+            if (this.pelaajienHahmot[pelaaja] == 0) {
+                this.hahmottomatPelaajat[this.hahmottomatPelaajat.length - hahmottomat] = pelaaja;
+                hahmottomat--;
+            }
+        }
+    }
+    
+    /**
+     * Tämä metodi laskee hahmojaon sopivuutta koskevat tunnusluvut (keskiarvo, pienin, suurin ja mediaani).
+     * @param sopivuudet taulukko joka sisältää listan hahmojen sopivuuksista pelaajille
+     */
+    private void laskeSopivuudet(int[] sopivuudet) {
+        int kokonaissopivuus = 0;
+        for (int i = 0; i < sopivuudet.length; i++) {
+            kokonaissopivuus = kokonaissopivuus + sopivuudet[i];
+            if (sopivuudet[i] < this.huonoinSopivuus) {
+                this.huonoinSopivuus = sopivuudet[i];
+            }
+            if (sopivuudet[i] > this.parasSopivuus) {
+                this.parasSopivuus = sopivuudet[i];
+            }
+        }
+        this.sopivuuskeskiarvo = (double) kokonaissopivuus / this.hahmojenPelaajat.length - 1;
+        Arrays.sort(sopivuudet);
+        if (sopivuudet.length % 2 == 0) {
+            this.mediaanisopivuus = (sopivuudet[sopivuudet.length / 2 - 1] + sopivuudet[sopivuudet.length / 2]) / 2.0;
+        } else {
+            this.mediaanisopivuus = sopivuudet[sopivuudet.length / 2];
+        }
     }
     
     // Getters
     
     /**
      * Tämä metodi palauttaa tiedot hahmoille valituista pelaajista.
-     * @return metodi palauttaa kokonaislukupareja sisältävän TreeMap-olion, 
-     * jossa avain sisältää hahmon indeksinumeron ja arvo sille valitun pelaajan
-     * indeksinumeron
+     * @return metodi palauttaa kokonaislukutaulukon, jossa taulukon rivi on hahmon 
+     * indeksi ja sen arvo hahmolle valitun pelaajan indeksi (arvo 0 tarkoittaa, 
+     * ettei hahmolle ole löytynyt pelaajaa)
      */
-    public TreeMap<Integer, Integer> getHahmojenPelaajat() { 
+    public int[] getHahmojenPelaajat() { 
         return this.hahmojenPelaajat;
     }
 
     /**
-     * Tämä metodi palauttaa tiedot pelaajille valituista hahmoista.
-     * @return metodi palauttaa kokonaislukupareja sisältävän TreeMap-olion, 
-     * jossa avain sisältää pelaajan indeksinumeron ja arvo sille valitun hahmon
-     * indeksinumeron
+     * Tämä metodi palauttaa listan hahmosita, joille ei löytynyt pelaajaa.
+     * @return metodi palauttaa pelaajattomien hahmojen indeksit sisältävän 
+     * kokonaislukutaulukon
      */
-    public TreeMap<Integer, Integer> getPelaajienHahmot() { 
+    public int[] getPelaajattomatHahmot() {
+        return this.pelaajattomatHahmot;
+    }
+    
+    /**
+     * Tämä metodi palauttaa tiedot pelaajille valituista hahmoista.
+     * @return metodi palauttaa kokonaislukutaulukon, jossa taulukon rivi on pelaajan 
+     * indeksi ja sen arvo pelaajalle valitun hahmon indeksi (arvo 0 tarkoittaa, 
+     * ettei pelaajalle ole löytynyt hahmoa)
+     */
+    public int[] getPelaajienHahmot() { 
         return this.pelaajienHahmot;
     }
     
     /**
      * Tämä metodi palauttaa listan pelaajista, joille ei löytynyt hahmoa.
-     * @return metodi palauttaa TreeSet-olion, joka sisältää pelaajien 
-     * indeksinumerot kokonaislukuina
+     * @return metodi palauttaa hahmottomien pelaajien indeksit sisältävän 
+     * kokonaislukutaulukon
      */
-    public TreeSet<Integer> getHahmottomatPelaajat() {
+    public int[] getHahmottomatPelaajat() {
         return this.hahmottomatPelaajat;
     }
     
-    /**
-     * Tämä metodi palauttaa listan hahmoista, joille ei löytynyt pelaajaa.
-     * @return metodi palauttaa TreeSet-olion, joka sisältää hahmojen 
-     * indeksinumerot kokonaislukuina
-     */
-    public TreeSet<Integer> getPelaajattomatHahmot() {
-        return this.pelaajattomatHahmot;
-    }
-
     /**
      * Tämä metodi palauttaa tuloksen edustamaan hahmojakoon käytetyn 
      * algoritmin.
@@ -103,30 +195,47 @@ public class Tulos implements Comparable<Tulos> {
         return this.minimiyhteensopivuus;
     }
 
-    public double getHuonoinSopivuus() {
+    /**
+     * Tämä metodi palauttaa hahmojaon parhaan sopivuuden hahmon ja pelaajan 
+     * välillä.
+     * @return metodi palauttaa parhaan sopivuuden kokonaislukuna
+     */
+    public int getParasSopivuus() {
+        return this.parasSopivuus;
+    }
+    
+    /**
+     * Tämä metodi palauttaa hahmojaon huonoimman sopivuuden hahmon ja pelaajan 
+     * välillä.
+     * @return metodi palauttaa huonoimman sopivuuden kokonaislukuna
+     */
+    public int getHuonoinSopivuus() {
         return this.huonoinSopivuus;
     }
     
     /**
-     * Tämä metodi palauttaa hahmojaon keskimääräisen sopivuuden.
+     * Tämä metodi palauttaa hahmojaon keskimääräisen sopivuuden hahmojen ja 
+     * pelaajien välillä.
      * @return metodi palauttaa keskimääräisen sopivuuden liukulukuna
      */
     public double getSopivuuskeskiarvo() {
         return this.sopivuuskeskiarvo;
     }
 
+    /**
+     * Tämä metodi palauttaa hahmojaon mediaanisopivuuden hahmojen ja pelaajien 
+     * välillä.
+     * @return metodi palauttaa mediaanisopivuuden liukulukuna
+     */
     public double getMediaanisopivuus() {
         return this.mediaanisopivuus;
     }
-    
-    public double getParasSopivuus() {
-        return this.parasSopivuus;
-    }
-    
-    public int getPrioriteetti() {
-        return this.prioriteetti;
-    }
-    
+
+    /**
+     * Tämä metodi palauttaa tuloksen järjestysnumeron algoritmin laskemien 
+     * tulosten joukossa.
+     * @return metodi palauttaa järjestysnumeron kokonaislukuna
+     */
     public int getJarjestysnumero() {
         return this.jarjestysnumero;
     }
@@ -150,64 +259,39 @@ public class Tulos implements Comparable<Tulos> {
     public void setMinimiyhteensopivuus(int minimiyhteensopivuus) {
         this.minimiyhteensopivuus = minimiyhteensopivuus;
     }
-
-    public void setPrioriteetti(int prioriteetti) {
-        this.prioriteetti = prioriteetti;
-    }
     
+    /**
+     * Tämä metodi tallentaa tulokseen sen järjestysnumeron algoritmin laskemien 
+     * tulosten joukossa.
+     * @param jarjestysnumero tallennettava järjestysnumero kokonaislukuna
+     */
     public void setJarjestysnumero(int jarjestysnumero) {
         this.jarjestysnumero = jarjestysnumero;
     }
     
-    /**
-     * Tämä metodi tallentaa valitun algoritmin laskemat hahmojaon tulokset 
-     * Tulos-olion taulukoihin.
-     * @param sopivuusmatriisi hahmojaossa käytetyt yhteensopivuustiedot 
-     * sisältävä Sopivuusmatriisi-olio
-     * @param pelaajienValinnat taulukko, joka sisältää kullekin pelaajalle 
-     * hahmojaossa valitun hahmon
-     * @param hahmojenValinnat taulukko, joka sisältää kullekin hahmolle 
-     * hahmojaossa valitun pelaajan
-     */
-    public void taytaTulokset(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
-        int[] sopivuudet = new int[sopivuusmatriisi.getHahmomaara()];
-        int kokonaissopivuus = 0;
-        for (int i = 1; i < pelaajienValinnat.length; i++) {
-            if (pelaajienValinnat[i] > sopivuusmatriisi.getHahmomaara() || pelaajienValinnat[i] == 0) {
-                hahmottomatPelaajat.add(i);
-            } else {
-                pelaajienHahmot.put(i, pelaajienValinnat[i]);
-            }
-        }
-        for (int i = 1; i < hahmojenValinnat.length; i++) {
-            if (i > sopivuusmatriisi.getHahmomaara()) {  
-            } else if  (hahmojenValinnat[i] == 0) {
-                pelaajattomatHahmot.add(i);
-            } else {
-                hahmojenPelaajat.put(i, hahmojenValinnat[i]);
-                int sopivuus = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[i], i);
-                sopivuudet[i - 1] = sopivuus;
-                kokonaissopivuus = kokonaissopivuus + sopivuus;
-                if (sopivuus < this.huonoinSopivuus) {
-                    this.huonoinSopivuus = sopivuus;
-                }
-                if (sopivuus > this.parasSopivuus) {
-                    this.parasSopivuus = sopivuus;
-                }
-            }
-        }
-        this.sopivuuskeskiarvo = (double) kokonaissopivuus / sopivuusmatriisi.getHahmomaara();
-        Arrays.sort(sopivuudet);
-        
-        if (sopivuudet.length % 2 == 0) {
-            this.mediaanisopivuus = (sopivuudet[sopivuudet.length / 2 - 1] + sopivuudet[sopivuudet.length / 2]) / 2.0;
-        } else {
-            this.mediaanisopivuus = sopivuudet[sopivuudet.length / 2];
-        }
+    
+    @Override
+    public int compareTo(final Tulos o) {
+        return Double.compare(this.sopivuuskeskiarvo, o.sopivuuskeskiarvo);
     }
     
     @Override
-    public int compareTo( final Tulos o) {
-        return Double.compare(this.sopivuuskeskiarvo, o.sopivuuskeskiarvo);
+    public boolean equals(Object o) {
+        if (o == this) { 
+            return true; 
+        }
+        if (!(o instanceof Tulos)) { 
+            return false; 
+        }
+        Tulos t = (Tulos) o;
+        if (Double.compare(this.sopivuuskeskiarvo, t.sopivuuskeskiarvo) != 0) {
+            return false;
+        }
+        for (int i = 1; i < this.hahmojenPelaajat.length; i++) {
+            if (Integer.compare(this.hahmojenPelaajat[i], t.hahmojenPelaajat[i]) != 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

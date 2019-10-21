@@ -36,7 +36,7 @@ public class Unkarilainen {
     private Set<Integer> pystylinjat;
     private int[] hahmojenValinnat;
     private int jarjestysnumero;
-    private List<Tulos> tulokset;
+    private ArrayList<Tulos> tulokset;
 
  
     /**
@@ -70,7 +70,7 @@ public class Unkarilainen {
      * @return tämä metodi palauttaa Tulos-olion joka sisältää kokonais-
      * yhteensopivuudeltaan maksimoidun hahmojaon
      */
-    public List<Tulos> laskeHahmojako() {
+    public ArrayList<Tulos> laskeHahmojako() {
         vahennaRivienPienimmatArvot();
         vahennaSarakkeidenPienimmatArvot();
         while (true) {
@@ -85,14 +85,14 @@ public class Unkarilainen {
             vahennaPieninArvoRiveilta(pienin);            
             lisaaPieninArvoSarakkeisiin(pienin);
         }
-        // Välituloste
-        for (int i = 0; i < this.pelaajamaara; i++) {
-            String tuloste = "";
-            for (int j = 0; j < this.hahmomaara; j++) {
-                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
-            }
-            System.out.println(tuloste);
-        }
+//        // Välituloste
+//        for (int i = 0; i < this.pelaajamaara; i++) {
+//            String tuloste = "";
+//            for (int j = 0; j < this.hahmomaara; j++) {
+//                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
+//            }
+//            System.out.println(tuloste);
+//        }
 
         // Rakennetaan hahmojen ehdokaslistat uusiksi optimaalisten vaihtoehtojen perusteella
         for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
@@ -116,6 +116,9 @@ public class Unkarilainen {
         // Haetaan peruuttavalla haulla kaikki eri vaihtoehdot joissa kaikkien rivien nollat ovat eri sarakkeissa
         Peruuttava peruuttavaHaku = new Peruuttava(this.hahmojako);
         this.tulokset = peruuttavaHaku.laskeHahmojako();
+        for (int i = 0; i < this.tulokset.size(); i++) {
+            this.tulokset.get(i).setAlgoritmi("unkarilainen");
+        }
         return this.tulokset;
     }
     

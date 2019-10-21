@@ -8,6 +8,7 @@ package fi.kapsi.vmarttil.larpcaster.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,6 +63,17 @@ public class Ehdokaslista {
     }
 
     /**
+     * Tämä metodi luo itsenäisen kopion annetusta ehdokaslistasta
+     * @param lahde kopioitava ehdokaslista
+     */
+    public Ehdokaslista(Ehdokaslista lahde) {
+        lista = new int[lahde.getPituus()];
+        for (int i = 0; i < lahde.getPituus(); i++) {
+            lista[i] = lahde.getEhdokas(i);
+        }
+    }
+    
+    /**
      * Tämä metodi palauttaa ehdokaslistan pituuden.
      * @return metodi palauttaa ehdokaslistan pituuden kokonaislukuna
      */
@@ -79,6 +91,33 @@ public class Ehdokaslista {
     }
     
     /**
+     * Tämä metodi asettaa annetun ehdokkaan indeksin osoittaman kohdan 
+     * ehdokkaaksi, korvaten aiemman ehdokkaan.
+     * @param ehdokas asetettavan ehdokkaan indeksinumero
+     * @param index indeksi joka osoittaa asetettavan ehdokkaan paikan
+     */
+    public void setEhdokas(int ehdokas, int index) {
+        this.lista[index] = ehdokas;
+    }
+    
+    /**
+     * Tämä metodi poistaa annetun indeksin kohdalla olevan ehdokkaan listasta, 
+     * siirtää seuraavia ehdokkaita yhden askelen ylöspäin ja lyhentää listan.
+     * @param index indeksi jonka kohdalta ehdokas poistetaan
+     */
+    
+    public void poistaEhdokas(int index) {
+        int[] uusiLista = new int[this.lista.length - 1];
+        for (int i = 0; i < index; i++) {
+            uusiLista[i] = this.lista[i];
+        }
+        for (int i = index + 1; i < this.lista.length; i++) {
+            uusiLista[i - 1] = this.lista[i];
+        }
+        this.lista = uusiLista;
+    }
+    
+    /**
      * Tämä metodi korvaa ehdokaslistan sisällön uusilla ehdokkailla
      * @param ehdokkaat HashMap-objekti joka sisältää avaimina ehdokkaiden
      * indeksit ja arvoina niiden yhteensopivuusarvot
@@ -86,6 +125,7 @@ public class Ehdokaslista {
     public void korvaaLista(HashMap<Integer,Integer> ehdokkaat) {
         this.lista = ehdokkaat.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
     }
+    
     
 }
 
