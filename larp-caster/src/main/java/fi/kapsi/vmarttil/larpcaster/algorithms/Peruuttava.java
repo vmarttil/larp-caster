@@ -114,7 +114,7 @@ public class Peruuttava {
         if (kulunutAika > 1.0) {
             this.lopetus = true;
         }
-        if (this.tulokset.size() > 30000) {
+        if (this.tulokset.size() > 50000) {
             this.lopetus = true;
         }
          Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);

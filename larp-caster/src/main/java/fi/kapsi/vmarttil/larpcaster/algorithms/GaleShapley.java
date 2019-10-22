@@ -236,7 +236,7 @@ public class GaleShapley {
                         galeShapleyHahmoKosii();
                         this.variaationumero++;
                         System.out.println(this.variaationumero + " variaatiota laskettu");
-                        if (this.variaationumero > 10000) {
+                        if (this.variaationumero > 500000) {
                             break;
                         }
                         laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);

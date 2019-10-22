@@ -85,14 +85,14 @@ public class Unkarilainen {
             vahennaPieninArvoRiveilta(pienin);            
             lisaaPieninArvoSarakkeisiin(pienin);
         }
-//        // Välituloste
-//        for (int i = 0; i < this.pelaajamaara; i++) {
-//            String tuloste = "";
-//            for (int j = 0; j < this.hahmomaara; j++) {
-//                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
-//            }
-//            System.out.println(tuloste);
-//        }
+        // Välituloste
+        for (int i = 0; i < this.pelaajamaara; i++) {
+            String tuloste = "";
+            for (int j = 0; j < this.hahmomaara; j++) {
+                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
+            }
+            System.out.println(tuloste);
+        }
 
         // Rakennetaan hahmojen ehdokaslistat uusiksi optimaalisten vaihtoehtojen perusteella
         for (int sarake = 0; sarake < this.hahmomaara; sarake++) {

@@ -573,7 +573,7 @@ public class TextUI {
                     System.out.println(hahmojako.getYhteensopivuusdata().getSopivuusprosentti(tulos.getHahmojenPelaajat()[hahmo], hahmo) + " %");
                 }
             }
-            tulostaHahmottomatPelaajat(tulos);
+            // tulostaHahmottomatPelaajat(tulos);
             System.out.println("");
             System.out.println("Huonoin sopivuus: " + tulos.getHuonoinSopivuus() + "%");
             System.out.println("Paras sopivuus: " + tulos.getParasSopivuus() + "%");
