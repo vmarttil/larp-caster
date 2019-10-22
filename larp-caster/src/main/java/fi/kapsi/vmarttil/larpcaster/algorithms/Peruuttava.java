@@ -5,6 +5,7 @@
  */
 package fi.kapsi.vmarttil.larpcaster.algorithms;
 
+import fi.kapsi.vmarttil.larpcaster.domain.Ehdokaslista;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
@@ -25,6 +26,8 @@ public class Peruuttava {
     private int pelaajamaara;
     private int hahmomaara;
     private long aloitusAika;
+    private int sopivuusraja;
+    private Ehdokaslista[] kaytettavatEhdokaslistat;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
     private int jarjestysnumero;
@@ -45,6 +48,8 @@ public class Peruuttava {
         this.pelaajamaara = this.yhteensopivuusdata.getPelaajamaara();
         this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
+        this.sopivuusraja = 100;
+        this.kaytettavatEhdokaslistat = new Ehdokaslista[this.hahmomaara + 1];
         this.tulokset = new ArrayList<>();
         this.jarjestysnumero = 0;
         this.lopetus = false;
@@ -52,17 +57,30 @@ public class Peruuttava {
     }
 
     /**
-     * Tämä metodi käynnistää rekursiivisen hahmojakojen laskennan peruuttavalla 
-     * hakualgoritmilla.
-     * @return tämä metodi palauttaa TreeMap-tietorakenteen, joka sisältää 
-     * sopivuusjärjestyksessä joukon Tulos-olioita joista kukin sisältää 
-     * lasketun hahmojaon
+     * Tämä metodi käynnistää sarjan peruuttavia hakuja jotka laskevat kaikki 
+     * mahdolliset hahmojaot laajenevilla pelaajaehdokasluetteloilla alkaen vain 
+     * kunkin hahmon sopivimman pelaajan sisältävistä luetteloista siten, että 
+     * joka kierroksella mukaan sisällytetään uusia, laskevan sopivuusraja-arvon 
+     * ylittäviä pelaajaehdokkaita, kunnes kaikki hahmojaot on laskettu, 
+     * sopivuusraja-arvo saavuttaa määritetyn minimisopivuuden tai laskettujen 
+     * hahmojakojen määrä ylittää 10 000.
+     * .
+     * @return tämä metodi palauttaa taulukkolistan joka sisältää löydettyjä 
+     * hahmojakoja edustavia Tulos-olioita keskimääräisen sopivuuden mukaisessa 
+     * käänteisessä järjestyksessä
      */
     public ArrayList<Tulos> laskeHahmojako() {
         this.aloitusAika = System.nanoTime();
         int hahmo = 1;
         this.edellinenLoytohetki = hahmojako.getSuorituksenAloitus();
-        etsiRatkaisu(hahmo);
+        while (this.sopivuusraja >= this.minimisopivuus) {
+            laskeEhdokaslistat();
+            
+            etsiRatkaisu(hahmo);
+        }
+        
+        
+        
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
         ArrayList<Tulos> tulosluettelo;
@@ -74,6 +92,17 @@ public class Peruuttava {
         }
         return tulosluettelo;
     }
+    
+    private void laskeEhdokaslistat() {
+        
+        for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this.hahmojako, "hahmo", hahmo);
+            
+            
+        }
+    }
+    
+    
     
     /**
      * Tämä metodi suorittaa hahmojakojen rekursiivisen haun kutsumalla itseään

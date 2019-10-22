@@ -5,13 +5,9 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Tämä luokka määrittelee yksittäisen hahmon tai pelaajan ehdokaslistan, 
@@ -20,46 +16,55 @@ import java.util.stream.Collectors;
  * @author Ville Marttila
  */
 public class Ehdokaslista {
-    private int[] lista;
+    private int[] ehdokaslista;
+    private int[] yhteensopivuuslista;
     
     /**
      * Tämä metodi luo Ehdokaslista-olion, joka sisältää tiedot yhden hahmon tai 
-     * pelaajan mahdollisista pelaaja- tai hahmoehdokkaista.
+     * pelaajan mahdollisista pelaaja- tai hahmoehdokkaista sekä niiden yhteensopivuuksista.
      * @param hahmojako Hahmojako-olio, joka sisältää sen hahmojaon tiedot johon 
      * tämä ehdokaslista liittyy
-     * @param sopivuusprosentit Sopivuusmatriisi-olio joka sisältää tiedon 
-     * jokaisen hahmon ja pelaajan keskinäisestä yhteensopivuudesta
-     * @param minimisopivuus kokonaisluku joka kertoo pienimmän yhteensopivuus-
-     * prosentin jolla hahmo tai pelaaja sisällytetään ehdokaslistaan
      * @param rooli merkkijono 'pelaaja' tai 'hahmo' joka kertoo, onko kyseessä 
      * pelaajan hahmoehdokaslista vai hahmon pelaajaehdokaslista
      * @param indeksi kokonaisluku, joka kertoo sen pelaajan tai hahmon 
-     * taulukkoindeksin jolle ehdokaslista kuuluu
+     * indeksin jolle ehdokaslista kuuluu
      */
-    public Ehdokaslista(Hahmojako hahmojako, Sopivuusmatriisi sopivuusprosentit, int minimisopivuus, String rooli, int indeksi) {
+    public Ehdokaslista(Hahmojako hahmojako, String rooli, int indeksi) {
+        if (rooli.equals("hahmo")) {
+            this.ehdokaslista = new int[hahmojako.getYhteensopivuusdata().getPelaajamaara()];
+            this.yhteensopivuuslista = new int[hahmojako.getYhteensopivuusdata().getPelaajamaara()];
+        } else {
+            this.ehdokaslista = new int[hahmojako.getYhteensopivuusdata().getHahmomaara()];
+            this.yhteensopivuuslista = new int[hahmojako.getYhteensopivuusdata().getHahmomaara()];
+        }
+        
+        
+        
+        
+        
         HashMap<Integer, Integer> naapurit = new HashMap<>();
         if (rooli.equals("pelaaja")) {
-            for (int i = 1; i <= sopivuusprosentit.getPelaajamaara(); i++) {
-                if (sopivuusprosentit.getSopivuusprosentti(indeksi, i) >= minimisopivuus) {
-                    naapurit.put(i, sopivuusprosentit.getSopivuusprosentti(indeksi, i));
+            for (int i = 1; i <= hahmojako.getYhteensopivuusdata().getPelaajamaara(); i++) {
+                if (hahmojako.getYhteensopivuusdata().getSopivuusprosentti(indeksi, i) >= hahmojako.getMinimisopivuus()) {
+                    naapurit.put(i, hahmojako.getYhteensopivuusdata().getSopivuusprosentti(indeksi, i));
                 }
             }
             if (naapurit.size() == 0) {
                 hahmojako.setEhdokaslistatOK(false);
-                System.out.println("VAROITUS: Pelaajalle " + sopivuusprosentit.getPelaajatunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää hahmoa.");
+                System.out.println("VAROITUS: Pelaajalle " + hahmojako.getYhteensopivuusdata().getPelaajatunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää hahmoa.");
             }
         } else if (rooli.equals("hahmo")) {
-            for (int i = 1; i <= sopivuusprosentit.getPelaajamaara(); i++) {
-                if (sopivuusprosentit.getSopivuusprosentti(i, indeksi) >= minimisopivuus) {
-                    naapurit.put(i, sopivuusprosentit.getSopivuusprosentti(i, indeksi));
+            for (int i = 1; i <= hahmojako.getYhteensopivuusdata().getPelaajamaara(); i++) {
+                if (hahmojako.getYhteensopivuusdata().getSopivuusprosentti(i, indeksi) >= hahmojako.getMinimisopivuus()) {
+                    naapurit.put(i, hahmojako.getYhteensopivuusdata().getSopivuusprosentti(i, indeksi));
                 }
             }
             if (naapurit.size() == 0) {
                 hahmojako.setEhdokaslistatOK(false);
-                System.out.println("VAROITUS: Hahmolle " + sopivuusprosentit.getHahmotunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää pelaajaa.");
+                System.out.println("VAROITUS: Hahmolle " + hahmojako.getYhteensopivuusdata().getHahmotunnus(indeksi) + " ei löydy yhtään minimisopivuuden ylittävää pelaajaa.");
             }
         }
-        this.lista = naapurit.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
+        this.ehdokaslista = naapurit.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
     }
 
     /**
@@ -67,9 +72,9 @@ public class Ehdokaslista {
      * @param lahde kopioitava ehdokaslista
      */
     public Ehdokaslista(Ehdokaslista lahde) {
-        lista = new int[lahde.getPituus()];
+        ehdokaslista = new int[lahde.getPituus()];
         for (int i = 0; i < lahde.getPituus(); i++) {
-            lista[i] = lahde.getEhdokas(i);
+            ehdokaslista[i] = lahde.getEhdokas(i);
         }
     }
     
@@ -78,7 +83,7 @@ public class Ehdokaslista {
      * @return metodi palauttaa ehdokaslistan pituuden kokonaislukuna
      */
     public int getPituus() {
-        return this.lista.length;
+        return this.ehdokaslista.length;
     }
     
     /**
@@ -87,7 +92,7 @@ public class Ehdokaslista {
      * @return metodi palauttaa valitun ehdokkaan indeksinumeron kokonaislukuna
      */
     public int getEhdokas(int index) {
-        return this.lista[index];
+        return this.ehdokaslista[index];
     }
     
     /**
@@ -97,7 +102,7 @@ public class Ehdokaslista {
      * @param index indeksi joka osoittaa asetettavan ehdokkaan paikan
      */
     public void setEhdokas(int ehdokas, int index) {
-        this.lista[index] = ehdokas;
+        this.ehdokaslista[index] = ehdokas;
     }
     
     /**
@@ -107,14 +112,14 @@ public class Ehdokaslista {
      */
     
     public void poistaEhdokas(int index) {
-        int[] uusiLista = new int[this.lista.length - 1];
+        int[] uusiLista = new int[this.ehdokaslista.length - 1];
         for (int i = 0; i < index; i++) {
-            uusiLista[i] = this.lista[i];
+            uusiLista[i] = this.ehdokaslista[i];
         }
-        for (int i = index + 1; i < this.lista.length; i++) {
-            uusiLista[i - 1] = this.lista[i];
+        for (int i = index + 1; i < this.ehdokaslista.length; i++) {
+            uusiLista[i - 1] = this.ehdokaslista[i];
         }
-        this.lista = uusiLista;
+        this.ehdokaslista = uusiLista;
     }
     
     /**
@@ -123,7 +128,7 @@ public class Ehdokaslista {
      * indeksit ja arvoina niiden yhteensopivuusarvot
      */
     public void korvaaLista(HashMap<Integer,Integer> ehdokkaat) {
-        this.lista = ehdokkaat.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
+        this.ehdokaslista = ehdokkaat.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).map(Map.Entry::getKey).mapToInt(i->i).toArray();
     }
     
     

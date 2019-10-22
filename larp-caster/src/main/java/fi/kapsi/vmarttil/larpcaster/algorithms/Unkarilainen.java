@@ -9,6 +9,7 @@ import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -63,6 +64,7 @@ public class Unkarilainen {
         this.vapaatPelaajat = new boolean[this.pelaajamaara + 1];
         for (int i = 0; i <= this.pelaajamaara; i++) {
             this.osoituksetRiveilla[i] = 0;
+            this.vapaatPelaajat[i] = true;
         }
         this.jarjestysnumero = 0;
         this.tulokset = new ArrayList<>();
@@ -86,7 +88,7 @@ public class Unkarilainen {
             }
             merkitseSarakkeet();
             int mahdollisiaOsoituksia = viivaaRivitJaSarakkeet();
-            if (mahdollisiaOsoituksia == this.pelaajamaara) {
+            if (mahdollisiaOsoituksia >= this.pelaajamaara) {
                 break;
             }
             muokkaaMatriisia();
@@ -96,9 +98,20 @@ public class Unkarilainen {
             int[] hahmojenValinnat = lueRatkaisu();
             kirjaaRatkaisu(hahmojenValinnat);
         } else {
+            long maara = laskeRatkaisujenMaara();
+            System.out.println("Mahdollisten ratkaisujen määrä: " + maara);
             laskeMahdollisetRatkaisut();
         }
-        return this.tulokset;
+        Collections.sort(this.tulokset);
+        Collections.reverse(this.tulokset);
+        ArrayList<Tulos> tulosluettelo;
+        System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
+        if (this.tulokset.size() > 100) {
+            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
+        } else {
+            tulosluettelo = this.tulokset;
+        }
+        return tulosluettelo;
     }
     
     // Luokan metodien käyttämät yksityiset apumetodit
@@ -172,12 +185,20 @@ public class Unkarilainen {
         boolean useitaNollia = false;
         // Käydään rivejä läpi kunnes uusia osoituksia ei enää löydy
         while (toistetaan == true) {
-            toistetaan = tarkistaRivit();
+            if (tarkistaRivit() == true) {
+                toistetaan = true;
+            } else {
+                toistetaan = false;
+            }
         }
-        // Käydään sarakkeita läpi kunnes uusia osoituksia ei enää löydy
         toistetaan = true;
+        // Käydään sarakkeet läpi kunnes uusia osoituksia ei enää löydy
         while (toistetaan == true) {
-            toistetaan = tarkistaSarakkeet();
+        if (tarkistaSarakkeet() == true) {
+                toistetaan = true;
+            } else {
+                toistetaan = false;
+            }
         }
     }
     
@@ -191,22 +212,25 @@ public class Unkarilainen {
         boolean toistetaan = false;
         boolean useitaNollia = false;
         for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
-            int nollia = 0;
-            int nollaSarakkeessa = 0;
-            for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
-                if (this.kustannusmatriisi[rivi][sarake] == 0 && this.blokatutSarakkeet[sarake] == false && this.osoituksetRiveilla[rivi] != sarake) {
-                    nollia++;
-                    nollaSarakkeessa = sarake;
+            if (this.osoituksetRiveilla[rivi] == 0) {
+                int nollia = 0;
+                int nollaSarakkeessa = 0;
+                for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                    if (this.kustannusmatriisi[rivi][sarake] == 0 && this.blokatutSarakkeet[sarake] == false && this.osoituksetRiveilla[rivi] != sarake) {
+                        nollia++;
+                        nollaSarakkeessa = sarake;
+                    }
                 }
-            }
-            if (nollia == 1) {
-                this.osoituksetRiveilla[rivi] = nollaSarakkeessa;
-                this.blokatutSarakkeet[nollaSarakkeessa] = true;
-                if (useitaNollia == true) {
-                    toistetaan = true;
+                if (nollia == 1) {
+                    this.osoituksetRiveilla[rivi] = nollaSarakkeessa;
+                    this.blokatutSarakkeet[nollaSarakkeessa] = true;
+                    if (useitaNollia == true) {
+                        toistetaan = true;
+                    }
+                } else if (nollia > 1) {
+                    this.osoituksetRiveilla[rivi] = 0;
+                    useitaNollia = true;
                 }
-            } else if (nollia > 1) {
-                useitaNollia = true;
             }
         }
         return toistetaan;
@@ -242,7 +266,8 @@ public class Unkarilainen {
 
     /**
      * Tämä metodi tarkistaa, onko kaikille riveille osoitettu sarake.
-     * @return tämä metodi palauttaa totuusarvon joka kertoo onko kaikille riveille löytynyt kelvollinen sarake
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko kaikille 
+     * riveille löytynyt täsmälleen yksi kelvollinen sarake
      */
     private boolean tarkistaOsoitukset() {
         int osoituksia = 0;
@@ -413,14 +438,23 @@ public class Unkarilainen {
     private int[] lueRatkaisu() {
         int[] hahmojenValinnat = new int[this.hahmomaara + 1];
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
-            for (int pelaaja= 1; pelaaja < this.pelaajamaara; pelaaja++) {
-                if (this.kustannusmatriisi[pelaaja][hahmo] == 0) {
-                    hahmojenValinnat[hahmo] = pelaaja;
-                    break;
-                }
-            }
+            hahmojenValinnat[hahmo] = this.osoituksetRiveilla[hahmo];
         }
         return hahmojenValinnat;
+    }
+    
+    private long laskeRatkaisujenMaara() {
+        long kertoma = 1;
+        for (int sarake = 1; sarake <= this.hahmomaara; sarake++) {
+            int nollia = 0;
+            for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                if (this.kustannusmatriisi[rivi][sarake] == 0) {
+                    nollia++;
+                }
+            }
+            kertoma = kertoma * nollia;
+        }
+        return kertoma;
     }
     
     private void laskeMahdollisetRatkaisut() {
@@ -433,7 +467,7 @@ public class Unkarilainen {
             kirjaaRatkaisu(this.hahmojenValinnat);
             return;
         }
-        for (int pelaaja = 1; pelaaja < this.pelaajamaara; pelaaja++) {
+        for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
             if (this.kustannusmatriisi[pelaaja][hahmo] == 0 && this.vapaatPelaajat[pelaaja] == true) {
                 this.hahmojenValinnat[hahmo] = pelaaja;
                 this.vapaatPelaajat[pelaaja] = false;

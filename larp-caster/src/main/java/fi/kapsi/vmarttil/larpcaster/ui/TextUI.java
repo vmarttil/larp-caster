@@ -61,9 +61,13 @@ public class TextUI {
                 asetaEhdot();
             } else if (komento.equals("4") && hahmojako.getYhteensopivuusdata() != null) {
                 naytaEhdokaslistat();
-            } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null) {
+            } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null && this.hahmojako.getEhdokaslistatOK() == true) {
                 double suoritusaika = this.hahmojako.teeHahmojako();
-                System.out.println("Suoritusaika: " + suoritusaika + " s");
+                if (suoritusaika == -1) {
+                    System.out.println("Algoritmi tuottanut yhtäkään kelvollista hahmojakoa nykyisillä parametreilla.");
+                } else { 
+                    System.out.println("Suoritusaika: " + suoritusaika + " s");
+                }
             } else if (komento.equals("6") && !hahmojako.getTulokset().isEmpty()) {
                 naytaLaskennat();
             } else {
@@ -89,9 +93,11 @@ public class TextUI {
         System.out.println(" 3 - Aseta reunaehdot ja optimoinnit");
         if (hahmojako.getYhteensopivuusdata() != null) {
             System.out.println(" 4 - Näytä lähtödata");
-            System.out.println(" 5 - Laske optimoitu hahmojako");
+            if (this.hahmojako.getEhdokaslistatOK() == true) {
+                System.out.println(" 5 - Laske optimoitu hahmojako");
+            }
         }
-        if (!hahmojako.getTulokset().isEmpty()) {
+        if (hahmojako.getTulokset().size() > 0) {
             System.out.println(" 6 - Näytä tulokset");
         }
         System.out.println(" x - Lopeta");

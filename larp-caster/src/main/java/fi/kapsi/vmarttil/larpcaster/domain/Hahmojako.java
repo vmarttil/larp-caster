@@ -419,12 +419,12 @@ public class Hahmojako {
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();        
         // Luodaan pelaajille hahmoehdokaslistat
         for (int i = 1; i <= pelaajamaara; i++) {
-            Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "pelaaja", i);
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this, "pelaaja", i);
             yhteensopivuusdata.setHahmoehdokaslista(i, ehdokaslista);
         }
         // Luodaan hahmoille pelaajaehdokaslistat
         for (int i = 1; i <= pelaajamaara; i++) {
-            Ehdokaslista ehdokaslista = new Ehdokaslista(this, yhteensopivuusdata, minimisopivuus, "hahmo", i);
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this, "hahmo", i);
             yhteensopivuusdata.setPelaajaehdokaslista(i, ehdokaslista);
         }
         if (ehdokaslistatOK == true) {
@@ -450,8 +450,12 @@ public class Hahmojako {
             Unkarilainen algoritmi = new Unkarilainen(this);
             tulokset = algoritmi.laskeHahmojako();    
         }
-        lisaaTulos(tulokset);
-        paivitaYhteistulokset(tulokset);
+        if (tulokset.size() > 0) {
+            lisaaTulos(tulokset);
+            paivitaYhteistulokset(tulokset);
+        } else {
+            return -1;
+        }
         Instant suorituksenLopetus = Instant.now();
         Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
         long suoritusaika = suorituksenKesto.getSeconds();
