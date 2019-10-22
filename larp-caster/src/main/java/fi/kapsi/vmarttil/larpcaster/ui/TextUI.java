@@ -188,8 +188,10 @@ public class TextUI {
             } else if (komento.equals("1")) {
                 asetaMinimisopivuus();
             } else if (komento.equals("2")) {
-                asetaTuloksiaEnintaanLaskentaaKohden();
+                asetaLaskettavatVariaatiot();
             } else if (komento.equals("3")) {
+                asetaTuloksiaEnintaanLaskentaaKohden();
+            } else if (komento.equals("4")) {
                 asetaTuloksiaEnintaanYhteensa();
             } else {
                 System.out.println("Tuntematon komento.");
@@ -204,8 +206,9 @@ public class TextUI {
         System.out.println("");
         System.out.println("Komennot: ");
         System.out.println(" 1 - Aseta minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%)");
-        System.out.println(" 2 - Aseta hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
-        System.out.println(" 3 - Aseta hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
+        System.out.println(" 2 - Aseta laskettavien variaatioiden aste (nykyinen:" + this.hahmojako.getLaskettavatVariaatiot() + ", max: 5)");
+        System.out.println(" 3 - Aseta hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
+        System.out.println(" 4 - Aseta hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -218,6 +221,20 @@ public class TextUI {
         System.out.print("Uusi minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%): ");
         int sopivuus = Integer.parseInt(this.lukija.nextLine().replace("%", "").replace(" ", ""));
         hahmojako.setMinimisopivuus(sopivuus);
+    }
+    
+    /**
+     * Tämä metodi määrittää käyttöliittymän laskettavien variaatioiden asteen asettamiselle.
+     */
+    private void asetaLaskettavatVariaatiot() {
+        System.out.println("");
+        System.out.print("Uusi laskettavien variaatioiden aste (nykyinen: " + hahmojako.getLaskettavatVariaatiot() + "): ");
+        int aste = Integer.parseInt(this.lukija.nextLine().replace("%", "").replace(" ", ""));
+        if (aste > 5) {
+            hahmojako.setLaskettavatVariaatiot(5);
+        } else {
+            hahmojako.setLaskettavatVariaatiot(aste);
+        }
     }
     
     /**

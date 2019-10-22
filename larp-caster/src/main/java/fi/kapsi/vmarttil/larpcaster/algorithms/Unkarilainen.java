@@ -8,15 +8,7 @@ package fi.kapsi.vmarttil.larpcaster.algorithms;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -32,9 +24,16 @@ public class Unkarilainen {
     private int hahmomaara;
     private long aloitusAika;
     private int[][] kustannusmatriisi;
-    private Set<Integer> vaakalinjat;
-    private Set<Integer> pystylinjat;
+    private int[] osoituksetRiveilla;
+    private boolean[] blokatutRivit;
+    private boolean[] blokatutSarakkeet;
+    private boolean[] merkitytRivit;
+    private boolean[] merkitytSarakkeet;
+    private boolean[] viivatutRivit;
+    private boolean[] viivatutSarakkeet;
+    private boolean yksiselitteinenRatkaisu;
     private int[] hahmojenValinnat;
+    private boolean[] vapaatPelaajat;
     private int jarjestysnumero;
     private ArrayList<Tulos> tulokset;
 
@@ -53,11 +52,17 @@ public class Unkarilainen {
         this.pelaajamaara = this.yhteensopivuusdata.getPelaajamaara();
         this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.kustannusmatriisi = laskeKustannusmatriisi();
-        this.vaakalinjat = new HashSet<>();
-        this.pystylinjat = new HashSet<>();
+        this.osoituksetRiveilla = new int[this.pelaajamaara + 1];
+        this.blokatutRivit = new boolean[this.pelaajamaara + 1];
+        this.blokatutSarakkeet = new boolean[this.pelaajamaara + 1];
+        this.merkitytRivit = new boolean[this.pelaajamaara + 1];
+        this.merkitytSarakkeet = new boolean[this.pelaajamaara + 1];
+        this.viivatutRivit = new boolean[this.pelaajamaara + 1];
+        this.viivatutSarakkeet = new boolean[this.pelaajamaara + 1];
         this.hahmojenValinnat = new int[this.pelaajamaara + 1];
+        this.vapaatPelaajat = new boolean[this.pelaajamaara + 1];
         for (int i = 0; i <= this.pelaajamaara; i++) {
-            this.hahmojenValinnat[i] = 0;
+            this.osoituksetRiveilla[i] = 0;
         }
         this.jarjestysnumero = 0;
         this.tulokset = new ArrayList<>();
@@ -74,50 +79,24 @@ public class Unkarilainen {
         vahennaRivienPienimmatArvot();
         vahennaSarakkeidenPienimmatArvot();
         while (true) {
-            // Lisätään nollien peitoksi minimimäärä vaaka- ja pystylinjoja
-            lisaaLinjat();
-            // Tarkistetaan onko piirrettyjä linjoja vähintään yhtä monta kuin pelaajia; jos on, keskeytetään silmukka
-            if (this.vaakalinjat.size() + this.pystylinjat.size() >= this.pelaajamaara) {
+            osoitaSarakkeetRiveille();
+            if (tarkistaOsoitukset() == true) {
+                this.yksiselitteinenRatkaisu = true;
                 break;
             }
-            // Jos piirrettyjä linjoja ei vielä ole yhtä montaa kuin pelaajia, etsitään pienin arvo joka ei ole yhdelläkään linjalla, vähennetään se riveiltä jotka eivät ole vaakalinjoja ja lisätään se sarakkeisiin jotka ovat pystylinjoja. 
-            int pienin = etsiPieninVapaaArvo(); 
-            vahennaPieninArvoRiveilta(pienin);            
-            lisaaPieninArvoSarakkeisiin(pienin);
-        }
-        // Välituloste
-        for (int i = 0; i < this.pelaajamaara; i++) {
-            String tuloste = "";
-            for (int j = 0; j < this.hahmomaara; j++) {
-                tuloste = tuloste + " " + this.kustannusmatriisi[i][j];
+            merkitseSarakkeet();
+            int mahdollisiaOsoituksia = viivaaRivitJaSarakkeet();
+            if (mahdollisiaOsoituksia == this.pelaajamaara) {
+                break;
             }
-            System.out.println(tuloste);
+            muokkaaMatriisia();
+            nollaaMuuttujat();
         }
-
-        // Rakennetaan hahmojen ehdokaslistat uusiksi optimaalisten vaihtoehtojen perusteella
-        for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
-            HashMap<Integer, Integer> ehdokkaat = new HashMap<>();
-            for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-                if (this.kustannusmatriisi[rivi][sarake] == 0) {
-                    ehdokkaat.put(rivi + 1, this.yhteensopivuusdata.getSopivuusprosentti(rivi + 1, sarake + 1));
-                }
-            }
-            this.yhteensopivuusdata.getPelaajaehdokaslista(sarake + 1).korvaaLista(ehdokkaat);
-        }
-        // Välitulostus
-        for (int i = 1; i <= this.hahmomaara; i++) {
-            String tulostus = String.valueOf(i) + ": ";
-            for (int j = 0; j < this.yhteensopivuusdata.getPelaajaehdokaslista(i).getPituus(); j++) {
-                tulostus = tulostus + " " + this.yhteensopivuusdata.getPelaajaehdokaslista(i).getEhdokas(j);
-            }
-            System.out.println(tulostus);
-        }
-        
-        // Haetaan peruuttavalla haulla kaikki eri vaihtoehdot joissa kaikkien rivien nollat ovat eri sarakkeissa
-        Peruuttava peruuttavaHaku = new Peruuttava(this.hahmojako);
-        this.tulokset = peruuttavaHaku.laskeHahmojako();
-        for (int i = 0; i < this.tulokset.size(); i++) {
-            this.tulokset.get(i).setAlgoritmi("unkarilainen");
+        if (this.yksiselitteinenRatkaisu == true) {
+            int[] hahmojenValinnat = lueRatkaisu();
+            kirjaaRatkaisu(hahmojenValinnat);
+        } else {
+            laskeMahdollisetRatkaisut();
         }
         return this.tulokset;
     }
@@ -132,15 +111,15 @@ public class Unkarilainen {
      * kokonaislukutaulukon
      */
     private int[][] laskeKustannusmatriisi() {
-        int[][] matriisi = new int[this.pelaajamaara][this.pelaajamaara];
-        for (int i = 0; i < this.pelaajamaara; i++) {
-            for (int j = 0; j < this.pelaajamaara; j++) {
+        int[][] matriisi = new int[this.pelaajamaara + 1][this.pelaajamaara + 1];
+        for (int i = 1; i <= this.pelaajamaara; i++) {
+            for (int j = 1; j <= this.pelaajamaara; j++) {
                 // Eliminoidaan minimisopivuuden alittavat yhdistelmät
-                if (this.yhteensopivuusdata.getSopivuusprosentti(i+1, j+1) < this.minimisopivuus) {
-                    matriisi[i][j] = 10000;
+                if (this.yhteensopivuusdata.getSopivuusprosentti(i, j) < this.minimisopivuus) {
+                    matriisi[i][j] = 100;
                 // Muussa tapauksessa lasketaan kustannukseksi 100 - sopivuusprosentti
                 } else {
-                    matriisi[i][j] = 100 - this.yhteensopivuusdata.getSopivuusprosentti(i+1, j+1);
+                    matriisi[i][j] = 100 - this.yhteensopivuusdata.getSopivuusprosentti(i, j);
                 }
             }
         }                
@@ -152,15 +131,15 @@ public class Unkarilainen {
      * vähentää sen muista rivin arvoista.
      */
     private void vahennaRivienPienimmatArvot() {
-        for (int i = 0; i < this.pelaajamaara; i++) {
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
             int pienin = 100;
-            for (int j = 0; j < this.pelaajamaara; j++) {
-                if (this.kustannusmatriisi[i][j] < pienin) {
-                    pienin = this.kustannusmatriisi[i][j];
+            for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                if (this.kustannusmatriisi[rivi][sarake] < pienin) {
+                    pienin = this.kustannusmatriisi[rivi][sarake];
                 }
             }
-            for (int j = 0; j < this.pelaajamaara; j++) {
-                this.kustannusmatriisi[i][j] = this.kustannusmatriisi[i][j] - pienin;
+            for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] - pienin;
             }
         }
     }
@@ -170,35 +149,244 @@ public class Unkarilainen {
      * vähentää sen muista sarakkeen arvoista.
      */
     private void vahennaSarakkeidenPienimmatArvot() {
-        for (int j = 0; j < this.pelaajamaara; j++) {
+        for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
             int pienin = 100;
-            for (int i = 0; i < this.pelaajamaara; i++) {
-                if (this.kustannusmatriisi[i][j] < pienin) {
-                    pienin = this.kustannusmatriisi[i][j];
+            for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                if (this.kustannusmatriisi[rivi][sarake] < pienin) {
+                    pienin = this.kustannusmatriisi[rivi][sarake];
                 }
             }
-            for (int i = 0; i < this.pelaajamaara; i++) {
-                this.kustannusmatriisi[i][j] = this.kustannusmatriisi[i][j] - pienin;
+            for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] - pienin;
             }
         }
     }
     
     /**
-     * Tämä metodi käy kustannusmatriisin läpi ja lisää jokaisen löydetyn 
-     * nollan riville tai sarakkeelle vaaka- tai pystylinjan sen mukaan 
-     * kummalla on enemmän nollia, edellyttäen, että nolla ei jo ole vaaka- 
-     * tai pystylinjalla.
+     * Tämä metodi käy läpi rivejä ja sarakkeita ja osoittaa riville sarakkeen 
+     * jos rivillä tai sarakkeessa on tasan yksi vapaa nolla ja jatkaa tätä 
+     * kunnes uusia osoituksia ei enää voi tehdä.
      */
-    private void lisaaLinjat() {
-        this.vaakalinjat.clear();
-        this.pystylinjat.clear();
-        for (int i = 0; i < this.pelaajamaara; i++) {
-            for (int j = 0; j < this.pelaajamaara; j++) {
-                if (this.kustannusmatriisi[i][j] == 0) {
-                    if (laskeRivinNollat(i) >= laskeSarakkeenNollat(j)) {
-                        this.vaakalinjat.add(i);
-                    } else {
-                        this.pystylinjat.add(j);
+    private void osoitaSarakkeetRiveille() {
+        boolean toistetaan = true;
+        boolean useitaNollia = false;
+        // Käydään rivejä läpi kunnes uusia osoituksia ei enää löydy
+        while (toistetaan == true) {
+            toistetaan = tarkistaRivit();
+        }
+        // Käydään sarakkeita läpi kunnes uusia osoituksia ei enää löydy
+        toistetaan = true;
+        while (toistetaan == true) {
+            toistetaan = tarkistaSarakkeet();
+        }
+    }
+    
+    /**
+     * Tämä metodi käy kustannustaulukon rivit kertaalleen läpi ja määrittää 
+     * osoitukset niille riveille joilla on vain yksi nolla.
+     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa 
+     * uudelleen
+     */
+    private boolean tarkistaRivit() {
+        boolean toistetaan = false;
+        boolean useitaNollia = false;
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+            int nollia = 0;
+            int nollaSarakkeessa = 0;
+            for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                if (this.kustannusmatriisi[rivi][sarake] == 0 && this.blokatutSarakkeet[sarake] == false && this.osoituksetRiveilla[rivi] != sarake) {
+                    nollia++;
+                    nollaSarakkeessa = sarake;
+                }
+            }
+            if (nollia == 1) {
+                this.osoituksetRiveilla[rivi] = nollaSarakkeessa;
+                this.blokatutSarakkeet[nollaSarakkeessa] = true;
+                if (useitaNollia == true) {
+                    toistetaan = true;
+                }
+            } else if (nollia > 1) {
+                useitaNollia = true;
+            }
+        }
+        return toistetaan;
+    }
+    
+    
+    private boolean tarkistaSarakkeet() {
+        boolean toistetaan = false;
+        boolean useitaNollia = false;
+        for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+            if (this.blokatutSarakkeet[sarake] == false) {
+                int nollia = 0;
+                int nollaRivilla = 0;
+                for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                    if (this.kustannusmatriisi[rivi][sarake] == 0 && this.blokatutRivit[rivi] == false && this.osoituksetRiveilla[rivi] != sarake) {
+                        nollia++;
+                        nollaRivilla = rivi;
+                    }
+                }
+                if (nollia == 1) {
+                    this.osoituksetRiveilla[nollaRivilla] = sarake;
+                    this.blokatutRivit[nollaRivilla] = true;
+                    if (useitaNollia == true) {
+                        toistetaan = true;
+                    }
+                } else if (nollia > 1) {
+                    useitaNollia = true;
+                }
+            }
+        }
+        return toistetaan;
+    }
+
+    /**
+     * Tämä metodi tarkistaa, onko kaikille riveille osoitettu sarake.
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko kaikille riveille löytynyt kelvollinen sarake
+     */
+    private boolean tarkistaOsoitukset() {
+        int osoituksia = 0;
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+            if (this.osoituksetRiveilla[rivi] > 0) {
+                osoituksia++;
+            } else {
+                // Merkitään osoittamattomat rivit seuraavaa vaihetta varten
+                this.merkitytRivit[rivi] = true;
+            }
+        }
+        if (osoituksia == this.pelaajamaara) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+   /**
+    * Tämä metodi merkitsee sarakkeet, joissa on nollia aiemmin merkityillä 
+    * riveillä ja kutsuu lopuksi metodia merkitseRivit() jos uusia sarakkeita 
+    * merkitään.
+    */
+    private void merkitseSarakkeet() {
+        boolean sarakkeitaMerkitty = false;
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) { 
+            if (this.merkitytRivit[rivi] == true) {
+                for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                    if (this.kustannusmatriisi[rivi][sarake] == 0 && this.merkitytSarakkeet[sarake] == false) {
+                        this.merkitytSarakkeet[sarake] = true;
+                        sarakkeitaMerkitty = true;
+                    }
+                }
+            }
+        }
+        if (sarakkeitaMerkitty == true) {
+            merkitseRivit();
+        }
+    }
+    
+    /**
+    * Tämä metodi merkitsee rivit, joilla on osoitus aiemmin merkityssä 
+    * sarakkeessa ja kutsuu lopuksi metodia merkitseSarakkeet() jos uusia rivejä 
+    * merkitään.
+    */
+    private void merkitseRivit() {
+        boolean rivejaMerkitty = false;
+        for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) { 
+            if (this.merkitytSarakkeet[sarake] == true) {
+                for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                    if (this.osoituksetRiveilla[rivi] == sarake && this.merkitytRivit[rivi] == false) {
+                        this.merkitytRivit[rivi] = true;
+                        rivejaMerkitty = true;
+                    }
+                }
+            }
+        }
+        if (rivejaMerkitty == true) {
+            merkitseSarakkeet();
+        }
+    }
+    
+    /**
+     * Tämä metodi yliviivaa merkitsemättömät rivit ja merkityt sarakkeet 
+     * ja palauttaa tämänhetkisessä matriisissa mahdollisten osoitusten 
+     * enimmäismäärän.
+     * @return tämä metodi palauttaa mahdollisten osoitusten enimmäismäärän 
+     * kokonaislukuna
+     */
+    private int viivaaRivitJaSarakkeet() {
+        int viivattu = 0;
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+            if (this.merkitytRivit[rivi] == false) {
+                this.viivatutRivit[rivi] = true;
+                viivattu++;
+            }
+        }
+        for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+            if (this.merkitytSarakkeet[sarake] == true) {
+                this.viivatutSarakkeet[sarake] = true;
+                viivattu++;
+            }
+        }
+        return viivattu;
+    }
+
+    /**
+    * Tämä metodi muokkaa matriisia synnyttäen siihen uusia nollakohtia. 
+    */    
+    private void muokkaaMatriisia() {
+        int pieninArvo = etsiPieninVapaaArvo();
+        vahennaPieninVapaaArvo(pieninArvo);
+        lisaaPieninVapaaArvo(pieninArvo);
+        
+    }
+
+    /**
+     * Tämä metodi etsii kustannusmatriisista pienimmän arvon, joka ei ole 
+     * viivatulla rivillä tai viivatussa sarakkeessa.
+     * @return metodi palauttaa matriisin pienimmän vapaan arvon
+     */
+    private int etsiPieninVapaaArvo() {
+        int pienin = 100;
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+            if (this.viivatutRivit[rivi] == false) {
+                for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                    if (this.viivatutSarakkeet[sarake] == false && this.kustannusmatriisi[rivi][sarake] < pienin) {
+                        pienin = this.kustannusmatriisi[rivi][sarake];
+                    }
+                }
+            }
+        }
+        return pienin;
+    }
+
+    /**
+     * Tämä metodi vähentää kustannusmatriisin pienimmän vapaan arvon kaikista 
+     * matriisin arvoista jotka eivät ole viivatulla rivillä tai viivatussa 
+     * sarakkeessa.
+     * @param pienin matriisin pienin arvo jota ei ole viivattu yli
+     */
+    private void vahennaPieninVapaaArvo(int pienin) {
+        for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+            if (this.viivatutRivit[rivi] == false) {
+                for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+                    if (this.viivatutSarakkeet[sarake] == false) {
+                        this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] - pienin;
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Tämä metodi lisää kustannusmatriisin pienimmän vapaan arvon kaikkiin 
+     * matriisin arvoihin jotka ovat viivatun rivin ja sarakkeen risteyskohdassa.
+     * @param pienin matriisin pieninarvo jota ei ole viivattu yli
+     */
+    private void lisaaPieninVapaaArvo(int pienin) {
+        for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
+            if (this.viivatutSarakkeet[sarake] == true) {
+                for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
+                    if (this.viivatutRivit[rivi] == true) {
+                        this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] + pienin;
                     }
                 }
             }
@@ -207,96 +395,79 @@ public class Unkarilainen {
     
     
     /**
-     * Tämä metodi laskee annetun rivin nollien määrän.
+     * Tämä metodi asettaa kustannusmatriisin manipuloinnissa käytettävät 
+     * taulukkomuuttujat alkuarvoihinsa.
      */
-    private int laskeRivinNollat(int rivi) {
-        int nollia = 0;
-        for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-            if (this.kustannusmatriisi[rivi][sarake] == 0) {
-                 nollia++;
-            }
-        }
-        return nollia;
-    } 
-    
-    /**
-     * Tämä metodi laskee annetun sarakkeen nollien määrän.
-     */
-    private int laskeSarakkeenNollat(int sarake) {
-        int nollia = 0;
-        for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-            if (this.kustannusmatriisi[rivi][sarake] == 0) {
-                 nollia++;
-            }
-        }
-        return nollia;
-    } 
-    
-    /**
-     * Tämä metodi etsii kustannusmatriisista pienimmän arvon, joka ei ole 
-     * yhdelläkään vaaka- tai pystylinjalla.
-     * @return metodi palauttaa matriisin pienimmän vapaan arvon
-     */
-    private int etsiPieninVapaaArvo() {
-        int pienin = 100;
-        for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-            for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-                if (!this.vaakalinjat.contains(rivi) && !this.pystylinjat.contains(sarake) && this.kustannusmatriisi[rivi][sarake] < pienin) {
-                    pienin = this.kustannusmatriisi[rivi][sarake];
-                }
-            }
-        }
-        return pienin;
-    }
-    
-    /**
-     * Tämä metodi vähentää kustannusmatriisin pienimmän arvon joka ei ole 
-     * pysty- eikä vaakalinjalla kaikkien niiden rivien arvoista, jotka *eivät 
-     * ole* vaakalinjoja.
-     * @param pienin matriisin pienin arvo joka ei ole pysty- eikä vaakalinjalla
-     */
-    private void vahennaPieninArvoRiveilta(int pienin) {
-        for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-            if (!this.vaakalinjat.contains(rivi)) {
-                for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-                    this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] - pienin;
-                }
-            }
+    private void nollaaMuuttujat() {
+        for (int i = 1; i <= this.pelaajamaara; i++) {
+            this.osoituksetRiveilla[i] = 0;
+            this.blokatutRivit[i] = false;
+            this.blokatutSarakkeet[i] = false;
+            this.merkitytRivit[i] = false;
+            this.merkitytSarakkeet[i] = false;
+            this.viivatutRivit[i] = false;
+            this.viivatutSarakkeet[i] = false;
         }
     }
     
-    /**
-     * Tämä metodi lisää kustannusmatriisin pienimmän arvon joka ei ole 
-     * pysty- eikä vaakalinjalla kaikkien niiden sarakkeiden arvoihin, jotka 
-     * *ovat* vaakalinjoja.
-     * @param pienin matriisin pienin arvo joka ei ole pysty- eikä vaakalinjalla
-     */
-    private void lisaaPieninArvoSarakkeisiin(int pienin) {
-        for (int sarake = 0; sarake < this.pelaajamaara; sarake++) {
-            if (this.pystylinjat.contains(sarake)) {
-                for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-                    this.kustannusmatriisi[rivi][sarake] = this.kustannusmatriisi[rivi][sarake] + pienin;
-                }
-            }
-        }
-    }
-    
-    /**
-     * Tämä metodi laskee kelvollisten tulosrivien, eli niiden rivien joilla on 
-     * nolla oikean hahmon kohdalla
-     * @return 
-     */
-    private int laskeTulosrivit() {
-        int tulosriveja = 0;
-        for (int rivi = 0; rivi < this.pelaajamaara; rivi++) {
-            for (int sarake = 0; sarake < this.hahmomaara; sarake++) {
-                if (this.kustannusmatriisi[rivi][sarake] == 0) {
-                    tulosriveja++;
+    private int[] lueRatkaisu() {
+        int[] hahmojenValinnat = new int[this.hahmomaara + 1];
+        for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
+            for (int pelaaja= 1; pelaaja < this.pelaajamaara; pelaaja++) {
+                if (this.kustannusmatriisi[pelaaja][hahmo] == 0) {
+                    hahmojenValinnat[hahmo] = pelaaja;
                     break;
                 }
             }
         }
-        return tulosriveja;
+        return hahmojenValinnat;
+    }
+    
+    private void laskeMahdollisetRatkaisut() {
+        int hahmo = 1;
+        laskeRatkaisu(hahmo);
+    }
+    
+    private void laskeRatkaisu(int hahmo) {
+        if (hahmo == this.hahmomaara + 1) {
+            kirjaaRatkaisu(this.hahmojenValinnat);
+            return;
+        }
+        for (int pelaaja = 1; pelaaja < this.pelaajamaara; pelaaja++) {
+            if (this.kustannusmatriisi[pelaaja][hahmo] == 0 && this.vapaatPelaajat[pelaaja] == true) {
+                this.hahmojenValinnat[hahmo] = pelaaja;
+                this.vapaatPelaajat[pelaaja] = false;
+                laskeRatkaisu(hahmo + 1);
+                this.hahmojenValinnat[hahmo] = 0;
+                this.vapaatPelaajat[pelaaja] = true;
+            }
+        } 
+    }
+    
+    private void kirjaaRatkaisu(int[] hahmojenValinnat) {
+       int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
+        for (int i = 1; i <= this.pelaajamaara; i++) {
+            pelaajienValinnat[i] = 0;
+        }
+        for (int i = 1; i <= this.hahmomaara; i++) {
+            int pelaaja = hahmojenValinnat[i];
+            pelaajienValinnat[pelaaja] = i;
+        }
+        Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
+        boolean kopio = false;
+        for (Tulos vanhaTulos : this.tulokset) {
+            if (tulos.equals(vanhaTulos)) {
+                kopio = true;
+                break;
+            }
+        }
+        if (kopio == false) {
+            tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
+            tulos.setMinimiyhteensopivuus(this.minimisopivuus);
+            tulos.setJarjestysnumero(this.jarjestysnumero);
+            this.tulokset.add(tulos);
+            this.jarjestysnumero++;
+        }
     }
     
 }

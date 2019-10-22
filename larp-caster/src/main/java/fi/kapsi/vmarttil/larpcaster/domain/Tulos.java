@@ -5,11 +5,7 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * Tämä luokka määrittelee hahmojaon tuloksen ja siihen liittyvien metatietojen 

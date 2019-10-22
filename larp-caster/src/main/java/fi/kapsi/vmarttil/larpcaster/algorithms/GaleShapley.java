@@ -11,9 +11,6 @@ import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 
 
 /**
@@ -30,7 +27,6 @@ public class GaleShapley {
     private int minimisopivuus;
     private int pelaajamaara;
     private int hahmomaara;
-    //private List<Ehdokaslista[]> jarjestysvariaatiot;
     private Ehdokaslista[] ehdokaslistat;
     private int variaationumero;
     private int jarjestysnumero;
@@ -54,7 +50,6 @@ public class GaleShapley {
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
         this.jarjestysnumero = 0;
         this.variaationumero = 0;
-        //this.jarjestysvariaatiot = new ArrayList<Ehdokaslista[]>();
         this.tulokset = new ArrayList<>();
     }
     
@@ -203,7 +198,6 @@ public class GaleShapley {
             for (int hahmo = 1; hahmo <= this.pelaajamaara; hahmo++) {
                 hahmojenEhdokaslistat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo);
             }
-            //this.jarjestysvariaatiot.add(hahmojenEhdokaslistat);
             laskePelaajaehdokasvariaatiot(hahmojenEhdokaslistat);
         } 
         if (this.kaytettavaAlgoritmi.contains("PelaajaKosii")) {

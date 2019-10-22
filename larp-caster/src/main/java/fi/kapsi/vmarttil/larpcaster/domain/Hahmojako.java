@@ -38,6 +38,7 @@ public class Hahmojako {
     private ArrayList<Tulos> yhteistulokset;
     private String kaytettavaAlgoritmi;
     private int minimisopivuus;
+    private int laskettavatVariaatiot;
     private int tuloksiaEnintaanLaskentaaKohden;
     private int tuloksiaEnintaanYhteensa;
     // Lisätään toteutukseen myöhemmin
@@ -59,6 +60,7 @@ public class Hahmojako {
         this.yhteistulokset = new ArrayList<>();
         this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 50;
+        this.laskettavatVariaatiot = 0;
         this.tuloksiaEnintaanLaskentaaKohden = 20;
         this.tuloksiaEnintaanYhteensa = 20;
         // Lisätään toteutukseen myöhemmin
@@ -118,6 +120,17 @@ public class Hahmojako {
      */
     public int getMinimisopivuus() {
         return this.minimisopivuus;
+    }
+    
+    /**
+     * Tämä metodi palauttaa tiedon siitä, lasketaanko hahmojaoista variaatiot 
+     * useiden parhaiten sopivien hahmojen tai pelaajien perusteella ja mille 
+     * asteelle (eli kuinka monta samanaikaista variaatiota huomioon ottaen).
+     * @return metodi palauttaa laskettavien variaatioiden enimmäisasteen 
+     * kertovan kokonaisluvun
+     */
+    public int getLaskettavatVariaatiot() {
+        return this.laskettavatVariaatiot;
     }
     
     /**
@@ -208,6 +221,17 @@ public class Hahmojako {
         luoEhdokaslistat();
     }
 
+    /**
+     * Tämä metodi asettaa tiedon siitä, lasketaanko hahmojaoista variaatiot 
+     * useiden parhaiten sopivien hahmojen tai pelaajien perusteella ja mille 
+     * asteelle eli kuinka monta samanaikaista variaatiota huomioon ottaen.
+     * @param variaatiot kokonaisluku joka kertoo laskettavien variaatioiden 
+     * asteen
+     */
+    public void setLaskettavatVariaatiot(int aste) {
+        this.laskettavatVariaatiot = aste;
+    }
+    
     /**
      * Tämä metodi asettaa yksittäistä laskentaa kohden näytettävien tulosten 
      * enimmäismäärän.
