@@ -15,15 +15,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -38,15 +34,8 @@ public class Hahmojako {
     private ArrayList<Tulos> yhteistulokset;
     private String kaytettavaAlgoritmi;
     private int minimisopivuus;
-    private int laskettavatVariaatiot;
     private int tuloksiaEnintaanLaskentaaKohden;
     private int tuloksiaEnintaanYhteensa;
-    // Lisätään toteutukseen myöhemmin
-    private boolean priorisoiHankalatHahmot;
-    // Lisätään toteutukseen myöhemmin
-    private ArrayList<Integer> hankalatHahmot;
-    // Lisätään toteutukseen myöhemmin
-    private HashMap<Integer, Integer> esivalitutPelaajat;
     private boolean ehdokaslistatOK;
     Instant suorituksenAloitus;
    
@@ -60,15 +49,8 @@ public class Hahmojako {
         this.yhteistulokset = new ArrayList<>();
         this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 50;
-        this.laskettavatVariaatiot = 0;
         this.tuloksiaEnintaanLaskentaaKohden = 20;
         this.tuloksiaEnintaanYhteensa = 20;
-        // Lisätään toteutukseen myöhemmin
-        this.priorisoiHankalatHahmot = false;
-        // Lisätään toteutukseen myöhemmin
-        this.hankalatHahmot = new ArrayList<>();
-        // Lisätään toteutukseen myöhemmin
-        this.esivalitutPelaajat = new HashMap<>();
         this.ehdokaslistatOK = true;
     }
      
@@ -104,6 +86,15 @@ public class Hahmojako {
     }
     
     /**
+     * Tämä metodi palauttaa kaikista hahmojakolaskennoista kootut sopivimmat 
+     * tulokset.
+     * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan
+     */
+    public ArrayList<Tulos> getYhteistulokset() {
+        return this.yhteistulokset;
+    }
+    
+    /**
      * Tämä metodi palauttaa tällä hetkellä hahmojakoon käytettäväksi määritetyn
      * algoritmin.
      * @return metodi palauttaa käytetyn algoritmin tunnuksen merkkijonona
@@ -123,17 +114,6 @@ public class Hahmojako {
     }
     
     /**
-     * Tämä metodi palauttaa tiedon siitä, lasketaanko hahmojaoista variaatiot 
-     * useiden parhaiten sopivien hahmojen tai pelaajien perusteella ja mille 
-     * asteelle (eli kuinka monta samanaikaista variaatiota huomioon ottaen).
-     * @return metodi palauttaa laskettavien variaatioiden enimmäisasteen 
-     * kertovan kokonaisluvun
-     */
-    public int getLaskettavatVariaatiot() {
-        return this.laskettavatVariaatiot;
-    }
-    
-    /**
      * Tämä metodi palauttaa yksittäistä laskentaa kohden näytettävien tulosten 
      * enimmäismäärän.
      * @return metodi palauttaa suurimman näytettävän laskentakohtaisen tulosmäärän 
@@ -149,35 +129,6 @@ public class Hahmojako {
      */
     public int getTuloksiaEnintaanYhteensa() {
         return this.tuloksiaEnintaanYhteensa;
-    }
-   
-    /**
-     * Tämä metodi palauttaa hankalasti jaettavien hahmojen priorisoinnin 
-     * asetuksen.
-     * @return metodi palauttaa totuusarvon, joka kertoo priorisoidaanko 
-     * hahmojaossa hankalasti jaettavia hahmoja
-     */
-    public boolean isPriorisoiHankalatHahmot() {
-        return this.priorisoiHankalatHahmot;
-    }
-
-    /**
-     * Tämä metodi palauttaa hankalasti jaettaviksi määriteltyjen hahmojen 
-     * (joilla on vain yksi sopiva pelaajaehdokas) indeksit.
-     * @return metodi palauttaa hahmoindeksit sisältävän taulukkolistan
-     */
-    public ArrayList<Integer> getHankalatHahmot() {
-        return this.hankalatHahmot;
-    }
-    
-    /**
-     * Tämä metodi palauttaa ennen hahmojakoa käsin määritetyt hahmon ja 
-     * pelaajan yhdistelmät.
-     * @return metodi palauttaa määritetyt hahmo-pelaaja-parit sisältävän 
-     * hajautustaulun
-     */
-    public HashMap<Integer, Integer> getEsivalitutPelaajat() {
-        return this.esivalitutPelaajat;
     }
     
     /**
@@ -220,17 +171,6 @@ public class Hahmojako {
         paivitaSopivuusmatriisi();
         luoEhdokaslistat();
     }
-
-    /**
-     * Tämä metodi asettaa tiedon siitä, lasketaanko hahmojaoista variaatiot 
-     * useiden parhaiten sopivien hahmojen tai pelaajien perusteella ja mille 
-     * asteelle eli kuinka monta samanaikaista variaatiota huomioon ottaen.
-     * @param variaatiot kokonaisluku joka kertoo laskettavien variaatioiden 
-     * asteen
-     */
-    public void setLaskettavatVariaatiot(int aste) {
-        this.laskettavatVariaatiot = aste;
-    }
     
     /**
      * Tämä metodi asettaa yksittäistä laskentaa kohden näytettävien tulosten 
@@ -249,16 +189,6 @@ public class Hahmojako {
     public void setTuloksiaEnintaanYhteensa(int enimmaismaara) {
         this.tuloksiaEnintaanYhteensa = enimmaismaara;
     } 
-    
-    /**
-     * Tämä metodi määrittää hankalasti jaettavien hahmojen (joilla on vain yksi 
-     * sopiva pelaajaehdokas) priorisoinnin käyttöön tai pois käytöstä.
-     * @param priorisoiHankalatHahmot totuusarvo, joka määrittää priorisoidaanko 
-     * hankalasti jaettavat hahmot
-     */
-    public void setPriorisoiHankalatHahmot(boolean priorisoiHankalatHahmot) {
-        this.priorisoiHankalatHahmot = priorisoiHankalatHahmot;
-    }
     
     /**
      * Tämä metodi kertoo sisältääkö jokaisen pelaajan ja hahmon ehdokaslista 
@@ -289,42 +219,6 @@ public class Hahmojako {
      */
     public void poistaTulos(int tuloksenIndeksi) {
         this.tulokset.remove(tuloksenIndeksi);
-    }
-    
-    /**
-     * Tämä metodi lisää hahmon hankalien hahmojen luetteloon. 
-     * @param hahmotunnus kokonaisluku, joka osoittaa lisättävän hahmon indeksin
-     */
-    public void lisaaHankalaHahmo(int hahmotunnus) {
-        this.hankalatHahmot.add(hahmotunnus);
-    }
-    
-    /**
-     * Tämä metodi tyhjentää hankalien hahmojen luettelon.
-     */
-    public void tyhjennaHankalatHahmot() {
-        this.hankalatHahmot.clear();
-    }
-    
-    /**
-     * Tämä metodi tallentaa hahmon ja pelaajan yhdistelmän esivalittujen 
-     * pelaajien luetteloon.
-     * @param hahmoindeksi kokonaisluku, joka osoittaa sen hahmon indeksin, johon
-     * pelaaja yhdistetään
-     * @param pelaajaindeksi kokonaisluku, joka osoittaa hahmoon yhdistettävän 
-     * pelaajan indeksin
-     */
-    public void esivalitsePelaaja(int hahmoindeksi, int pelaajaindeksi) {
-        this.esivalitutPelaajat.put(hahmoindeksi, pelaajaindeksi);
-    }
-    
-    /**
-     * Tämä metodi poistaa hahmon ja pelaajan yhdistelmän esivalittujen 
-     * pelaajien luettelosta hahmoindeksin perusteella.
-     * @param hahmoindeksi poistettavan hahmon indeksi
-     */
-    public void poistaEsivalittuPelaaja(int hahmoindeksi) {
-        this.esivalitutPelaajat.remove(hahmoindeksi);
     }
     
     // Operaatiot

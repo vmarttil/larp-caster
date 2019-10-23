@@ -62,6 +62,7 @@ public class TextUI {
             } else if (komento.equals("4") && hahmojako.getYhteensopivuusdata() != null) {
                 naytaEhdokaslistat();
             } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null && this.hahmojako.getEhdokaslistatOK() == true) {
+                System.out.println("Lasketaan hahmojakoja...");
                 double suoritusaika = this.hahmojako.teeHahmojako();
                 if (suoritusaika == -1) {
                     System.out.println("Algoritmi tuottanut yhtäkään kelvollista hahmojakoa nykyisillä parametreilla.");
@@ -194,10 +195,8 @@ public class TextUI {
             } else if (komento.equals("1")) {
                 asetaMinimisopivuus();
             } else if (komento.equals("2")) {
-                asetaLaskettavatVariaatiot();
-            } else if (komento.equals("3")) {
                 asetaTuloksiaEnintaanLaskentaaKohden();
-            } else if (komento.equals("4")) {
+            } else if (komento.equals("3")) {
                 asetaTuloksiaEnintaanYhteensa();
             } else {
                 System.out.println("Tuntematon komento.");
@@ -212,9 +211,8 @@ public class TextUI {
         System.out.println("");
         System.out.println("Komennot: ");
         System.out.println(" 1 - Aseta minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%)");
-        System.out.println(" 2 - Aseta laskettavien variaatioiden aste (nykyinen:" + this.hahmojako.getLaskettavatVariaatiot() + ", max: 5)");
-        System.out.println(" 3 - Aseta hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
-        System.out.println(" 4 - Aseta hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
+        System.out.println(" 2 - Aseta hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
+        System.out.println(" 3 - Aseta hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -229,29 +227,16 @@ public class TextUI {
         hahmojako.setMinimisopivuus(sopivuus);
     }
     
-    /**
-     * Tämä metodi määrittää käyttöliittymän laskettavien variaatioiden asteen asettamiselle.
-     */
-    private void asetaLaskettavatVariaatiot() {
-        System.out.println("");
-        System.out.print("Uusi laskettavien variaatioiden aste (nykyinen: " + hahmojako.getLaskettavatVariaatiot() + "): ");
-        int aste = Integer.parseInt(this.lukija.nextLine().replace("%", "").replace(" ", ""));
-        if (aste > 5) {
-            hahmojako.setLaskettavatVariaatiot(5);
-        } else {
-            hahmojako.setLaskettavatVariaatiot(aste);
-        }
-    }
-    
+   
     /**
      * Tämä metodi määrittää käyttöliittymän laskentakohtaisen hahmojakojen enimmäismäärän asettamiselle.
      */
     private void asetaTuloksiaEnintaanLaskentaaKohden() {
         System.out.println("");
-        System.out.print("Uusi hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 20): ");
+        System.out.print("Uusi hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100): ");
         int maara = Integer.parseInt(this.lukija.nextLine().replace(" ", ""));
-        if (maara > 20) {
-            System.out.println("VIRHE: Tuloksien enimmäismäärä on 20.");
+        if (maara > 100) {
+            System.out.println("VIRHE: Tuloksien enimmäismäärä on 100.");
         } else {
             hahmojako.setTuloksiaEnintaanLaskentaaKohden(maara);
         }
@@ -262,10 +247,10 @@ public class TextUI {
      */
     private void asetaTuloksiaEnintaanYhteensa() {
         System.out.println("");
-        System.out.print("Uusi hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 30): ");
+        System.out.print("Uusi hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 200): ");
         int maara = Integer.parseInt(this.lukija.nextLine().replace(" ", ""));
-        if (maara > 30) {
-            System.out.println("VIRHE: Tuloksien enimmäismäärä on 30.");
+        if (maara > 200) {
+            System.out.println("VIRHE: Tuloksien enimmäismäärä on 200.");
         } else {
             hahmojako.setTuloksiaEnintaanYhteensa(maara);
         }
@@ -420,7 +405,6 @@ public class TextUI {
                 System.out.println("Tuntematon komento.");
             }
         }
-        
     }
     
     private void naytaLaskennanTulosValikko() {
@@ -432,12 +416,33 @@ public class TextUI {
     }
     
     private void naytaYhteistulokset() {
-        
-        
-        
+        while (true) {
+            ArrayList<Tulos> tulokset = hahmojako.getYhteistulokset();
+            int tuloksia = laskeTulokset(tulokset);
+            System.out.println("");
+            System.out.println("Hahmojaon yhteistulokset kaikista lasketuista laskennoista)");
+            System.out.println("");
+            if (tulokset.get(0).getPelaajattomatHahmot().length > 0) {
+                System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa millään jaolla!");
+                System.out.println("");
+            }        
+            tulostaLaskennanHahmojakojenYhteenveto(tulokset, tuloksia);
+            System.out.println("");
+            System.out.println("Yhteenvetotiedot (" + tuloksia + " parasta jakoa):");        
+            System.out.println("Huonoin sopivuus: " + etsiHuonoinSopivuus(tulokset, tuloksia) + "%");
+            System.out.println("Paras sopivuus: " + etsiParasSopivuus(tulokset, tuloksia) + "%");
+            System.out.println("Keskimääräinen sopivuus: " + ((int) (laskeSopivuuskeskiarvo(tulokset, tuloksia) * 100) / 100.0) + "%");
+            naytaLaskennanTulosValikko();
+            String komento = this.lukija.nextLine();
+            if (komento.equals("x")) {
+                break;
+            } else if (Integer.parseInt(komento) > 0 && Integer.parseInt(komento) <= tuloksia) {
+                tulostaHahmojako(tulokset.get(Integer.parseInt(komento) - 1), komento);
+            } else {
+                System.out.println("Tuntematon komento.");
+            }
+        }
     }
-    
-    
     
     private void tulostaLaskennanHahmojakojenYhteenveto(ArrayList<Tulos> tulokset, int tuloksia) {
         tulostaYhteenvedonOtsikot(tuloksia);
@@ -479,7 +484,10 @@ public class TextUI {
             }
             System.out.print(i);
             for (int j = 0; j < valeja ; j++) {
-                System.out.print(" ");    
+                System.out.print(" ");
+                if (Integer.toString(i).length() % 2 == 0) {
+                    System.out.print(" ");
+                }
             }
             System.out.print("|");
         }
@@ -523,7 +531,7 @@ public class TextUI {
         }
         for (int i = 1; i <= tuloksia; i++) {
             Double yhteensopivuus = ((int) tulokset.get(i - 1).getSopivuuskeskiarvo() * 100) / 100.0;
-            System.out.print(yhteensopivuus);
+            System.out.printf("%.2f", yhteensopivuus);
             for (int j = 0; j < this.pisinPelaajatunnus - 5; j++) {
                 System.out.print(" ");    
             }

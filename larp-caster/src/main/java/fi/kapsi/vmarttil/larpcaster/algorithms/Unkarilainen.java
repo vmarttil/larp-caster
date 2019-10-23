@@ -38,7 +38,6 @@ public class Unkarilainen {
     private int jarjestysnumero;
     private ArrayList<Tulos> tulokset;
 
- 
     /**
      * Tämä metodi luo Unkarilainen-olion joka laskee hahmojaon käyttämällä 
      * nk. unkarilaista menetelmää eli Kuhnin-Munkresin algoritmia.
@@ -98,14 +97,11 @@ public class Unkarilainen {
             int[] hahmojenValinnat = lueRatkaisu();
             kirjaaRatkaisu(hahmojenValinnat);
         } else {
-            long maara = laskeRatkaisujenMaara();
-            System.out.println("Mahdollisten ratkaisujen määrä: " + maara);
             laskeMahdollisetRatkaisut();
         }
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
         ArrayList<Tulos> tulosluettelo;
-        System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
         if (this.tulokset.size() > 100) {
             tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
         } else {
@@ -441,20 +437,6 @@ public class Unkarilainen {
             hahmojenValinnat[hahmo] = this.osoituksetRiveilla[hahmo];
         }
         return hahmojenValinnat;
-    }
-    
-    private long laskeRatkaisujenMaara() {
-        long kertoma = 1;
-        for (int sarake = 1; sarake <= this.hahmomaara; sarake++) {
-            int nollia = 0;
-            for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
-                if (this.kustannusmatriisi[rivi][sarake] == 0) {
-                    nollia++;
-                }
-            }
-            kertoma = kertoma * nollia;
-        }
-        return kertoma;
     }
     
     private void laskeMahdollisetRatkaisut() {

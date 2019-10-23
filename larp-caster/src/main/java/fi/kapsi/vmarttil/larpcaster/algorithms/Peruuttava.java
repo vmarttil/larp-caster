@@ -25,14 +25,12 @@ public class Peruuttava {
     private int minimisopivuus;
     private int pelaajamaara;
     private int hahmomaara;
-    private long aloitusAika;
     private int sopivuusraja;
     private int ehdokkaidenMinimimaara;
     private Ehdokaslista[] kaytettavatEhdokaslistat;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
     private int jarjestysnumero;
-    private Instant edellinenLoytohetki;
     private ArrayList<Tulos> tulokset;
     private boolean lopetus;
     
@@ -71,32 +69,9 @@ public class Peruuttava {
      * käänteisessä järjestyksessä
      */
     public ArrayList<Tulos> laskeHahmojako() {
-        this.aloitusAika = System.nanoTime();
-        this.edellinenLoytohetki = hahmojako.getSuorituksenAloitus();
         while (this.sopivuusraja >= this.minimisopivuus) {
             alustaTaulukot();
             luoKaytettavatEhdokaslistat();
-            
-            
-            System.out.println("");
-            System.out.println("Hahmojen käytettävät pelaajaehdokkaat");
-            System.out.println("");
-            System.out.println("Hahmo:      Pelaajaehdokkaat (sopivuus):");
-            for (int i = 1; i <= this.hahmomaara; i++) {
-                System.out.println(this.yhteensopivuusdata.getHahmotunnus(i));
-                Ehdokaslista ehdokaslista = kaytettavatEhdokaslistat[i];
-            if (!this.yhteensopivuusdata.getHahmotunnus(i).equals("")) {
-                for (int e = 0; e < ehdokaslista.getPituus(); e++) {
-                    String tunnus = this.yhteensopivuusdata.getPelaajatunnus(ehdokaslista.getEhdokas(e));
-                    int sopivuus = ehdokaslista.getYhteensopivuus(e);
-                    System.out.println("            " + tunnus + " (" + sopivuus + "%)");
-                }
-            }
-            System.out.println("");
-        }       
-            
-            
-            
             etsiRatkaisu(1);
             this.sopivuusraja = this.sopivuusraja - 5;
             this.ehdokkaidenMinimimaara = (100 - this.sopivuusraja) / 5;
@@ -104,7 +79,6 @@ public class Peruuttava {
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
         ArrayList<Tulos> tulosluettelo;
-        System.out.println("Ratkaisuja laskettu: " + this.tulokset.size());
         if (this.tulokset.size() > 100) {
             tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
         } else {
@@ -126,45 +100,37 @@ public class Peruuttava {
      * @param aloitusAika kulloisenkin hahmojaon laskennan aloitusaika
      */
     private void etsiRatkaisu(int hahmo) {
+        boolean timeout = false;
+        if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > 60) {
+            timeout = true;
+        }
         if (this.lopetus == true) {
             return;
         }
         if (hahmo == this.hahmomaara + 1) {
             kirjaaTulos();
-            this.aloitusAika = System.nanoTime();
             return;
         }
         for (int i = 0; i < this.kaytettavatEhdokaslistat[hahmo].getPituus(); i++) {
             if (this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] == true) {
                 this.hahmojenValinnat[hahmo] = this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i);
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = false;
-                etsiRatkaisu(hahmo + 1);
+                if (timeout == false) {
+                    etsiRatkaisu(hahmo + 1);
+                }
                 this.hahmojenValinnat[hahmo] = 0;
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = true;
             }
         } 
     }
-
+    
     private void kirjaaTulos() {
-        long lopetusAika = System.nanoTime();
-        double kulunutAika = (double) ((int) (lopetusAika - this.aloitusAika) / 10000) / 100;
         this.jarjestysnumero++;
         tallennaTulos();
-        Instant tuloksenLoytohetki = Instant.now();
-//        if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 1) {
-//            this.lopetus = true;
-//        }
-//        if (kulunutAika > 1.0) {
-//            this.lopetus = true;
-//        }
         if (this.tulokset.size() > 50000) {
             this.lopetus = true;
         }
-         Duration tuloksenLoytoaika = Duration.between(hahmojako.getSuorituksenAloitus(), tuloksenLoytohetki);
-         System.out.println(this.jarjestysnumero + " tulosta löydetty ajassa " + tuloksenLoytoaika.getSeconds() + " sekuntia");
-         this.edellinenLoytohetki = tuloksenLoytohetki;
     }
-    
     
     private void alustaTaulukot() {
         this.hahmojenValinnat = new int[this.hahmomaara + 1];
