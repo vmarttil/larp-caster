@@ -8,8 +8,6 @@ package fi.kapsi.vmarttil.larpcaster.ui;
 import java.util.Scanner;
 import fi.kapsi.vmarttil.larpcaster.domain.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import javax.xml.parsers.*;
 import org.xml.sax.SAXException;
 
@@ -19,7 +17,7 @@ import org.xml.sax.SAXException;
  */
 public class TextUI {
     
-    private static HashMap<String, String> tulostettavatNimet;
+    private static String[][] tulostettavatNimet;
     private Hahmojako hahmojako;
     private Scanner lukija;
     private int pisinHahmotunnus;
@@ -69,7 +67,7 @@ public class TextUI {
                 } else { 
                     System.out.println("Suoritusaika: " + suoritusaika + " s");
                 }
-            } else if (komento.equals("6") && !hahmojako.getTulokset().isEmpty()) {
+            } else if (komento.equals("6") && hahmojako.getTulokset().length > 0) {
                 naytaLaskennat();
             } else {
                 System.out.println("Tuntematon komento.");
@@ -98,7 +96,7 @@ public class TextUI {
                 System.out.println(" 5 - Laske optimoitu hahmojako");
             }
         }
-        if (hahmojako.getTulokset().size() > 0) {
+        if (hahmojako.getTulokset().length > 0) {
             System.out.println(" 6 - Näytä tulokset");
         }
         System.out.println(" x - Lopeta");
@@ -155,10 +153,10 @@ public class TextUI {
     private void naytaAlgoritmivalikko(String nykyinen) {
         System.out.println("");
         System.out.println("Vaihtoehdot (nykyinen: " + nykyinen + "): ");
-        System.out.println(" 1 - " + tulostettavatNimet.get("galeShapleyHahmoKosii"));
-        System.out.println(" 2 - " + tulostettavatNimet.get("galeShapleyPelaajaKosii"));
-        System.out.println(" 3 - " + tulostettavatNimet.get("peruuttava"));
-        System.out.println(" 4 - " + tulostettavatNimet.get("unkarilainen"));
+        System.out.println(" 1 - " + getTulostettavaNimi("galeShapleyHahmoKosii"));
+        System.out.println(" 2 - " + getTulostettavaNimi("galeShapleyPelaajaKosii"));
+        System.out.println(" 3 - " + getTulostettavaNimi("peruuttava"));
+        System.out.println(" 4 - " + getTulostettavaNimi("unkarilainen"));
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -279,7 +277,7 @@ public class TextUI {
     }
     
     /**
-     * Tämä metodi tulostaa näytölle ehdokaslistojen tarkasteluvalikon.
+     * Tämä metodi tulostaa ehdokaslistojen tarkasteluvalikon näytölle.
      */
     private void naytaEhdokaslistavalikko() {
         System.out.println("");
@@ -358,8 +356,8 @@ public class TextUI {
         while (true) {
             System.out.println("");
             System.out.println("Tehdyt laskennat: ");
-            for (int i = 1; i <= hahmojako.getTulokset().size(); i++) {
-                System.out.println(" " + i + " - " + tulostettavatNimet.get(hahmojako.getTulokset().get(i - 1).get(0).getAlgoritmi()) + "(" + hahmojako.getTulokset().get(i - 1).get(0).getMinimiyhteensopivuus() + "%): " + "paras ka. sop. " + ((int) (hahmojako.getTulokset().get(i - 1).get(0).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
+            for (int i = 1; i <= hahmojako.getTulokset().length; i++) {
+                System.out.println(" " + i + " - " + getTulostettavaNimi(hahmojako.getTulokset()[i - 1].hae(0).getAlgoritmi()) + " (" + hahmojako.getTulokset()[i - 1].hae(0).getMinimiyhteensopivuus() + "%): " + "paras ka. sop. " + ((int) (hahmojako.getTulokset()[i - 1].hae(0).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
             }
             System.out.println(" y - Kaikkien laskentojen yhteistulokset");
             System.out.println(" x - Takaisin");
@@ -375,17 +373,21 @@ public class TextUI {
         }
     }
     
+    /**
+     * Tämä metodi tulostaa valitun laskennan tulokset näytölle.
+     * @param laskentaNumero näytettävä laskenta
+     */
     private void naytaTulokset(int laskentaNumero) {
         while (true) {
-            ArrayList<Tulos> tulokset = hahmojako.getTulokset().get(laskentaNumero);
+            Tulosluettelo tulokset = hahmojako.getTulokset()[laskentaNumero];
             int tuloksia = laskeTulokset(tulokset);
             System.out.println("");
             System.out.println("Hahmojaon tulokset laskennalle " + laskentaNumero + 1);
             System.out.println("");
-            System.out.println("Käytetty algoritmi: " + tulostettavatNimet.get(tulokset.get(0).getAlgoritmi()));
-            System.out.println("Käytetty minimisopivuus: " + tulokset.get(0).getMinimiyhteensopivuus() + "%");
+            System.out.println("Käytetty algoritmi: " + getTulostettavaNimi(tulokset.hae(0).getAlgoritmi()));
+            System.out.println("Käytetty minimisopivuus: " + tulokset.hae(0).getMinimiyhteensopivuus() + "%");
             System.out.println("");
-            if (tulokset.get(0).getPelaajattomatHahmot().length > 0) {
+            if (tulokset.hae(0).getPelaajattomatHahmot().length > 0) {
                 System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa millään jaolla!");
                 System.out.println("");
             }        
@@ -400,13 +402,16 @@ public class TextUI {
             if (komento.equals("x")) {
                 break;
             } else if (Integer.parseInt(komento) > 0 && Integer.parseInt(komento) <= tuloksia) {
-                tulostaHahmojako(tulokset.get(Integer.parseInt(komento) - 1), komento);
+                tulostaHahmojako(tulokset.hae(Integer.parseInt(komento) - 1), komento);
             } else {
                 System.out.println("Tuntematon komento.");
             }
         }
     }
     
+    /**
+     * Tämä metodi tulostaa yksittäisen laskennan tarkasteluvalikon näytölle.
+     */
     private void naytaLaskennanTulosValikko() {
         System.out.println("");
         System.out.println("Komennot: ");
@@ -415,14 +420,17 @@ public class TextUI {
         System.out.print("Komento: ");
     }
     
+    /**
+     * Tämä metodi tulostaa kaikkien laskentojen yhdistetyt tulokset näytölle.
+     */
     private void naytaYhteistulokset() {
         while (true) {
-            ArrayList<Tulos> tulokset = hahmojako.getYhteistulokset();
+            Tulosluettelo tulokset = hahmojako.getYhteistulokset();
             int tuloksia = laskeTulokset(tulokset);
             System.out.println("");
             System.out.println("Hahmojaon yhteistulokset kaikista lasketuista laskennoista)");
             System.out.println("");
-            if (tulokset.get(0).getPelaajattomatHahmot().length > 0) {
+            if (tulokset.hae(0).getPelaajattomatHahmot().length > 0) {
                 System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa millään jaolla!");
                 System.out.println("");
             }        
@@ -437,14 +445,19 @@ public class TextUI {
             if (komento.equals("x")) {
                 break;
             } else if (Integer.parseInt(komento) > 0 && Integer.parseInt(komento) <= tuloksia) {
-                tulostaHahmojako(tulokset.get(Integer.parseInt(komento) - 1), komento);
+                tulostaHahmojako(tulokset.hae(Integer.parseInt(komento) - 1), komento);
             } else {
                 System.out.println("Tuntematon komento.");
             }
         }
     }
     
-    private void tulostaLaskennanHahmojakojenYhteenveto(ArrayList<Tulos> tulokset, int tuloksia) {
+    /**
+     * Tämä metodi tulostaa näytölle yhteenvedon laskennan hahmojaoista osana laskennan tarkastelua.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param tuloksia näytettävien hahmojakojen määrä
+     */
+    private void tulostaLaskennanHahmojakojenYhteenveto(Tulosluettelo tulokset, int tuloksia) {
         tulostaYhteenvedonOtsikot(tuloksia);
         for (int hahmo = 1; hahmo <= this.hahmojako.getYhteensopivuusdata().getHahmomaara(); hahmo++) {
             tulostaHahmonPelaajat(tulokset, hahmo, tuloksia); 
@@ -453,15 +466,24 @@ public class TextUI {
         tulostaKeskiarvoisetSopivuudet(tulokset, tuloksia);
     }
     
-    private int laskeTulokset(ArrayList<Tulos> tulokset) {
+    /**
+     * Tämä metodi laskee näytettävien hahmojakojen lukumäärän.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @return metodi palauttaa hahmojakojen määrän kokonaislukuna
+     */
+    private int laskeTulokset(Tulosluettelo tulokset) {
         int tuloksia;
-        if (tulokset.size() > this.hahmojako.getTuloksiaEnintaanLaskentaaKohden()) {
+        if (tulokset.pituus() > this.hahmojako.getTuloksiaEnintaanLaskentaaKohden()) {
             return this.hahmojako.getTuloksiaEnintaanLaskentaaKohden();
         } else {
-            return tulokset.size();
+            return tulokset.pituus();
         } 
     }
     
+    /**
+     * Tämä metodi tulostaa näytölle otsikot laskennan hahmojakojen yhteenvedolle.
+     * @param tuloksia näytettävien hahmojakojen määrä
+     */
     private void tulostaYhteenvedonOtsikot(int tuloksia) {
         int leveys = (this.pisinPelaajatunnus + 1) * tuloksia;
         for (int i = 0; i < ((leveys + this.pisinHahmotunnus - 9) / 2) / 10; i++) {
@@ -495,7 +517,13 @@ public class TextUI {
         System.out.println("Hahmot: ");
     }
     
-    private void tulostaHahmonPelaajat(ArrayList<Tulos> tulokset, int hahmo, int tuloksia) {
+    /**
+     * Tämä metodi tulostaa näytölle yhden hahmon pelaajat osana laskennan yhteenvetotietojen tulostusta.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param hahmo sen hahmon indeksinumero, jonka pelaajat tulostetaan
+     * @param tuloksia näytettävien hahmojakojen määrä
+     */
+    private void tulostaHahmonPelaajat(Tulosluettelo tulokset, int hahmo, int tuloksia) {
         System.out.print(this.hahmojako.getYhteensopivuusdata().getHahmotunnus(hahmo));
         if (this.pisinHahmotunnus < 11) {
             for (int i = 0; i < 12 - this.hahmojako.getYhteensopivuusdata().getHahmotunnus(hahmo).length() + 1; i++) {
@@ -508,10 +536,10 @@ public class TextUI {
         }
         for (int i = 1; i <= tuloksia; i++) {
             String pelaajatunnus;
-            if (tulokset.get(i - 1).getHahmojenPelaajat()[hahmo] == 0) {
+            if (tulokset.hae(i - 1).getHahmojenPelaajat()[hahmo] == 0) {
                 pelaajatunnus = "-";
             } else {
-                pelaajatunnus = this.hahmojako.getYhteensopivuusdata().getPelaajatunnus(tulokset.get(i - 1).getHahmojenPelaajat()[hahmo]);
+                pelaajatunnus = this.hahmojako.getYhteensopivuusdata().getPelaajatunnus(tulokset.hae(i - 1).getHahmojenPelaajat()[hahmo]);
             }
             System.out.print(pelaajatunnus);
             for (int j = 0; j < this.pisinPelaajatunnus - pelaajatunnus.length(); j++) {
@@ -522,7 +550,12 @@ public class TextUI {
         System.out.println("");
     }
     
-    private void tulostaKeskiarvoisetSopivuudet(ArrayList<Tulos> tulokset, int tuloksia) {
+    /**
+     * Tämä metodi tulostaa näytölle hahmojakojen keskiarvoiset sopivuudet osana laskennan yhteenvetotietojen tulostusta.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param tuloksia näytettävin hahmojakojen määrä
+     */
+    private void tulostaKeskiarvoisetSopivuudet(Tulosluettelo tulokset, int tuloksia) {
         System.out.print("Ka. sop. %: ");
         if (this.pisinHahmotunnus > 11) {
             for (int i = 0; i < this.pisinHahmotunnus - 11; i++) {
@@ -530,7 +563,7 @@ public class TextUI {
             }
         }
         for (int i = 1; i <= tuloksia; i++) {
-            Double yhteensopivuus = ((int) tulokset.get(i - 1).getSopivuuskeskiarvo() * 100) / 100.0;
+            Double yhteensopivuus = ((int) tulokset.hae(i - 1).getSopivuuskeskiarvo() * 100) / 100.0;
             System.out.printf("%.2f", yhteensopivuus);
             for (int j = 0; j < this.pisinPelaajatunnus - 5; j++) {
                 System.out.print(" ");    
@@ -540,30 +573,49 @@ public class TextUI {
         System.out.println("");
     }
     
-    private int etsiHuonoinSopivuus(ArrayList<Tulos> tulokset, int tuloksia) {
+    /**
+     * Tämä metodi etsii näytettävien hahmojakojen joukosta pienimmän huonoimman sopivuuden arvon.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param tuloksia näytettävin hahmojakojen määrä
+     * @return metodi palauttaa peinimmän huonoimman sopivuuden arvon kokonaislukuna
+     */
+    private int etsiHuonoinSopivuus(Tulosluettelo tulokset, int tuloksia) {
         int huonoinSopivuus = 100;
         for (int i = 0; i < tuloksia; i++) {
-            if (tulokset.get(i).getHuonoinSopivuus() < huonoinSopivuus) {
-                huonoinSopivuus = tulokset.get(i).getHuonoinSopivuus();
+            if (tulokset.hae(i).getHuonoinSopivuus() < huonoinSopivuus) {
+                huonoinSopivuus = tulokset.hae(i).getHuonoinSopivuus();
             }
         }
         return huonoinSopivuus;
     } 
     
-    private int etsiParasSopivuus(ArrayList<Tulos> tulokset, int tuloksia) {
+    /**
+     * Tämä metodi etsii näytettävien hahmojakojen joukosta suurimman parhaan sopivuuden arvon.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param tuloksia näytettävin hahmojakojen määrä
+     * @return metodi palauttaa suurimman parhaan sopivuuden arvon kokonaislukuna
+     */    
+    private int etsiParasSopivuus(Tulosluettelo tulokset, int tuloksia) {
         int parasSopivuus = 0;
         for (int i = 0; i < tuloksia; i++) {
-            if (tulokset.get(i).getParasSopivuus() > parasSopivuus) {
-                parasSopivuus = tulokset.get(i).getParasSopivuus();
+            if (tulokset.hae(i).getParasSopivuus() > parasSopivuus) {
+                parasSopivuus = tulokset.hae(i).getParasSopivuus();
             }
         }
         return parasSopivuus;
     } 
     
-    private double laskeSopivuuskeskiarvo(ArrayList<Tulos> tulokset, int tuloksia) {
+    /**
+     * Tämä metodi laskee kaikkien laskennan hahmojakojen sopivuuskeskiarvojen 
+     * kokonaiskeskiarvon.
+     * @param tulokset tarkasteltavat hahmojaot sisältävä taulukkolistaobjekti
+     * @param tuloksia näytettävin hahmojakojen määrä
+     * @return metodi palauttaa kokonaiskeskiarvon liukulukuna
+     */
+    private double laskeSopivuuskeskiarvo(Tulosluettelo tulokset, int tuloksia) {
         double kokonaissopivuus = 0;
         for (int i = 0; i < tuloksia; i++) {
-            kokonaissopivuus = kokonaissopivuus + tulokset.get(i).getSopivuuskeskiarvo();
+            kokonaissopivuus = kokonaissopivuus + tulokset.hae(i).getSopivuuskeskiarvo();
         }
         double sopivuuskeskiarvo = kokonaissopivuus / tuloksia;
         return sopivuuskeskiarvo;
@@ -642,6 +694,10 @@ public class TextUI {
     
     // Yleisiä käyttöliittymän apumetodeja
     
+    /**
+     * Tämä metodi laskee pisimmän nykyisessä hahmojaossa esintyvän hahmotunnuksen pituuden merkkeinä
+     * @return pisimmän hahmotunnuksen pituus kokonaislukuna
+     */
     private int laskePisinHahmotunnus() {
         int pisinHahmotunnus = 0;
         for (int i = 1; i <= this.hahmojako.getYhteensopivuusdata().getHahmomaara(); i++) {
@@ -651,7 +707,11 @@ public class TextUI {
         }
         return pisinHahmotunnus;
     }
-    
+
+    /**
+     * Tämä metodi laskee pisimmän nykyisessä hahmojaossa esintyvän pelaajatunnuksen pituuden merkkeinä
+     * @return pisimmän pelaajatunnuksen pituus kokonaislukuna
+     */    
     private int laskePisinPelaajatunnus() {
         int pisinPelaajatunnus = 5;
         for (int i = 1; i <= this.hahmojako.getYhteensopivuusdata().getPelaajamaara(); i++) {
@@ -669,11 +729,24 @@ public class TextUI {
      * Tämä metodi määrittää algoritmien tulostettavat nimet käyttöliittymää varten
      */
     private void alustaTulostettavatNimet() {
-        this.tulostettavatNimet = new HashMap<>();
-        tulostettavatNimet.put("galeShapleyHahmoKosii", "Hahmolähtöinen Galen-Shapleyn algoritmi");
-        tulostettavatNimet.put("galeShapleyPelaajaKosii", "Pelaajalähtöinen Galen-Shapleyn algoritmi");
-        tulostettavatNimet.put("peruuttava", "Peruuttava hakualgoritmi");
-        tulostettavatNimet.put("unkarilainen", "Unkarilainen menetelmä (Kuhnin-Munkresin algoritmi)");
+        this.tulostettavatNimet = new String[4][2];
+        this.tulostettavatNimet[0][0] = "galeShapleyHahmoKosii";
+        this.tulostettavatNimet[0][1] = "Hahmolähtöinen Galen-Shapleyn algoritmi";
+        this.tulostettavatNimet[1][0] = "galeShapleyPelaajaKosii";
+        this.tulostettavatNimet[1][1] = "Pelaajalähtöinen Galen-Shapleyn algoritmi";
+        this.tulostettavatNimet[2][0] = "peruuttava";
+        this.tulostettavatNimet[2][1] = "Peruuttava hakualgoritmi";
+        this.tulostettavatNimet[3][0] = "unkarilainen";
+        this.tulostettavatNimet[3][1] = "Unkarilainen menetelmä (Kuhnin-Munkresin algoritmi)";
+    }
+    
+    private String getTulostettavaNimi (String tunnus) {
+        for (int i = 0; i < this.tulostettavatNimet.length; i++) {
+            if (this.tulostettavatNimet[i][0].equals(tunnus)) {
+                return this.tulostettavatNimet[i][1];
+            }
+        }
+        return "";
     }
     
 }

@@ -8,8 +8,7 @@ package fi.kapsi.vmarttil.larpcaster.algorithms;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
-import java.util.ArrayList;
-import java.util.Collections;
+import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 
 /**
  *
@@ -36,7 +35,7 @@ public class Unkarilainen {
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
     private int jarjestysnumero;
-    private ArrayList<Tulos> tulokset;
+    private Tulosluettelo tulokset;
 
     /**
      * Tämä metodi luo Unkarilainen-olion joka laskee hahmojaon käyttämällä 
@@ -66,7 +65,7 @@ public class Unkarilainen {
             this.vapaatPelaajat[i] = true;
         }
         this.jarjestysnumero = 0;
-        this.tulokset = new ArrayList<>();
+        this.tulokset = new Tulosluettelo();
     }
     
     
@@ -76,7 +75,7 @@ public class Unkarilainen {
      * @return tämä metodi palauttaa Tulos-olion joka sisältää kokonais-
      * yhteensopivuudeltaan maksimoidun hahmojaon
      */
-    public ArrayList<Tulos> laskeHahmojako() {
+    public Tulosluettelo laskeHahmojako() {
         vahennaRivienPienimmatArvot();
         vahennaSarakkeidenPienimmatArvot();
         while (true) {
@@ -99,15 +98,11 @@ public class Unkarilainen {
         } else {
             laskeMahdollisetRatkaisut();
         }
-        Collections.sort(this.tulokset);
-        Collections.reverse(this.tulokset);
-        ArrayList<Tulos> tulosluettelo;
-        if (this.tulokset.size() > 100) {
-            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
-        } else {
-            tulosluettelo = this.tulokset;
+        this.tulokset.jarjesta();
+        if (this.tulokset.pituus() > 100) {
+            this.tulokset = this.tulokset.rajaa(100);
         }
-        return tulosluettelo;
+        return this.tulokset;
     }
     
     // Luokan metodien käyttämät yksityiset apumetodit
@@ -453,7 +448,7 @@ public class Unkarilainen {
             if (this.kustannusmatriisi[pelaaja][hahmo] == 0 && this.vapaatPelaajat[pelaaja] == true) {
                 this.hahmojenValinnat[hahmo] = pelaaja;
                 this.vapaatPelaajat[pelaaja] = false;
-                if (this.tulokset.size() < 50000) {
+                if (this.tulokset.pituus() < 50000) {
                     laskeRatkaisu(hahmo + 1);
                 }
                 this.hahmojenValinnat[hahmo] = 0;
@@ -473,8 +468,8 @@ public class Unkarilainen {
         }
         Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
         boolean kopio = false;
-        for (Tulos vanhaTulos : this.tulokset) {
-            if (tulos.equals(vanhaTulos)) {
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
                 kopio = true;
                 break;
             }
@@ -483,7 +478,7 @@ public class Unkarilainen {
             tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
-            this.tulokset.add(tulos);
+            this.tulokset.lisaa(tulos);
             this.jarjestysnumero++;
         }
     }

@@ -12,9 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,8 +28,8 @@ import org.xml.sax.SAXException;
  */
 public class Hahmojako {
     private Sopivuusmatriisi yhteensopivuusdata;
-    private ArrayList<ArrayList<Tulos>> tulokset;
-    private ArrayList<Tulos> yhteistulokset;
+    private Tulosluettelo[] tulokset;
+    private Tulosluettelo yhteistulokset;
     private String kaytettavaAlgoritmi;
     private int minimisopivuus;
     private int tuloksiaEnintaanLaskentaaKohden;
@@ -45,8 +43,8 @@ public class Hahmojako {
      */
     public Hahmojako() {
         this.yhteensopivuusdata = null;
-        this.tulokset = new ArrayList<>();
-        this.yhteistulokset = new ArrayList<>();
+        this.tulokset = new Tulosluettelo[0];
+        this.yhteistulokset = new Tulosluettelo();
         this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 50;
         this.tuloksiaEnintaanLaskentaaKohden = 20;
@@ -71,7 +69,7 @@ public class Hahmojako {
      * taulukolistoja, joista kukin taulukkolista sisältää yhden hahmojaon 
      * laskennan tulokset metatietoineen.
      */
-    public ArrayList<ArrayList<Tulos>> getTulokset() {
+    public Tulosluettelo[] getTulokset() {
         return this.tulokset;
     }
 
@@ -81,8 +79,8 @@ public class Hahmojako {
      * @param haku palautettavan laskennan indeksinumero
      * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan 
      */
-    public ArrayList<Tulos> getHaunTulokset(int haku) {
-        return this.tulokset.get(haku);
+    public Tulosluettelo getHaunTulokset(int haku) {
+        return this.tulokset[haku];
     }
     
     /**
@@ -90,7 +88,7 @@ public class Hahmojako {
      * tulokset.
      * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan
      */
-    public ArrayList<Tulos> getYhteistulokset() {
+    public Tulosluettelo getYhteistulokset() {
         return this.yhteistulokset;
     }
     
@@ -203,22 +201,14 @@ public class Hahmojako {
     // Lisäykset ja poistot
     
     /**
-     * Tämä metodi lisää jollakin algoritmilla lasketun hahmojaon tulokset 
-     * tulosluetteloon.
-     * @param tulos Tulos-olioita sisältävä ArrayList-olio joka sisältää 
-     * hahmojaon tulokset ja niihin liittyvät metatiedot
+     * Tämä metodi lisää jollakin algoritmilla lasketut tulokset sisältävän 
+     * Tulosluettelo-olion tulokset tulosten luetteloon.
+     * @param tulos Tulos-olioita sisältävä Tulosluettelo-olio 
      */
-    public void lisaaTulos(ArrayList<Tulos> tulos) {
-        this.tulokset.add(tulos);
-    }
-    
-    /**
-     * Tämä metodi poistaa tulosluettelosta yhden hahmojaon tulokset. 
-     * @param tuloksenIndeksi kokonaisluku, joka osoittaa poistettavan 
-     * tuloksen indeksin
-     */
-    public void poistaTulos(int tuloksenIndeksi) {
-        this.tulokset.remove(tuloksenIndeksi);
+    public void lisaaTulos(Tulosluettelo tulos) {
+        int uusiKoko = this.tulokset.length + 1;
+        this.tulokset = Arrays.copyOf(this.tulokset, uusiKoko);
+        this.tulokset[uusiKoko - 1] = tulos;
     }
     
     // Operaatiot
@@ -333,7 +323,7 @@ public class Hahmojako {
      */
     public long teeHahmojako() {
         this.suorituksenAloitus = Instant.now();
-        ArrayList<Tulos> tulokset = new ArrayList<>();
+        Tulosluettelo tulokset = new Tulosluettelo();
         if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
             GaleShapley algoritmi = new GaleShapley(this);
             tulokset = algoritmi.laskeHahmojako();
@@ -344,7 +334,7 @@ public class Hahmojako {
             Unkarilainen algoritmi = new Unkarilainen(this);
             tulokset = algoritmi.laskeHahmojako();    
         }
-        if (tulokset.size() > 0) {
+        if (tulokset.pituus() > 0) {
             lisaaTulos(tulokset);
             paivitaYhteistulokset(tulokset);
         } else {
@@ -356,14 +346,22 @@ public class Hahmojako {
         return suoritusaika;
     }
     
-    private void paivitaYhteistulokset(ArrayList<Tulos> tulokset) {
-        for (Tulos tulos : tulokset) {
-            this.yhteistulokset.add(tulos);
+    private void paivitaYhteistulokset(Tulosluettelo tulokset) {
+        for (int i = 0; i < tulokset.pituus(); i++) {
+            Tulos tulos = tulokset.hae(i);
+            boolean kopio = false;
+            for (int j = 0; j < this.yhteistulokset.pituus(); j++) {
+                if (tulos.equals(this.yhteistulokset.hae(j))) {
+                    kopio = true;
+                }
+            }
+            if (kopio == false) {
+                this.yhteistulokset.lisaa(tulos);
+            }
         }
-        Collections.sort(this.yhteistulokset);
-        Collections.reverse(this.yhteistulokset);
-        if (this.yhteistulokset.size() > this.tuloksiaEnintaanYhteensa) {
-            this.yhteistulokset = new ArrayList<Tulos>(this.yhteistulokset.subList(0, this.tuloksiaEnintaanYhteensa));
+        this.yhteistulokset.jarjesta();
+        if (this.yhteistulokset.pituus() > this.tuloksiaEnintaanYhteensa) {
+            this.yhteistulokset = this.yhteistulokset.rajaa(this.tuloksiaEnintaanYhteensa);
         }
     }
 }

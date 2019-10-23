@@ -268,7 +268,7 @@ public class Tulos implements Comparable<Tulos> {
     
     @Override
     public int compareTo(final Tulos o) {
-        return Double.compare(this.sopivuuskeskiarvo, o.sopivuuskeskiarvo);
+        return Double.compare(o.sopivuuskeskiarvo, this.sopivuuskeskiarvo);
     }
     
     @Override

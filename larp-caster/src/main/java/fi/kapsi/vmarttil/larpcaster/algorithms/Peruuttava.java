@@ -9,10 +9,9 @@ import fi.kapsi.vmarttil.larpcaster.domain.Ehdokaslista;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
+import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  *
@@ -31,7 +30,7 @@ public class Peruuttava {
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
     private int jarjestysnumero;
-    private ArrayList<Tulos> tulokset;
+    private Tulosluettelo tulokset;
     private boolean lopetus;
     
     /**
@@ -50,7 +49,7 @@ public class Peruuttava {
         this.sopivuusraja = 100;
         this.ehdokkaidenMinimimaara = 1;
         this.kaytettavatEhdokaslistat = new Ehdokaslista[this.hahmomaara + 1];
-        this.tulokset = new ArrayList<>();
+        this.tulokset = new Tulosluettelo();
         this.jarjestysnumero = 0;
         this.lopetus = false;
     }
@@ -68,7 +67,7 @@ public class Peruuttava {
      * hahmojakoja edustavia Tulos-olioita keskimääräisen sopivuuden mukaisessa 
      * käänteisessä järjestyksessä
      */
-    public ArrayList<Tulos> laskeHahmojako() {
+    public Tulosluettelo laskeHahmojako() {
         while (this.sopivuusraja >= this.minimisopivuus) {
             alustaTaulukot();
             luoKaytettavatEhdokaslistat();
@@ -76,15 +75,11 @@ public class Peruuttava {
             this.sopivuusraja = this.sopivuusraja - 5;
             this.ehdokkaidenMinimimaara = (100 - this.sopivuusraja) / 5;
         }
-        Collections.sort(this.tulokset);
-        Collections.reverse(this.tulokset);
-        ArrayList<Tulos> tulosluettelo;
-        if (this.tulokset.size() > 100) {
-            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
-        } else {
-            tulosluettelo = this.tulokset;
+        this.tulokset.jarjesta();
+        if (this.tulokset.pituus() > 100) {
+            this.tulokset = this.tulokset.rajaa(100);
         }
-        return tulosluettelo;
+        return this.tulokset;
     }
     
     private void luoKaytettavatEhdokaslistat() {
@@ -127,7 +122,7 @@ public class Peruuttava {
     private void kirjaaTulos() {
         this.jarjestysnumero++;
         tallennaTulos();
-        if (this.tulokset.size() > 50000) {
+        if (this.tulokset.pituus() > 50000) {
             this.lopetus = true;
         }
     }
@@ -154,8 +149,8 @@ public class Peruuttava {
         }
         Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
         boolean kopio = false;
-        for (Tulos vanhaTulos : this.tulokset) {
-            if (tulos.equals(vanhaTulos)) {
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
                 kopio = true;
                 break;
             }
@@ -164,7 +159,7 @@ public class Peruuttava {
             tulos.setAlgoritmi("peruuttava");
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
-            this.tulokset.add(tulos);
+            this.tulokset.lisaa(tulos);
         }
     }    
 }

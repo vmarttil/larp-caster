@@ -9,8 +9,7 @@ import fi.kapsi.vmarttil.larpcaster.domain.Ehdokaslista;
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
-import java.util.ArrayList;
-import java.util.Collections;
+import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 
 
 /**
@@ -33,7 +32,7 @@ public class GaleShapley {
     private int[] ehdokkaitaKosittu;
     private int[] pelaajienValinnat;
     private int[] hahmojenValinnat;
-    private ArrayList<Tulos> tulokset;
+    private Tulosluettelo tulokset;
     
     /**
      * Tämä metodi luo GaleShapley-olion joka laskee hahmojaon käyttämällä 
@@ -50,7 +49,7 @@ public class GaleShapley {
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
         this.jarjestysnumero = 0;
         this.variaatioitaLaskettu = 0;
-        this.tulokset = new ArrayList<>();
+        this.tulokset = new Tulosluettelo();
     }
     
     /**
@@ -59,17 +58,13 @@ public class GaleShapley {
      * @return tämä metodi palauttaa Tulos-olion joka sisältää lasketun
      * hahmojaon tiedot
      */
-    public ArrayList<Tulos> laskeHahmojako() {
+    public Tulosluettelo laskeHahmojako() {
         laskeVariaatiot();
-        Collections.sort(this.tulokset);
-        Collections.reverse(this.tulokset);
-        ArrayList<Tulos> tulosluettelo;
-        if (this.tulokset.size() > 100) {
-            tulosluettelo = new ArrayList<Tulos>(this.tulokset.subList(0, 100));
-        } else {
-            tulosluettelo = this.tulokset;
+        this.tulokset.jarjesta();
+        if (this.tulokset.pituus() > 100) {
+            this.tulokset = this.tulokset.rajaa(100);
         }
-        return tulosluettelo;
+        return this.tulokset;
     }
     
     /**
@@ -281,18 +276,24 @@ public class GaleShapley {
     
     private void tallennaTulos() {
         Tulos tulos = new Tulos(this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat);
+        boolean vajaa = false; 
+        for (int i = 1; i <= this.hahmomaara; i++) {
+            if (this.hahmojenValinnat[i] == 0) {
+                vajaa = true;
+            }
+        }
         boolean kopio = false;
-        for (Tulos vanhaTulos : this.tulokset) {
-            if (tulos.equals(vanhaTulos)) {
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
                 kopio = true;
                 break;
             }
         }
-        if (kopio == false) {
+        if (kopio == false && vajaa == false) {
             tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
-            this.tulokset.add(tulos);
+            this.tulokset.lisaa(tulos);
         }
     }
     
