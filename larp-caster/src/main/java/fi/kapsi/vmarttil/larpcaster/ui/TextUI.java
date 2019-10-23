@@ -319,9 +319,8 @@ public class TextUI {
             System.out.println(yhteensopivuudet.getPelaajatunnus(i));
             Ehdokaslista ehdokaslista = yhteensopivuudet.getHahmoehdokaslista(i);
             for (int e = 0; e < ehdokaslista.getPituus(); e++) {
-                int ehdokas = ehdokaslista.getEhdokas(e);
-                String tunnus = yhteensopivuudet.getHahmotunnus(ehdokas);
-                int sopivuus = yhteensopivuudet.getSopivuusprosentti(i, ehdokas);
+                String tunnus = yhteensopivuudet.getHahmotunnus(ehdokaslista.getEhdokas(e));
+                int sopivuus = ehdokaslista.getYhteensopivuus(e);
                 System.out.println("            " + tunnus + " (" + sopivuus + "%)");
             }
             System.out.println("");
@@ -337,14 +336,13 @@ public class TextUI {
         System.out.println("Hahmojen potentiaaliset pelaajaehdokkaat");
         System.out.println("");
         System.out.println("Hahmo:      Pelaajaehdokkaat (sopivuus):");
-        for (int i = 1; i <= yhteensopivuudet.getPelaajamaara(); i++) {
+        for (int i = 1; i <= yhteensopivuudet.getHahmomaara(); i++) {
             System.out.println(yhteensopivuudet.getHahmotunnus(i));
             Ehdokaslista ehdokaslista = yhteensopivuudet.getPelaajaehdokaslista(i);
             if (!yhteensopivuudet.getHahmotunnus(i).equals("")) {
                 for (int e = 0; e < ehdokaslista.getPituus(); e++) {
-                    int ehdokas = ehdokaslista.getEhdokas(e);
-                    String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokas);
-                    int sopivuus = yhteensopivuudet.getSopivuusprosentti(ehdokas, i);
+                    String tunnus = yhteensopivuudet.getPelaajatunnus(ehdokaslista.getEhdokas(e));
+                    int sopivuus = ehdokaslista.getYhteensopivuus(e);
                     System.out.println("            " + tunnus + " (" + sopivuus + "%)");
                 }
             }

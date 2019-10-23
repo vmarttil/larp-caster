@@ -27,6 +27,7 @@ public class Peruuttava {
     private int hahmomaara;
     private long aloitusAika;
     private int sopivuusraja;
+    private int ehdokkaidenMinimimaara;
     private Ehdokaslista[] kaytettavatEhdokaslistat;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
@@ -49,11 +50,11 @@ public class Peruuttava {
         this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
         this.sopivuusraja = 100;
+        this.ehdokkaidenMinimimaara = 1;
         this.kaytettavatEhdokaslistat = new Ehdokaslista[this.hahmomaara + 1];
         this.tulokset = new ArrayList<>();
         this.jarjestysnumero = 0;
         this.lopetus = false;
-        alustaTaulukot();
     }
 
     /**
@@ -71,16 +72,35 @@ public class Peruuttava {
      */
     public ArrayList<Tulos> laskeHahmojako() {
         this.aloitusAika = System.nanoTime();
-        int hahmo = 1;
         this.edellinenLoytohetki = hahmojako.getSuorituksenAloitus();
         while (this.sopivuusraja >= this.minimisopivuus) {
-            laskeEhdokaslistat();
+            alustaTaulukot();
+            luoKaytettavatEhdokaslistat();
             
-            etsiRatkaisu(hahmo);
+            
+            System.out.println("");
+            System.out.println("Hahmojen käytettävät pelaajaehdokkaat");
+            System.out.println("");
+            System.out.println("Hahmo:      Pelaajaehdokkaat (sopivuus):");
+            for (int i = 1; i <= this.hahmomaara; i++) {
+                System.out.println(this.yhteensopivuusdata.getHahmotunnus(i));
+                Ehdokaslista ehdokaslista = kaytettavatEhdokaslistat[i];
+            if (!this.yhteensopivuusdata.getHahmotunnus(i).equals("")) {
+                for (int e = 0; e < ehdokaslista.getPituus(); e++) {
+                    String tunnus = this.yhteensopivuusdata.getPelaajatunnus(ehdokaslista.getEhdokas(e));
+                    int sopivuus = ehdokaslista.getYhteensopivuus(e);
+                    System.out.println("            " + tunnus + " (" + sopivuus + "%)");
+                }
+            }
+            System.out.println("");
+        }       
+            
+            
+            
+            etsiRatkaisu(1);
+            this.sopivuusraja = this.sopivuusraja - 5;
+            this.ehdokkaidenMinimimaara = (100 - this.sopivuusraja) / 5;
         }
-        
-        
-        
         Collections.sort(this.tulokset);
         Collections.reverse(this.tulokset);
         ArrayList<Tulos> tulosluettelo;
@@ -93,16 +113,12 @@ public class Peruuttava {
         return tulosluettelo;
     }
     
-    private void laskeEhdokaslistat() {
-        
+    private void luoKaytettavatEhdokaslistat() {
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
-            Ehdokaslista ehdokaslista = new Ehdokaslista(this.hahmojako, "hahmo", hahmo);
-            
-            
+            Ehdokaslista ehdokaslista = new Ehdokaslista(this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo), this.sopivuusraja, this.ehdokkaidenMinimimaara);
+            this.kaytettavatEhdokaslistat[hahmo] = ehdokaslista;
         }
     }
-    
-    
     
     /**
      * Tämä metodi suorittaa hahmojakojen rekursiivisen haun kutsumalla itseään
@@ -118,13 +134,13 @@ public class Peruuttava {
             this.aloitusAika = System.nanoTime();
             return;
         }
-        for (int i = 0; i < this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getPituus(); i++) {
-            if (this.vapaatPelaajat[this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i)] == true) {
-                this.hahmojenValinnat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i);
-                this.vapaatPelaajat[this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i)] = false;
+        for (int i = 0; i < this.kaytettavatEhdokaslistat[hahmo].getPituus(); i++) {
+            if (this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] == true) {
+                this.hahmojenValinnat[hahmo] = this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i);
+                this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = false;
                 etsiRatkaisu(hahmo + 1);
                 this.hahmojenValinnat[hahmo] = 0;
-                this.vapaatPelaajat[this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo).getEhdokas(i)] = true;
+                this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = true;
             }
         } 
     }
@@ -135,12 +151,12 @@ public class Peruuttava {
         this.jarjestysnumero++;
         tallennaTulos();
         Instant tuloksenLoytohetki = Instant.now();
-        if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 1) {
-            this.lopetus = true;
-        }
-        if (kulunutAika > 1.0) {
-            this.lopetus = true;
-        }
+//        if (Duration.between(this.edellinenLoytohetki, tuloksenLoytohetki).getSeconds() > 1) {
+//            this.lopetus = true;
+//        }
+//        if (kulunutAika > 1.0) {
+//            this.lopetus = true;
+//        }
         if (this.tulokset.size() > 50000) {
             this.lopetus = true;
         }

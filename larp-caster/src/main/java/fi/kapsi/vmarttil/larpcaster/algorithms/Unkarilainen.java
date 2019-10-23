@@ -471,7 +471,9 @@ public class Unkarilainen {
             if (this.kustannusmatriisi[pelaaja][hahmo] == 0 && this.vapaatPelaajat[pelaaja] == true) {
                 this.hahmojenValinnat[hahmo] = pelaaja;
                 this.vapaatPelaajat[pelaaja] = false;
-                laskeRatkaisu(hahmo + 1);
+                if (this.tulokset.size() < 50000) {
+                    laskeRatkaisu(hahmo + 1);
+                }
                 this.hahmojenValinnat[hahmo] = 0;
                 this.vapaatPelaajat[pelaaja] = true;
             }
