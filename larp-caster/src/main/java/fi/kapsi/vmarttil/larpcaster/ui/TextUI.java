@@ -33,7 +33,6 @@ public class TextUI {
      * Tämä metodi käynnistää työkalun tekstikäyttöliittymän.
      * @param hahmojako Hahmojako-olio, joka ohjaa työkalun toimintalogiikkaa 
      * ja sisältää kulloiseenkin hahmojakoon liittyvät tiedot. 
-     * @throws 
      */
     public void kaynnista(Hahmojako hahmojako) throws Exception {
         alustaTulostettavatNimet();
@@ -61,7 +60,7 @@ public class TextUI {
                 naytaEhdokaslistat();
             } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null && this.hahmojako.getEhdokaslistatOK() == true) {
                 System.out.println("Lasketaan hahmojakoja...");
-                double suoritusaika = this.hahmojako.teeHahmojako();
+                int suoritusaika = this.hahmojako.teeHahmojako();
                 if (suoritusaika == -1) {
                     System.out.println("Algoritmi tuottanut yhtäkään kelvollista hahmojakoa nykyisillä parametreilla.");
                 } else { 
@@ -357,7 +356,7 @@ public class TextUI {
             System.out.println("");
             System.out.println("Tehdyt laskennat: ");
             for (int i = 1; i <= hahmojako.getTulokset().length; i++) {
-                System.out.println(" " + i + " - " + getTulostettavaNimi(hahmojako.getTulokset()[i - 1].hae(0).getAlgoritmi()) + " (" + hahmojako.getTulokset()[i - 1].hae(0).getMinimiyhteensopivuus() + "%): " + "paras ka. sop. " + ((int) (hahmojako.getTulokset()[i - 1].hae(0).getSopivuuskeskiarvo() * 100) / 100.0) + "%");
+                System.out.println(" " + i + " - " + getTulostettavaNimi(hahmojako.getTulokset()[i - 1].hae(0).getAlgoritmi()) + " (" + hahmojako.getTulokset()[i - 1].hae(0).getMinimiyhteensopivuus() + "%): " + "paras ka. sop. " + ((int) (hahmojako.getTulokset()[i - 1].hae(0).getSopivuuskeskiarvo() * 100)) / 100.0 + "%");
             }
             System.out.println(" y - Kaikkien laskentojen yhteistulokset");
             System.out.println(" x - Takaisin");
@@ -386,17 +385,13 @@ public class TextUI {
             System.out.println("");
             System.out.println("Käytetty algoritmi: " + getTulostettavaNimi(tulokset.hae(0).getAlgoritmi()));
             System.out.println("Käytetty minimisopivuus: " + tulokset.hae(0).getMinimiyhteensopivuus() + "%");
-            System.out.println("");
-            if (tulokset.hae(0).getPelaajattomatHahmot().length > 0) {
-                System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa millään jaolla!");
-                System.out.println("");
-            }        
+            System.out.println("");      
             tulostaLaskennanHahmojakojenYhteenveto(tulokset, tuloksia);
             System.out.println("");
             System.out.println("Yhteenvetotiedot (" + tuloksia + " parasta jakoa):");        
             System.out.println("Huonoin sopivuus: " + etsiHuonoinSopivuus(tulokset, tuloksia) + "%");
             System.out.println("Paras sopivuus: " + etsiParasSopivuus(tulokset, tuloksia) + "%");
-            System.out.println("Keskimääräinen sopivuus: " + ((int) (laskeSopivuuskeskiarvo(tulokset, tuloksia) * 100) / 100.0) + "%");
+            System.out.println("Keskimääräinen sopivuus: " + ((int) (laskeSopivuuskeskiarvo(tulokset, tuloksia) * 100)) / 100.0 + "%");
             naytaLaskennanTulosValikko();
             String komento = this.lukija.nextLine();
             if (komento.equals("x")) {
@@ -429,17 +424,13 @@ public class TextUI {
             int tuloksia = laskeTulokset(tulokset);
             System.out.println("");
             System.out.println("Hahmojaon yhteistulokset kaikista lasketuista laskennoista)");
-            System.out.println("");
-            if (tulokset.hae(0).getPelaajattomatHahmot().length > 0) {
-                System.out.println("VAROITUS: Kaikille hahmoille ei löytynyt pelaajaa millään jaolla!");
-                System.out.println("");
-            }        
+            System.out.println("");    
             tulostaLaskennanHahmojakojenYhteenveto(tulokset, tuloksia);
             System.out.println("");
             System.out.println("Yhteenvetotiedot (" + tuloksia + " parasta jakoa):");        
             System.out.println("Huonoin sopivuus: " + etsiHuonoinSopivuus(tulokset, tuloksia) + "%");
             System.out.println("Paras sopivuus: " + etsiParasSopivuus(tulokset, tuloksia) + "%");
-            System.out.println("Keskimääräinen sopivuus: " + ((int) (laskeSopivuuskeskiarvo(tulokset, tuloksia) * 100) / 100.0) + "%");
+            System.out.println("Keskimääräinen sopivuus: " + ((int) (laskeSopivuuskeskiarvo(tulokset, tuloksia) * 100)) / 100.0 + "%");
             naytaLaskennanTulosValikko();
             String komento = this.lukija.nextLine();
             if (komento.equals("x")) {
@@ -563,7 +554,7 @@ public class TextUI {
             }
         }
         for (int i = 1; i <= tuloksia; i++) {
-            Double yhteensopivuus = ((int) tulokset.hae(i - 1).getSopivuuskeskiarvo() * 100) / 100.0;
+            Double yhteensopivuus = ((int) (tulokset.hae(i - 1).getSopivuuskeskiarvo() * 100)) / 100.0;
             System.out.printf("%.2f", yhteensopivuus);
             for (int j = 0; j < this.pisinPelaajatunnus - 5; j++) {
                 System.out.print(" ");    
@@ -617,7 +608,7 @@ public class TextUI {
         for (int i = 0; i < tuloksia; i++) {
             kokonaissopivuus = kokonaissopivuus + tulokset.hae(i).getSopivuuskeskiarvo();
         }
-        double sopivuuskeskiarvo = kokonaissopivuus / tuloksia;
+        double sopivuuskeskiarvo = kokonaissopivuus / (double) tuloksia;
         return sopivuuskeskiarvo;
     }
     
@@ -629,6 +620,10 @@ public class TextUI {
     private void tulostaHahmojako(Tulos tulos, String tuloksenNumero) {
         while(true) {
             System.out.println("Hahmojaon " + tuloksenNumero + " tulokset:");
+            System.out.println("");
+            System.out.println("Käytetty algoritmi: " + this.getTulostettavaNimi(tulos.getAlgoritmi()));
+            System.out.println("Käytetty minimiyhteensopivuus: " + tulos.getMinimiyhteensopivuus() + "%");
+            System.out.println("");
             System.out.println("Hahmo:                  Pelaaja:                Sopivuus:");
             for (int hahmo = 1; hahmo <= this.hahmojako.getYhteensopivuusdata().getHahmomaara(); hahmo++) {
                 String hahmotunnus = hahmojako.getYhteensopivuusdata().getHahmotunnus(hahmo);
@@ -658,7 +653,7 @@ public class TextUI {
             System.out.println("");
             System.out.println("Huonoin sopivuus: " + tulos.getHuonoinSopivuus() + "%");
             System.out.println("Paras sopivuus: " + tulos.getParasSopivuus() + "%");
-            System.out.println("Keskimääräinen sopivuus: " + ((int) tulos.getSopivuuskeskiarvo() * 100) / 100.0 + "%");
+            System.out.println("Keskimääräinen sopivuus: " + ((int) (tulos.getSopivuuskeskiarvo() * 100)) / 100.0 + "%");
             System.out.println("Mediaanisopivuus: " + ((int) tulos.getMediaanisopivuus() * 100) / 100.0 + "%");
             System.out.println("");
             System.out.println("Komennot: ");

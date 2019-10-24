@@ -11,7 +11,14 @@ import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 
 /**
- *
+ * Tämä luokka toteuttaa hahmojaon ratkaisuna kohdistusongelmaan käyttäen sen ratkaisemiseen Kuhnin-Munkresin 
+ * algoritmia eli niin sanottua unkarilaista menetelmää, joka perustuu yhteensopivuusmatriisista lasketun 
+ * kustannusmatriisin manipuloimiseen ja minimisumman löytämiseen hahmojen ja pelaajien muodostamien parien 
+ * kustannuksille siten, että kukin hahmo liitetään yhteen pelaajaan ja kukin pelaaja yhteen hahmoon. Koska 
+ * optimaalisia ratkaisuja on monessa tapauksessa useita – suurempien matriisien tapauksessa usein huomattavia 
+ * määriä, etsitään vaihtoehtoisia optimaalisia ratkaisuja soveltamalla optimoituun kustannusmatriisiin 
+ * peruuttavaa hakua samalla tavoin kuin klassisessa kuningatarongelmassa, kunnes on laskettu 50 000 
+ * vaihtoehtoista optimiratkaisua joista tulokseen tallennetaan keskimääräiseltä sopivuudeltaan 100 parasta.
  * @author Ville
  */
 public class Unkarilainen {
@@ -68,7 +75,6 @@ public class Unkarilainen {
         this.tulokset = new Tulosluettelo();
     }
     
-    
     /**
      * Tämä metodi käynnistää kokonaissopivuuden maksimoivan hahmojaon laskennan 
      * nk. unkarilaisella menetelmällä eli Kuhnin-Munkresin algoritmilla.
@@ -93,8 +99,7 @@ public class Unkarilainen {
             nollaaMuuttujat();
         }
         if (this.yksiselitteinenRatkaisu == true) {
-            int[] hahmojenValinnat = lueRatkaisu();
-            kirjaaRatkaisu(hahmojenValinnat);
+            lueRatkaisu();
         } else {
             laskeMahdollisetRatkaisut();
         }
@@ -227,7 +232,12 @@ public class Unkarilainen {
         return toistetaan;
     }
     
-    
+    /**
+     * Tämä metodi käy kustannustaulukon sarakkeet kertaalleen läpi ja määrittää 
+     * osoitukset niille sarakkeille joissa on vain yksi nolla.
+     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa 
+     * uudelleen
+     */
     private boolean tarkistaSarakkeet() {
         boolean toistetaan = false;
         boolean useitaNollia = false;
@@ -426,22 +436,36 @@ public class Unkarilainen {
         }
     }
     
-    private int[] lueRatkaisu() {
-        int[] hahmojenValinnat = new int[this.hahmomaara + 1];
+    /**
+     * Tämä metodi lukee ratkaisun suoraan kustannusmatriisista siinä tapauksessa että matriisille 
+     * on löytynyt yksiselitteinen optimiratkaisu.
+     */
+    private void lueRatkaisu() {
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
-            hahmojenValinnat[hahmo] = this.osoituksetRiveilla[hahmo];
+            this.hahmojenValinnat[hahmo] = this.osoituksetRiveilla[hahmo];
         }
-        return hahmojenValinnat;
+        this.jarjestysnumero++;
+        tallennaTulos();
     }
     
+    /**
+     * Tämä metodi käynnistää peruuttavan haun otimiratkaisujen etsimiseksi optimoidusta 
+     * kustannusmatriisista siinä tapauksessa, että optimiratkaisuja on useita.
+     */
     private void laskeMahdollisetRatkaisut() {
         int hahmo = 1;
         laskeRatkaisu(hahmo);
     }
     
+    /**
+     * Tämä metodi etsii peruuttavan haun avulla optimiratkaisuja optimoidusta kustannusmatriisista kunnes 
+     * se on joko löytänyt kaikki mahdolliset optimiratkaisut tai löydettyjen ratkaisujen määrä ylittää 50 000. 
+     * @param hahmo sen hahmon indeksi, jolle etsitään pelaajaa
+     */
     private void laskeRatkaisu(int hahmo) {
         if (hahmo == this.hahmomaara + 1) {
-            kirjaaRatkaisu(this.hahmojenValinnat);
+            this.jarjestysnumero++;
+            tallennaTulos();
             return;
         }
         for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
@@ -457,16 +481,21 @@ public class Unkarilainen {
         } 
     }
     
-    private void kirjaaRatkaisu(int[] hahmojenValinnat) {
+    /**
+     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki 
+     * hahmot eikä ole kaksoiskappale aiemmin tallennetusta jaosta, ja tallentaa 
+     * sen tämän jälkeen tulosluetteloon.
+     */
+    private void tallennaTulos() {
        int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
         for (int i = 1; i <= this.pelaajamaara; i++) {
             pelaajienValinnat[i] = 0;
         }
         for (int i = 1; i <= this.hahmomaara; i++) {
-            int pelaaja = hahmojenValinnat[i];
+            int pelaaja = this.hahmojenValinnat[i];
             pelaajienValinnat[pelaaja] = i;
         }
-        Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, hahmojenValinnat);
+        Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
         boolean kopio = false;
         for (int i = 0; i < this.tulokset.pituus(); i++) {
             if (tulos.equals(this.tulokset.hae(i))) {
@@ -479,8 +508,6 @@ public class Unkarilainen {
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
             this.tulokset.lisaa(tulos);
-            this.jarjestysnumero++;
         }
     }
-    
 }

@@ -16,7 +16,6 @@ public class Tulos implements Comparable<Tulos> {
     private int[] pelaajienHahmot;
     private int[] hahmojenPelaajat;
     private int[] hahmottomatPelaajat;
-    private int[] pelaajattomatHahmot;
     private String algoritmi;
     int minimiyhteensopivuus;
     int huonoinSopivuus;
@@ -50,34 +49,17 @@ public class Tulos implements Comparable<Tulos> {
     private int[] taytaHahmojenPelaajat(Sopivuusmatriisi sopivuusmatriisi, int[] hahmojenValinnat) {
         this.hahmojenPelaajat = new int[sopivuusmatriisi.getHahmomaara() + 1];
         int[] sopivuudet = new int[sopivuusmatriisi.getHahmomaara()];
-        int pelaajattomat = 0;
         for (int hahmo = 1; hahmo <= sopivuusmatriisi.getHahmomaara(); hahmo++) {
             this.hahmojenPelaajat[hahmo] = hahmojenValinnat[hahmo];
             if (this.hahmojenPelaajat[hahmo] == 0) {
                 sopivuudet[hahmo - 1] = 0;
-                pelaajattomat++;
             } else {
                 sopivuudet[hahmo - 1] = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[hahmo], hahmo);
             }
         }
-        taytaPelaajattomatHahmot(pelaajattomat);
         return sopivuudet;
     }
-
-    /**
-     * Tämä metodi luo ja täyttää kokonaislukutaulukon joka sisältää listan hahmosita joille ei löytynyt pelaajaa.
-     * @param pelaajattomat ilman pelaajaa jääneiden hahmojen määrä
-     */    
-    private void taytaPelaajattomatHahmot(int pelaajattomat) {
-        this.pelaajattomatHahmot = new int[pelaajattomat];
-        for (int hahmo = 1; hahmo < this.hahmojenPelaajat.length; hahmo++) {
-            if (this.hahmojenPelaajat[hahmo] == 0) {
-                this.pelaajattomatHahmot[this.pelaajattomatHahmot.length - pelaajattomat] = hahmo;
-                pelaajattomat--;
-            }
-        }
-    }
-    
+ 
     /**
      * Tämä metodi täyttää taulukot jotka sisältävät tiedon kullekin pelaajalle valitusta hahmosta ja hahmottomista pelaajista.
      * @param sopivuusmatriisi hahmojaon laskennassa käytetty Sopivuusmatriisi-olio
@@ -124,7 +106,7 @@ public class Tulos implements Comparable<Tulos> {
                 this.parasSopivuus = sopivuudet[i];
             }
         }
-        this.sopivuuskeskiarvo = (double) kokonaissopivuus / this.hahmojenPelaajat.length - 1;
+        this.sopivuuskeskiarvo = (double) kokonaissopivuus / (double) sopivuudet.length;
         Arrays.sort(sopivuudet);
         if (sopivuudet.length % 2 == 0) {
             this.mediaanisopivuus = (sopivuudet[sopivuudet.length / 2 - 1] + sopivuudet[sopivuudet.length / 2]) / 2.0;
@@ -143,15 +125,6 @@ public class Tulos implements Comparable<Tulos> {
      */
     public int[] getHahmojenPelaajat() { 
         return this.hahmojenPelaajat;
-    }
-
-    /**
-     * Tämä metodi palauttaa listan hahmosita, joille ei löytynyt pelaajaa.
-     * @return metodi palauttaa pelaajattomien hahmojen indeksit sisältävän 
-     * kokonaislukutaulukon
-     */
-    public int[] getPelaajattomatHahmot() {
-        return this.pelaajattomatHahmot;
     }
     
     /**

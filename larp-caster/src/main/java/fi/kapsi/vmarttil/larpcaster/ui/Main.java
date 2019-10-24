@@ -17,7 +17,6 @@ public class Main {
      * Tämä metodi käynnistää sovelluksen.
      * @param args merkkijonotaulu, joka sisältää ohjelman käynnistyksessä 
      * käytetyt koventoriviargumentit
-     * @throws Exception 
      */
     public static void main(String[] args) throws Exception {
         Hahmojako hahmojako = new Hahmojako();

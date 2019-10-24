@@ -14,8 +14,13 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
- *
- * @author Ville
+ * Tämä luokka toteuttaa hahmojaon ratkaisuna kohdistusongelmaan 
+ * käyttäen useaa peräkkäistä optimoitua peruuttavaa hakua kierroksittain 
+ * kasvavilla ehdokaslistoilla siten, että joka kierroksella mukaan sisällytetään uusia, 
+ * laskevan sopivuusraja-arvon ylittäviä pelaajaehdokkaita, kunnes kaikki hahmojaot on laskettu, 
+ * sopivuusraja-arvo saavuttaa määritetyn minimisopivuuden tai laskettujen hahmojakojen määrä 
+ * ylittää 50 000, joista tulokseen tallennetaan keskimääräiseltä sopivuudeltaan 100 parasta.
+ * @author Ville Marttila
  */
 public class Peruuttava {
     private Hahmojako hahmojako;
@@ -34,8 +39,8 @@ public class Peruuttava {
     private boolean lopetus;
     
     /**
-     * Tämä metodi luo Peruuttava-olion joka laskee hahmojaon käyttämällä 
-     * optimoitua peruuttavaa hakua.
+     * Tämä metodi luo Peruuttava-olion joka laskee hahmojaon käyttämällä useaaa peräkkäistä 
+     * optimoitua peruuttavaa hakua. 
      * @param hahmojako Hahmojako-olio joka sisältää sen hahmojaon tiedot, johon 
      * tämä laskenta liittyy
      */
@@ -55,14 +60,9 @@ public class Peruuttava {
     }
 
     /**
-     * Tämä metodi käynnistää sarjan peruuttavia hakuja jotka laskevat kaikki 
-     * mahdolliset hahmojaot laajenevilla pelaajaehdokasluetteloilla alkaen vain 
-     * kunkin hahmon sopivimman pelaajan sisältävistä luetteloista siten, että 
-     * joka kierroksella mukaan sisällytetään uusia, laskevan sopivuusraja-arvon 
-     * ylittäviä pelaajaehdokkaita, kunnes kaikki hahmojaot on laskettu, 
-     * sopivuusraja-arvo saavuttaa määritetyn minimisopivuuden tai laskettujen 
-     * hahmojakojen määrä ylittää 10 000.
-     * .
+     * Tämä metodi käynnistää sarjan peruuttavia hakuja jotka laskevat kaikki mahdolliset hahmojaot 
+     * laajenevilla pelaajaehdokasluetteloilla alkaen vain kunkin hahmon sopivimman pelaajan sisältävistä 
+     * luetteloista.
      * @return tämä metodi palauttaa taulukkolistan joka sisältää löydettyjä 
      * hahmojakoja edustavia Tulos-olioita keskimääräisen sopivuuden mukaisessa 
      * käänteisessä järjestyksessä
@@ -82,6 +82,10 @@ public class Peruuttava {
         return this.tulokset;
     }
     
+    /**
+     * Tämä metodi luo kullekin kierrokselle sen sopivuusrajan ja ehdokkaiden 
+     * minimimäärän mukaiset ehdokaslistat kaikille hahmoille. 
+     */
     private void luoKaytettavatEhdokaslistat() {
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
             Ehdokaslista ehdokaslista = new Ehdokaslista(this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo), this.sopivuusraja, this.ehdokkaidenMinimimaara);
@@ -90,43 +94,39 @@ public class Peruuttava {
     }
     
     /**
-     * Tämä metodi suorittaa hahmojakojen rekursiivisen haun kutsumalla itseään
+     * Tämä metodi suorittaa hahmojakojen rekursiivisen haun kutsumalla itseään.
      * @param hahmo sen hahmon indeksi, jolle etsitään pelaajaa
-     * @param aloitusAika kulloisenkin hahmojaon laskennan aloitusaika
      */
     private void etsiRatkaisu(int hahmo) {
-        boolean timeout = false;
         if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > 60) {
-            timeout = true;
+            this.lopetus = true;
         }
         if (this.lopetus == true) {
             return;
         }
         if (hahmo == this.hahmomaara + 1) {
-            kirjaaTulos();
+            this.jarjestysnumero++;
+            tallennaTulos();
+            if (this.tulokset.pituus() > 50000) {
+                this.lopetus = true;
+            }
             return;
         }
         for (int i = 0; i < this.kaytettavatEhdokaslistat[hahmo].getPituus(); i++) {
             if (this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] == true) {
                 this.hahmojenValinnat[hahmo] = this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i);
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = false;
-                if (timeout == false) {
-                    etsiRatkaisu(hahmo + 1);
-                }
+                etsiRatkaisu(hahmo + 1);
                 this.hahmojenValinnat[hahmo] = 0;
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = true;
             }
         } 
     }
     
-    private void kirjaaTulos() {
-        this.jarjestysnumero++;
-        tallennaTulos();
-        if (this.tulokset.pituus() > 50000) {
-            this.lopetus = true;
-        }
-    }
-    
+    /**
+     * Tämä metodi alustaa haussa käytetyt hahmojen valitsemien pelaajien ja 
+     * vapaiden pelaajien taulukot alkuarvoihinsa ennen haun alkua.
+     */
     private void alustaTaulukot() {
         this.hahmojenValinnat = new int[this.hahmomaara + 1];
         for (int i = 1; i <= this.hahmomaara; i++) {
@@ -138,6 +138,11 @@ public class Peruuttava {
         }
     }
     
+    /**
+     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki 
+     * hahmot eikä ole kaksoiskappale aiemmin tallennetusta jaosta, ja tallentaa 
+     * sen tämän jälkeen tulosluetteloon.
+     */
     private void tallennaTulos() {
         int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
         for (int i = 1; i <= this.pelaajamaara; i++) {
@@ -156,7 +161,7 @@ public class Peruuttava {
             }
         }
         if (kopio == false) {
-            tulos.setAlgoritmi("peruuttava");
+            tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
             this.tulokset.lisaa(tulos);

@@ -215,12 +215,9 @@ public class Hahmojako {
     
     /**
      * Tämä metodi lataa hahmojaossa käytettävät yhteensopivuustiedot XML-
-     * tiedostosta.
-     * @param tiedostonimi merkkijono, joka kertoo käytettävän XML-tiedoston 
-     * nimen
-     * @throws SAXException
-     * @throws ParserConfigurationException
-     * @throws IOException 
+     * tiedostosta ja kutsuu alimetodeja jotka luovat niistä yhteensopivuusmatriisin 
+     * sekä pelaajien ja hahmojen ehdokasluettelot.
+     * @param tiedostonimi merkkijono, joka kertoo käytettävän XML-tiedoston nimen
      */
     public void lataaYhteensopivuustiedot(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
         NodeList pelaajaluettelo = lataaSolmuluettelo(tiedostonimi);
@@ -240,6 +237,12 @@ public class Hahmojako {
         luoEhdokaslistat();  
     } 
     
+    
+    /**
+     * Tämä metodi lataa pelaajien yhteensopivuustiedot solmuluettelona annetusta x.
+     * @param tiedostonimi merkkijono, joka kertoo käytettävän XML-tiedoston nimen
+     * @return metodi palauttaa luettelon pelaajien yhteensopivuustiedoista solmuluettelona
+     */
     private NodeList lataaSolmuluettelo(String tiedostonimi) throws SAXException, ParserConfigurationException, IOException {    
         File xmlTiedosto = new File(tiedostonimi);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -252,31 +255,43 @@ public class Hahmojako {
         return pelaajaluettelo;
     }
     
+    /**
+     * Tämä metodi luo tyhjän sopivuusmatriisin annetun XML-tiedostosta muodostetun 
+     * Document-olion sisältämien tietojen perusteella
+     * @param dokumentti yhteensopivuustiedot sisältävä Document-objekti
+     */
     private void luoSopivuusmatriisi(Document dokumentti) {
         int pelaajamaara = dokumentti.getElementsByTagName("person").getLength();
         int hahmomaara = dokumentti.getElementsByTagName("note").getLength() / dokumentti.getElementsByTagName("person").getLength();
         this.yhteensopivuusdata = new Sopivuusmatriisi(pelaajamaara, hahmomaara);
     }
     
-    private void lisaaYhteensopivuustiedot(int i, int pelaajamaara, NodeList hahmoluettelo) {
+    /**
+     * Tämä metodi lisää hahmojen ja pelaajien väliset yhteensopivuustiedot 
+     * XML-tiedoston pohjalta muodostetusta Document-oliosta yhteensopivuusmatriisiin. 
+     * @param pelaaja pelaajan järjestysnumero
+     * @param pelaajamaara pelaajien kokonaismäärä
+     * @param hahmoluettelo pelaajan ja hahmojen yhteensopivuudet sisältävä solmuluettelo-olio
+     */
+    private void lisaaYhteensopivuustiedot(int pelaaja, int pelaajamaara, NodeList hahmoluettelo) {
         for (int j = 0; j < pelaajamaara; j++) {
             if (j < hahmoluettelo.getLength()) {
                 Element hahmo = (Element) hahmoluettelo.item(j);
                 String hahmotunnus = hahmo.getAttribute("n");
                 // Hahmotunnukset kirjoitetaan indeksitaulukkoon, mutta vain kerran
-                if (i == 0) {
+                if (pelaaja == 0) {
                     this.yhteensopivuusdata.setHahmotunnus(j + 1, hahmotunnus);
                 }
                 Element yhteensopivuus = (Element) hahmo.getElementsByTagName("num").item(0);
                 int yhteensopivuusprosentti = Integer.parseInt(yhteensopivuus.getAttribute("value"));
                 // Yhteensopivuusprosentti kirjoitetaan matriisiin
-                this.yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, yhteensopivuusprosentti);
+                this.yhteensopivuusdata.setSopivuusprosentti(pelaaja + 1, j + 1, yhteensopivuusprosentti);
             } else {
                 // Lisätään täytehahmoja kunnes hahmoja on yhtä monta kuin pelaajia
-                if (i == 0) {
+                if (pelaaja == 0) {
                     this.yhteensopivuusdata.setHahmotunnus(j + 1, "");
                 }
-                this.yhteensopivuusdata.setSopivuusprosentti(i + 1, j + 1, this.minimisopivuus);
+                this.yhteensopivuusdata.setSopivuusprosentti(pelaaja + 1, j + 1, this.minimisopivuus);
             }
         }
     }
@@ -321,7 +336,7 @@ public class Hahmojako {
      * valitun algoritmin ja asetettujen ehtojen ja parametrien perusteella.
      * @return metodi palauttaa hahmojaon laskentaan kuluneen ajan sekunteina
      */
-    public long teeHahmojako() {
+    public int teeHahmojako() {
         this.suorituksenAloitus = Instant.now();
         Tulosluettelo tulokset = new Tulosluettelo();
         if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
@@ -342,10 +357,17 @@ public class Hahmojako {
         }
         Instant suorituksenLopetus = Instant.now();
         Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
-        long suoritusaika = suorituksenKesto.getSeconds();
+        int suoritusaika = (int) suorituksenKesto.getSeconds();
+        System.out.println(suoritusaika);
         return suoritusaika;
     }
     
+    /**
+     * Tämä metodi päivittää kaikkien tehtyjen hehmojakolaskentojen tuloksista 
+     * muodostetut yhteistulokset uuden laskennan jälkeen.
+     * @param tulokset laskennan tuloksena syntyneet ja yhteistuloksiin 
+     * lisättävät tulokset sisältävä Tulosluettelo-olio
+     */
     private void paivitaYhteistulokset(Tulosluettelo tulokset) {
         for (int i = 0; i < tulokset.pituus(); i++) {
             Tulos tulos = tulokset.hae(i);

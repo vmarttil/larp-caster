@@ -11,13 +11,17 @@ import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 
-
 /**
- * Tämä luokka toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen ongelmaan 
- * käyttäen Galen-Shapleyn algoritmia.
+ * Tämä luokka toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen ongelmaan käyttäen Galen-Shapleyn 
+ * algoritmia. Koska käyttötarkoituksen kannalta on tarkoituksenmukaista laskea useampia kuin yksi 
+ * ratkaisu ja ehdokaslistat sisältävät usein ehdokkaita joiden sopivuus on sama, laskee algoritmi 
+ * vaihtoehtoisia optimiratkaisuja siten, että tällaisista ehdokaslistoista poistetaan ensimmäinen 
+ * ehdokas ja lasketaan hahmojako uudelleen vaihtoehtoisella parhaalla ehdokkaalla. Koska variaatioiden 
+ * laskennan aikavaativuus on eksponentiaalinen ja käyttötarkoituksen kannalta riittää approksimaatio, 
+ * variaatioita lasketaan kunnes tuloksia on kertynyt 50 000, joten ensimmäistä seuraavat hahmojaot eivät 
+ * välttämättä ole absoluuttisesti sopivimmat.
  * @author Ville Marttila
  */
-
 public class GaleShapley {
     
     private Hahmojako hahmojako;
@@ -68,12 +72,88 @@ public class GaleShapley {
     }
     
     /**
-     * Tämä metodi toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen 
-     * ongelmaan käyttäen Galen-Shapleyn algoritmia siten, että hahmot 
-     * toimivat kosivana osapuolena, jolloin tulos on optimaalinen hahmojen 
-     * asettamien vaatimusten suhteen.
+     * Tämä metodi ohjaa ehdokaslistojen jaetuista ykkössijoista seuraavien 
+     * vaihtoehtoisten hahmojakojen laskua sen mukaan toimiiko kosijana pelaaja 
+     * vai hahmo.
      */
+    private void laskeVariaatiot() {
+        if (this.kaytettavaAlgoritmi.contains("HahmoKosii")) {
+            Ehdokaslista[] hahmojenEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
+            for (int hahmo = 1; hahmo <= this.pelaajamaara; hahmo++) {
+                hahmojenEhdokaslistat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo);
+            }
+            laskePelaajaehdokasvariaatiot(hahmojenEhdokaslistat);
+        } 
+        if (this.kaytettavaAlgoritmi.contains("PelaajaKosii")) {
+            Ehdokaslista[] pelaajienEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
+            for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
+                pelaajienEhdokaslistat[pelaaja] = this.yhteensopivuusdata.getHahmoehdokaslista(pelaaja);
+            }
+            laskeHahmoehdokasvariaatiot(pelaajienEhdokaslistat);
+        }
+        
+    }
+        
+    /**
+     * Tämä metodi laskee variaatiot, jotka syntyvät poistamalla ensimmäinen ehdokas sellaisista hahmojen 
+     * ehdokaslistoista joissa on useampi yhtä sopiva sopivin ehdokas, ja laskee hahmojaon kullakin variaatiolla.
+     * @param hahmojenEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
+     */
+    private void laskePelaajaehdokasvariaatiot(Ehdokaslista[] hahmojenEhdokaslistat) {
+        for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
+            if (hahmojenEhdokaslistat[hahmo].getPituus() > 1) {
+                if (this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
+                    Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
+                    for (int i = 1; i < hahmojenEhdokaslistat.length; i++) {
+                        uudetEhdokaslistat[i] = new Ehdokaslista(hahmojenEhdokaslistat[i]);
+                    }
+                    uudetEhdokaslistat[hahmo].poistaEhdokas(0);
+                    // Lasketaan hahmojako tällä variaatiolla
+                    alustaTaulukot();
+                    this.ehdokaslistat = uudetEhdokaslistat;
+                    galeShapleyHahmoKosii();
+                    this.variaatioitaLaskettu++;
+                    if (this.variaatioitaLaskettu > 50000) {
+                        break;
+                    }
+                    laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
+                }
+            }
+        }
+    }
     
+    /**
+     * Tämä metodi laskee variaatiot, jotka syntyvät poistamalla ensimmäinen ehdokas sellaisista pelaajien 
+     * ehdokaslistoista joissa on useampi yhtä sopiva sopivin ehdokas, ja laskee hahmojaon kullakin variaatiolla
+     * @param pelaajienEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
+     */
+    private void laskeHahmoehdokasvariaatiot(Ehdokaslista[] pelaajienEhdokaslistat) {
+        for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
+            if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1) {
+                if (this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
+                    Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
+                    for (int i = 1; i < pelaajienEhdokaslistat.length; i++) {
+                        uudetEhdokaslistat[i] = new Ehdokaslista(pelaajienEhdokaslistat[i]);
+                    }
+                    uudetEhdokaslistat[pelaaja].poistaEhdokas(0);
+                    // Lasketaan hahmojako tällä variaatiolla
+                    alustaTaulukot();
+                    this.ehdokaslistat = uudetEhdokaslistat;
+                    galeShapleyPelaajaKosii();
+                    this.variaatioitaLaskettu++;
+                    if (this.variaatioitaLaskettu > 50000) {
+                        break;
+                    }
+                    laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
+                } 
+            }
+        }
+    }
+    
+    /**
+     * Tämä metodi toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen ongelmaan käyttäen Galen-Shapleyn algoritmia siten, että hahmot 
+     * toimivat kosivana osapuolena, jolloin tulos on optimaalinen hahmojen asettamien vaatimusten suhteen.
+     */
     private void galeShapleyHahmoKosii() {
         boolean vapaitaHahmoja = true;
         while (vapaitaHahmoja == true) {
@@ -90,6 +170,15 @@ public class GaleShapley {
         tallennaTulos();               
     }
     
+    /**
+     * Tämä metodi tarkistaa onko hahmolla ehdokaslistallaan vielä pelaajia joita hahmo ei ole kosinut, ja jos on, 
+     * tarkistetaan onko listan ensimmäinen pelaaja jota hahmo ei vielä ole kosinut vapaa, tai jos se on varattu, 
+     * onko hahmo paremmin sopiva kuin pelaajan nykyinen hahmo; jos vastaus jompaan kumpaan on kyllä, luodaan pari ja 
+     * vapautetaan mahdollinen aiempi hahmo.
+     * @param hahmo kosiva hahmo
+     * @return tämä metodi palauttaa totuusarvon, joka kertoo oliko hahmolla 
+     * listallaan vielä kosimaton pelaaja vai ei
+     */
     private boolean kosiPelaajaa(int hahmo) {
         // Tarkistetaan onko hahmo edelleen vapaa ja onko sillä listallaan vielä kosimattomia pelaajia
         if (this.hahmojenValinnat[hahmo] == 0 && this.ehdokkaitaKosittu[hahmo] < this.ehdokaslistat[hahmo].getPituus()) {
@@ -113,10 +202,8 @@ public class GaleShapley {
     }
     
     /**
-     * Tämä metodi toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen 
-     * ongelmaan käyttäen Galen-Shapleyn algoritmia siten, että pelaajat 
-     * toimivat kosivana osapuolena, jolloin tulos on optimaalinen pelaajien 
-     * toiveiden suhteen.
+     * Tämä metodi toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen ongelmaan käyttäen Galen-Shapleyn algoritmia siten, 
+     * että pelaajat toimivat kosivana osapuolena, jolloin tulos on optimaalinen pelaajien toiveiden suhteen.
      */
     
     private void galeShapleyPelaajaKosii() {
@@ -131,9 +218,19 @@ public class GaleShapley {
             }
         }
         // Tallennetaan tulokset Tulos-olioon
+        this.jarjestysnumero++;
         tallennaTulos();               
     }
     
+    /**
+     * Tämä metodi tarkistaa onko hahmolla ehdokaslistallaan vielä pelaajia joita hahmo ei ole kosinut, ja jos on, 
+     * se tarkistaa onko listan ensimmäinen pelaaja jota hahmo ei vielä ole kosinut vapaa, tai jos se on varattu, 
+     * onko hahmo paremmin sopiva kuin pelaajan nykyinen hahmo; jos vastaus jompaan kumpaan kysymykseen on kyllä, 
+     * metodi luo parin ja vapauttaa mahdollisen aiemman hahmon.
+     * @param hahmo kosiva hahmo
+     * @return tämä metodi palauttaa totuusarvon, joka kertoo oliko hahmolla 
+     * listallaan vielä kosimaton pelaaja vai ei
+     */
     private boolean kosiHahmoa(int pelaaja) {
         // Tarkistetaan onko hahmo edelleen vapaa ja onko sillä listallaan vielä kosimattomia pelaajia
         if (this.pelaajienValinnat[pelaaja] == 0 && this.ehdokkaitaKosittu[pelaaja] < this.ehdokaslistat[pelaaja].getPituus()) {
@@ -158,6 +255,9 @@ public class GaleShapley {
   
     // Algoritmien käyttämät apumenetelmät
     
+    /**
+     * Tämä metodi alustaa algoritmin käyttämät taulukot alkuarvoihinsa algoritmin ajojen välillä.
+     */
     private void alustaTaulukot() {
         // Taulukko johon on merkitty kuinka montaa ehdokaslistansa ehdokasta kukin hahmo tai pelaaja on kosinut
         this.ehdokkaitaKosittu = new int[this.pelaajamaara + 1];
@@ -176,104 +276,52 @@ public class GaleShapley {
         }
     }
     
-    private void laskeVariaatiot() {
-        if (this.kaytettavaAlgoritmi.contains("HahmoKosii")) {
-            Ehdokaslista[] hahmojenEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
-            for (int hahmo = 1; hahmo <= this.pelaajamaara; hahmo++) {
-                hahmojenEhdokaslistat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo);
-            }
-            laskePelaajaehdokasvariaatiot(hahmojenEhdokaslistat);
-        } 
-        if (this.kaytettavaAlgoritmi.contains("PelaajaKosii")) {
-            Ehdokaslista[] pelaajienEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
-            for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
-                pelaajienEhdokaslistat[pelaaja] = this.yhteensopivuusdata.getHahmoehdokaslista(pelaaja);
-            }
-            laskeHahmoehdokasvariaatiot(pelaajienEhdokaslistat);
-        }
-        
-    }
-        
     /**
-     * Tämä metodi laskee variaatiot, jotka syntyvät vaihtamalla kaikkien pelaajaehdokaslistojen sellaisten kahden ensimmäisen ehdokkaan paikkoja, joiden sopivuudet ovat samat, ja laskee hahmojaon kullakin variaatiolla.
-     * @param hahmojenEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
+     * Tämä metodi lisää annetun hahmon annetun pelaajan valinnaksi.
+     * @param hahmo lisättävä hahmo
+     * @param seuraavaEhdokas pelaaja, jonka valinnaksi hahmo lisätään
      */
-    private void laskePelaajaehdokasvariaatiot(Ehdokaslista[] hahmojenEhdokaslistat) {
-        for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
-            if (hahmojenEhdokaslistat[hahmo].getPituus() > 1) {
-                if (this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
-                        Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
-                        for (int i = 1; i < hahmojenEhdokaslistat.length; i++) {
-                            uudetEhdokaslistat[i] = new Ehdokaslista(hahmojenEhdokaslistat[i]);
-                        }
-                        uudetEhdokaslistat[hahmo].poistaEhdokas(0);
-                        // Lasketaan hahmojako tällä variaatiolla
-                        alustaTaulukot();
-                        this.ehdokaslistat = uudetEhdokaslistat;
-                        galeShapleyHahmoKosii();
-                        this.variaatioitaLaskettu++;
-                        if (this.variaatioitaLaskettu > 50000) {
-                            break;
-                        }
-                        laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
-                    }
-                
-            }
-        }
-    }
-    
-    /**
-     * Tämä metodi laskee variaatiot, jotka syntyvät vaihtamalla kaikkien hahmoehdokaslistojen sellaisten kahden ensimmäisen ehdokkaan paikkoja, joiden sopivuudet ovat samat, ja laskee hahmojaon kullakin variaatiolla.
-     * @param pelaajienEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
-     */
-    private void laskeHahmoehdokasvariaatiot(Ehdokaslista[] pelaajienEhdokaslistat) {
-        for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
-            if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1) {
-                if (this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
-                        Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
-                        for (int i = 1; i < pelaajienEhdokaslistat.length; i++) {
-                            uudetEhdokaslistat[i] = new Ehdokaslista(pelaajienEhdokaslistat[i]);
-                        }
-                        uudetEhdokaslistat[pelaaja].poistaEhdokas(0);
-                        // Lasketaan hahmojako tällä variaatiolla
-                        alustaTaulukot();
-                        this.ehdokaslistat = uudetEhdokaslistat;
-                        galeShapleyPelaajaKosii();
-                        this.variaatioitaLaskettu++;
-                        System.out.println(this.variaatioitaLaskettu + " variaatiota laskettu");
-                        if (this.variaatioitaLaskettu > 50000) {
-                            break;
-                        }
-                        laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
-                    }
-                
-            }
-        }
-    }
-    
-    
     private void lisaaHahmo(int hahmo, int seuraavaEhdokas) {
         this.pelaajienValinnat[seuraavaEhdokas] = hahmo;
         this.hahmojenValinnat[hahmo] = seuraavaEhdokas;
     }
-    
+
+    /**
+     * Tämä metodi vaihtaa annetun pelaajan aiemmin valitseman hahmon uuteen, paremmin yhteensopivaan.
+     * @param hahmo uusi hahmo
+     * @param seuraavaEhdokas pelaaja, jonka valinnaksi hahmo vaihdetaan
+     */
     private void vaihdaHahmo(int hahmo, int seuraavaEhdokas) {
         this.hahmojenValinnat[this.pelaajienValinnat[seuraavaEhdokas]] = 0;
         this.hahmojenValinnat[hahmo] = seuraavaEhdokas;
         this.pelaajienValinnat[seuraavaEhdokas] = hahmo;
     }
 
+    /**
+     * Tämä metodi lisää annetun pelaajan annetun hahmon valinnaksi.
+     * @param pelaaja lisättävä pelaaja
+     * @param seuraavaEhdokas hahmo, jonka valinnaksi pelaaja lisätään
+     */
     private void lisaaPelaaja(int pelaaja, int seuraavaEhdokas) {
         this.hahmojenValinnat[seuraavaEhdokas] = pelaaja;
         this.pelaajienValinnat[pelaaja] = seuraavaEhdokas;
     }
     
+    /**
+     * Tämä metodi vaihtaa annetun pelaajan aiemmin valitseman hahmon uuteen, paremmin yhteensopivaan.
+     * @param pelaaja uusi pelaaja
+     * @param seuraavaEhdokas hahmo, jonka valinnaksi pelaaja vaihdetaan
+     */
     private void vaihdaPelaaja(int pelaaja, int seuraavaEhdokas) {
         this.pelaajienValinnat[this.hahmojenValinnat[seuraavaEhdokas]] = 0;
         this.pelaajienValinnat[pelaaja] = seuraavaEhdokas;
         this.hahmojenValinnat[seuraavaEhdokas] = pelaaja;
     }
     
+    /**
+     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki hahmot eikä ole kaksoiskappale 
+     * aiemmin tallennetusta jaosta, ja tallentaa sen tämän jälkeen tulosluetteloon.
+     */
     private void tallennaTulos() {
         Tulos tulos = new Tulos(this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat);
         boolean vajaa = false; 

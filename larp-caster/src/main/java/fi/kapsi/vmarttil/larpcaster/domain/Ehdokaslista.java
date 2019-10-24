@@ -8,7 +8,7 @@ package fi.kapsi.vmarttil.larpcaster.domain;
 /**
  * Tämä luokka määrittelee yksittäisen hahmon tai pelaajan ehdokaslistan, 
  * joka sisältää luettelon kaikista sopivista pelaajista tai hahmoista niiden 
- * sopivuusjärjestyksessä sekä laskurin käsiteltyjen ehdokkaiden seuraamiseksi.
+ * sopivuusjärjestyksessä sekä niiden yhteensopivuudet.
  * @author Ville Marttila
  */
 public class Ehdokaslista {
@@ -219,8 +219,5 @@ public class Ehdokaslista {
             rakennaKeko(yhteensopivuuslista, ehdokaslista, keonKoko, pienin);
         }
     }
-    
-    
-    
 }
 
