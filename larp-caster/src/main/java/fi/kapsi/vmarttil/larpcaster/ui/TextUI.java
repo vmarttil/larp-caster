@@ -498,9 +498,9 @@ public class TextUI {
             System.out.print(i);
             for (int j = 0; j < valeja ; j++) {
                 System.out.print(" ");
-                if (Integer.toString(i).length() % 2 == 0) {
-                    System.out.print(" ");
-                }
+            }
+            if (Integer.toString(i).length() % 2 == 0) {
+                System.out.print(" ");
             }
             System.out.print("|");
         }
@@ -649,7 +649,7 @@ public class TextUI {
                     System.out.println(hahmojako.getYhteensopivuusdata().getSopivuusprosentti(tulos.getHahmojenPelaajat()[hahmo], hahmo) + " %");
                 }
             }
-            // tulostaHahmottomatPelaajat(tulos);
+            tulostaHahmottomatPelaajat(tulos);
             System.out.println("");
             System.out.println("Huonoin sopivuus: " + tulos.getHuonoinSopivuus() + "%");
             System.out.println("Paras sopivuus: " + tulos.getParasSopivuus() + "%");

@@ -98,25 +98,20 @@ public class Peruuttava {
      * @param hahmo sen hahmon indeksi, jolle etsitään pelaajaa
      */
     private void etsiRatkaisu(int hahmo) {
-        if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > 60) {
+        if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > 60 || this.tulokset.pituus() > 50000) {
             this.lopetus = true;
         }
-        if (this.lopetus == true) {
-            return;
-        }
         if (hahmo == this.hahmomaara + 1) {
-            this.jarjestysnumero++;
             tallennaTulos();
-            if (this.tulokset.pituus() > 50000) {
-                this.lopetus = true;
-            }
             return;
         }
         for (int i = 0; i < this.kaytettavatEhdokaslistat[hahmo].getPituus(); i++) {
             if (this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] == true) {
                 this.hahmojenValinnat[hahmo] = this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i);
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = false;
-                etsiRatkaisu(hahmo + 1);
+                if (this.lopetus == false) {
+                    etsiRatkaisu(hahmo + 1);
+                }
                 this.hahmojenValinnat[hahmo] = 0;
                 this.vapaatPelaajat[this.kaytettavatEhdokaslistat[hahmo].getEhdokas(i)] = true;
             }
@@ -139,9 +134,7 @@ public class Peruuttava {
     }
     
     /**
-     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki 
-     * hahmot eikä ole kaksoiskappale aiemmin tallennetusta jaosta, ja tallentaa 
-     * sen tämän jälkeen tulosluetteloon.
+     * Tämä metodi tarkistaa, että hahmojako on kelvollinen ja tallentaa sen tämän jälkeen tulosluetteloon.
      */
     private void tallennaTulos() {
         int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
@@ -153,18 +146,30 @@ public class Peruuttava {
             pelaajienValinnat[pelaaja] = i;
         }
         Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
-        boolean kopio = false;
-        for (int i = 0; i < this.tulokset.pituus(); i++) {
-            if (tulos.equals(this.tulokset.hae(i))) {
-                kopio = true;
-                break;
-            }
-        }
+        boolean kopio = onKopio(tulos);
         if (kopio == false) {
+            this.jarjestysnumero++;
             tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
             this.tulokset.lisaa(tulos);
         }
     }    
+    
+    /**
+     * Tämä metodi tarkistaa, ettei hahmojako ole kopio jostain aiemmin tallennetusta hahmojaosta.
+     * @param tulos tarkistettava hahmojako
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko hahmojako kopio
+     */
+    private boolean onKopio(Tulos tulos) {
+        boolean kopio = false;
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
 }

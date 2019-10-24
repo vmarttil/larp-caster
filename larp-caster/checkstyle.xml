@@ -31,7 +31,7 @@
         <module name="OneStatementPerLine"/>
         <module name="MethodLength">
             <property name="tokens" value="METHOD_DEF"/>
-            <property name="max" value="20"/>
+            <property name="max" value="25"/>
             <property name="countEmpty" value="false"/>
         </module>
 
@@ -82,7 +82,7 @@
             <property name="scope" value="public"/>
             <property name="allowMissingParamTags" value="false"/>
             <property name="allowMissingPropertyJavadoc" value="true"/>
-            <property name="allowMissingThrowsTags" value="false"/>
+            <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="false"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
         </module>
@@ -97,7 +97,7 @@
     <!-- File Length -->
 
     <module name='FileLength'>
-        <property name='max' value='500' />
+        <property name='max' value='550' />
     </module>
 
 

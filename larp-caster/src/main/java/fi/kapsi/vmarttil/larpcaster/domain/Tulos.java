@@ -25,8 +25,10 @@ public class Tulos implements Comparable<Tulos> {
     int jarjestysnumero;
     
     /**
-     * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset 
-     * ja siihen liittyvät metatiedot.
+     * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset ja siihen liittyvät metatiedot. 
+     * @param sopivuusmatriisi hahmojaon sopivuustiedot sisältävä Sopivuusmatriisi-olio 
+     * @param pelaajienValinnat taulukko jossa kukin arvo on kyseisen indeksin osoittamalle pelaajalle valitun hahmon indeksitunnus
+     * @param hahmojenValinnat taulukko jossa kukin arvo on kyseisen indeksin osoittamalle hahmolle valitun pelaajan indeksitunnus
      */
     public Tulos(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat, int[] hahmojenValinnat) {
         this.huonoinSopivuus = 100;
@@ -51,11 +53,7 @@ public class Tulos implements Comparable<Tulos> {
         int[] sopivuudet = new int[sopivuusmatriisi.getHahmomaara()];
         for (int hahmo = 1; hahmo <= sopivuusmatriisi.getHahmomaara(); hahmo++) {
             this.hahmojenPelaajat[hahmo] = hahmojenValinnat[hahmo];
-            if (this.hahmojenPelaajat[hahmo] == 0) {
-                sopivuudet[hahmo - 1] = 0;
-            } else {
-                sopivuudet[hahmo - 1] = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[hahmo], hahmo);
-            }
+            sopivuudet[hahmo - 1] = sopivuusmatriisi.getSopivuusprosentti(hahmojenValinnat[hahmo], hahmo);
         }
         return sopivuudet;
     }
@@ -68,13 +66,16 @@ public class Tulos implements Comparable<Tulos> {
     private void taytaPelaajienHahmot(Sopivuusmatriisi sopivuusmatriisi, int[] pelaajienValinnat) {
         this.pelaajienHahmot = new int[sopivuusmatriisi.getPelaajamaara() + 1];
         int hahmottomat = 0;
-        for (int pelaaja = 1; pelaaja <= sopivuusmatriisi.getHahmomaara(); pelaaja++) {
+        for (int pelaaja = 1; pelaaja <= sopivuusmatriisi.getPelaajamaara(); pelaaja++) {
             this.pelaajienHahmot[pelaaja] = pelaajienValinnat[pelaaja];
             if (this.pelaajienHahmot[pelaaja] == 0) {
                 hahmottomat++;
             }
         }
         this.hahmottomatPelaajat = new int[hahmottomat];
+        if (hahmottomat > 0) {
+            taytaHahmottomatPelaajat(hahmottomat);
+        }
     }
     
     /**
@@ -82,7 +83,6 @@ public class Tulos implements Comparable<Tulos> {
      * @param hahmottomat ilman hahmoa jääneiden pelaajien määrä
      */
     private void taytaHahmottomatPelaajat(int hahmottomat) {
-        this.hahmottomatPelaajat = new int[hahmottomat];
         for (int pelaaja = 1; pelaaja < this.pelaajienHahmot.length; pelaaja++) {
             if (this.pelaajienHahmot[pelaaja] == 0) {
                 this.hahmottomatPelaajat[this.hahmottomatPelaajat.length - hahmottomat] = pelaaja;

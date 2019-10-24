@@ -65,9 +65,8 @@ public class Hahmojako {
 
     /**
      * Tämä metodi palauttaa kaikkien hahmojakolaskentojen tulokset.
-     * @return metodi palauttaa taulukkolistan Tulos-olioita sisältäviä 
-     * taulukolistoja, joista kukin taulukkolista sisältää yhden hahmojaon 
-     * laskennan tulokset metatietoineen.
+     * @return metodi palauttaa Tulosluettelo-olioita sisältävän taulukon, jossa 
+     * kukin Tulosluettelo sisältää kaikki yhden hahmojakojen laskennan tulokset metatietoineen.
      */
     public Tulosluettelo[] getTulokset() {
         return this.tulokset;
@@ -77,7 +76,8 @@ public class Hahmojako {
      * Tämä metodi palauttaa annetun indeksinumeron mukaisen hahmojaon laskennan 
      * tulokset.
      * @param haku palautettavan laskennan indeksinumero
-     * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan 
+     * @return metodi palauttaa Tulosluettelo-olion joka sisältää yksittäisten 
+     * hahmojakojen tiedot sisältäviä Tulos-olioita
      */
     public Tulosluettelo getHaunTulokset(int haku) {
         return this.tulokset[haku];
@@ -86,7 +86,8 @@ public class Hahmojako {
     /**
      * Tämä metodi palauttaa kaikista hahmojakolaskennoista kootut sopivimmat 
      * tulokset.
-     * @return metodi palauttaa Tulos-olioita sisältävän taulukkolistan
+     * @return metodi palauttaa Tulosluettelo-olion joka sisältää yksittäisten 
+     * hahmojakojen tiedot sisältäviä Tulos-olioita
      */
     public Tulosluettelo getYhteistulokset() {
         return this.yhteistulokset;
@@ -142,7 +143,7 @@ public class Hahmojako {
     /**
      * Tämä metodi palauttaa käynnissä olevan hahmojaon aloitushetken Instant-
      * olion muodossa.
-     * @return 
+     * @return tämä metodi palauttaa suorituksen aloitushetkeä edustavan Instant-olion
      */
     public Instant getSuorituksenAloitus() {
         return this.suorituksenAloitus;
@@ -314,7 +315,7 @@ public class Hahmojako {
      * perusteella.
      */
     public void luoEhdokaslistat() {
-        ehdokaslistatOK = true;
+        this.ehdokaslistatOK = true;
         int pelaajamaara = yhteensopivuusdata.getPelaajamaara();        
         // Luodaan pelaajille hahmoehdokaslistat
         for (int i = 1; i <= pelaajamaara; i++) {
@@ -326,8 +327,8 @@ public class Hahmojako {
             Ehdokaslista ehdokaslista = new Ehdokaslista(this, "hahmo", i);
             yhteensopivuusdata.setPelaajaehdokaslista(i, ehdokaslista);
         }
-        if (ehdokaslistatOK == true) {
-            System.out.println("Kaikille hahmoille ja pelaajille löytyy minimisopivuuden ylittävä pelaaja tai hahmo.");
+        if (this.ehdokaslistatOK == true) {
+            System.out.println("Kaikille hahmoille löytyy minimisopivuuden ylittävä pelaaja.");
         }
     }
     

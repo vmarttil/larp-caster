@@ -11,18 +11,14 @@ import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
 
 /**
- * Tämä luokka toteuttaa hahmojaon ratkaisuna kohdistusongelmaan käyttäen sen ratkaisemiseen Kuhnin-Munkresin 
- * algoritmia eli niin sanottua unkarilaista menetelmää, joka perustuu yhteensopivuusmatriisista lasketun 
- * kustannusmatriisin manipuloimiseen ja minimisumman löytämiseen hahmojen ja pelaajien muodostamien parien 
- * kustannuksille siten, että kukin hahmo liitetään yhteen pelaajaan ja kukin pelaaja yhteen hahmoon. Koska 
- * optimaalisia ratkaisuja on monessa tapauksessa useita – suurempien matriisien tapauksessa usein huomattavia 
- * määriä, etsitään vaihtoehtoisia optimaalisia ratkaisuja soveltamalla optimoituun kustannusmatriisiin 
- * peruuttavaa hakua samalla tavoin kuin klassisessa kuningatarongelmassa, kunnes on laskettu 50 000 
- * vaihtoehtoista optimiratkaisua joista tulokseen tallennetaan keskimääräiseltä sopivuudeltaan 100 parasta.
- * @author Ville
+ * Tämä luokka toteuttaa hahmojaon ratkaisuna kohdistusongelmaan käyttäen sen ratkaisemiseen Kuhnin-Munkresin algoritmia eli niin sanottua unkarilaista menetelmää, joka perustuu 
+ * yhteensopivuusmatriisista lasketun kustannusmatriisin manipuloimiseen ja minimisumman löytämiseen hahmojen ja pelaajien muodostamien parien kustannuksille siten, että kukin hahmo 
+ * liitetään yhteen pelaajaan ja kukin pelaaja yhteen hahmoon. Koska optimaalisia ratkaisuja on monessa tapauksessa useita – suurempien matriisien tapauksessa usein huomattavia määriä, 
+ * etsitään vaihtoehtoisia optimaalisia ratkaisuja soveltamalla optimoituun kustannusmatriisiin peruuttavaa hakua samalla tavoin kuin klassisessa kuningatarongelmassa, kunnes on 
+ * laskettu 50 000 vaihtoehtoista optimiratkaisua joista tulokseen tallennetaan keskimääräiseltä sopivuudeltaan 100 parasta.
+ * @author Ville Marttila
  */
 public class Unkarilainen {
-    
     private Hahmojako hahmojako;
     private String kaytettavaAlgoritmi;
     private Sopivuusmatriisi yhteensopivuusdata;
@@ -45,10 +41,8 @@ public class Unkarilainen {
     private Tulosluettelo tulokset;
 
     /**
-     * Tämä metodi luo Unkarilainen-olion joka laskee hahmojaon käyttämällä 
-     * nk. unkarilaista menetelmää eli Kuhnin-Munkresin algoritmia.
-     * @param hahmojako Hahmojako-olio joka sisältää sen hahmojaon tiedot, johon 
-     * tämä laskenta liittyy
+     * Tämä metodi luo Unkarilainen-olion joka laskee hahmojaon käyttämällä nk. unkarilaista menetelmää eli Kuhnin-Munkresin algoritmia.
+     * @param hahmojako Hahmojako-olio joka sisältää sen hahmojaon tiedot, johon tämä laskenta liittyy
      */
     public Unkarilainen(Hahmojako hahmojako) {
         this.hahmojako = hahmojako;
@@ -76,10 +70,8 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi käynnistää kokonaissopivuuden maksimoivan hahmojaon laskennan 
-     * nk. unkarilaisella menetelmällä eli Kuhnin-Munkresin algoritmilla.
-     * @return tämä metodi palauttaa Tulos-olion joka sisältää kokonais-
-     * yhteensopivuudeltaan maksimoidun hahmojaon
+     * Tämä metodi käynnistää kokonaissopivuuden maksimoivan hahmojaon laskennan nk. unkarilaisella menetelmällä eli Kuhnin-Munkresin algoritmilla.
+     * @return tämä metodi palauttaa Tulosluettelo-olion joka sisältää yhden tai useampia optimaalisia hahmojakoja
      */
     public Tulosluettelo laskeHahmojako() {
         vahennaRivienPienimmatArvot();
@@ -98,6 +90,15 @@ public class Unkarilainen {
             muokkaaMatriisia();
             nollaaMuuttujat();
         }
+        lueTulokset();
+        return this.tulokset;
+    }
+    
+    /**
+     * Tämä metodi lukee tulokset Kuhnin-Munkresin algoritmin suorittamisen jälkeen kutsumalla alimetodeja jotka 
+     * lukevat tai laskevat optimaaliset hahmojaot ja tallentavat ne tulosluetteloon.
+     */
+    private void lueTulokset() {
         if (this.yksiselitteinenRatkaisu == true) {
             lueRatkaisu();
         } else {
@@ -107,17 +108,12 @@ public class Unkarilainen {
         if (this.tulokset.pituus() > 100) {
             this.tulokset = this.tulokset.rajaa(100);
         }
-        return this.tulokset;
     }
     
-    // Luokan metodien käyttämät yksityiset apumetodit
-    
     /**
-     * Tämä metodi laskee algoritmin käyttämän kustannusmatriisin pelaajien ja 
-     * hahmojen yhteeensopivuustietojen perusteella
-     * @return tämä metodi palauttaa kunkin pelaaja-hahmo yhdistelmän 
-     * "kustannuksen" eli käänteisen yhteensopivuuden sisältävän kaksiulotteisen
-     * kokonaislukutaulukon
+     * Tämä metodi laskee algoritmin käyttämän kustannusmatriisin pelaajien ja hahmojen yhteeensopivuustietojen perusteella
+     * @return tämä metodi palauttaa kunkin pelaaja-hahmo yhdistelmän "kustannuksen" eli käänteisen yhteensopivuuden sisältävän 
+     * kaksiulotteisen kokonaislukutaulukon
      */
     private int[][] laskeKustannusmatriisi() {
         int[][] matriisi = new int[this.pelaajamaara + 1][this.pelaajamaara + 1];
@@ -136,8 +132,7 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi etsii jokaisen kustannusmatriisin rivin pienimmän arvon ja 
-     * vähentää sen muista rivin arvoista.
+     * Tämä metodi etsii jokaisen kustannusmatriisin rivin pienimmän arvon ja vähentää sen muista rivin arvoista.
      */
     private void vahennaRivienPienimmatArvot() {
         for (int rivi = 1; rivi <= this.pelaajamaara; rivi++) {
@@ -154,8 +149,7 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi etsii jokaisen kustannusmatriisin sarakkeen pienimmän arvon ja 
-     * vähentää sen muista sarakkeen arvoista.
+     * Tämä metodi etsii jokaisen kustannusmatriisin sarakkeen pienimmän arvon ja vähentää sen muista sarakkeen arvoista.
      */
     private void vahennaSarakkeidenPienimmatArvot() {
         for (int sarake = 1; sarake <= this.pelaajamaara; sarake++) {
@@ -172,9 +166,8 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi käy läpi rivejä ja sarakkeita ja osoittaa riville sarakkeen 
-     * jos rivillä tai sarakkeessa on tasan yksi vapaa nolla ja jatkaa tätä 
-     * kunnes uusia osoituksia ei enää voi tehdä.
+     * Tämä metodi käy läpi rivejä ja sarakkeita ja osoittaa riville sarakkeen jos rivillä tai sarakkeessa on tasan yksi vapaa 
+     * nolla ja jatkaa tätä kunnes uusia osoituksia ei enää voi tehdä.
      */
     private void osoitaSarakkeetRiveille() {
         boolean toistetaan = true;
@@ -190,7 +183,7 @@ public class Unkarilainen {
         toistetaan = true;
         // Käydään sarakkeet läpi kunnes uusia osoituksia ei enää löydy
         while (toistetaan == true) {
-        if (tarkistaSarakkeet() == true) {
+            if (tarkistaSarakkeet() == true) {
                 toistetaan = true;
             } else {
                 toistetaan = false;
@@ -199,10 +192,8 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi käy kustannustaulukon rivit kertaalleen läpi ja määrittää 
-     * osoitukset niille riveille joilla on vain yksi nolla.
-     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa 
-     * uudelleen
+     * Tämä metodi käy kustannustaulukon rivit kertaalleen läpi ja määrittää osoitukset niille riveille joilla on vain yksi nolla.
+     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa uudelleen
      */
     private boolean tarkistaRivit() {
         boolean toistetaan = false;
@@ -218,11 +209,7 @@ public class Unkarilainen {
                     }
                 }
                 if (nollia == 1) {
-                    this.osoituksetRiveilla[rivi] = nollaSarakkeessa;
-                    this.blokatutSarakkeet[nollaSarakkeessa] = true;
-                    if (useitaNollia == true) {
-                        toistetaan = true;
-                    }
+                    toistetaan = maaritaRivinOsoitus(rivi, nollaSarakkeessa, useitaNollia);
                 } else if (nollia > 1) {
                     this.osoituksetRiveilla[rivi] = 0;
                     useitaNollia = true;
@@ -233,10 +220,24 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi käy kustannustaulukon sarakkeet kertaalleen läpi ja määrittää 
-     * osoitukset niille sarakkeille joissa on vain yksi nolla.
-     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa 
-     * uudelleen
+     * Tämä metodi tallentaa rivin perusteella tunnistetun osoituksen ja merkitsee osoituksen sarakkeen blokatuksi.
+     * @param rivi tarkasteltava rivi
+     * @param nollaSarakkeessa sarake, josta yksittäinen nolla on löytynyt
+     * @param useitaNollia totuusarvo joka kertoo, onko tätä riviä edeltäviltä riveiltä löytynyt useita nollia
+     * @return tämä metodi palauttaa totuusarvon, joka kertoo tuleeko rivientarkistusmetodi toistaa
+     */
+    private boolean maaritaRivinOsoitus(int rivi, int nollaSarakkeessa, boolean useitaNollia) {
+        this.osoituksetRiveilla[rivi] = nollaSarakkeessa;
+        this.blokatutSarakkeet[nollaSarakkeessa] = true;
+        if (useitaNollia == true) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Tämä metodi käy kustannustaulukon sarakkeet kertaalleen läpi ja määrittää osoitukset niille sarakkeille joissa on vain yksi nolla.
+     * @return tämä metodi palauttaa totuusarvon joka kertoo tuleeko se ajaa uudelleen
      */
     private boolean tarkistaSarakkeet() {
         boolean toistetaan = false;
@@ -252,11 +253,7 @@ public class Unkarilainen {
                     }
                 }
                 if (nollia == 1) {
-                    this.osoituksetRiveilla[nollaRivilla] = sarake;
-                    this.blokatutRivit[nollaRivilla] = true;
-                    if (useitaNollia == true) {
-                        toistetaan = true;
-                    }
+                    toistetaan = maaritaSarakkeenOsoitus(sarake, nollaRivilla, useitaNollia);
                 } else if (nollia > 1) {
                     useitaNollia = true;
                 }
@@ -266,9 +263,24 @@ public class Unkarilainen {
     }
 
     /**
+     * Tämä metodi tallentaa sarakkeen perusteella tunnistetun osoituksen ja merkitsee osoituksen rivin blokatuksi.
+     * @param sarake tarkasteltava sarake
+     * @param nollaRivilla rivi, jolta yksittäinen nolla on löytynyt
+     * @param useitaNollia totuusarvo joka kertoo, onko tätä saraketta edeltävistä sarakkeista löytynyt useita nollia
+     * @return tämä metodi palauttaa totuusarvon, joka kertoo tuleeko sarakkeidentarkistusmetodi toistaa
+     */
+    private boolean maaritaSarakkeenOsoitus(int sarake, int nollaRivilla, boolean useitaNollia) {
+        this.osoituksetRiveilla[nollaRivilla] = sarake;
+        this.blokatutRivit[nollaRivilla] = true;
+        if (useitaNollia == true) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Tämä metodi tarkistaa, onko kaikille riveille osoitettu sarake.
-     * @return tämä metodi palauttaa totuusarvon joka kertoo onko kaikille 
-     * riveille löytynyt täsmälleen yksi kelvollinen sarake
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko kaikille riveille löytynyt täsmälleen yksi kelvollinen sarake
      */
     private boolean tarkistaOsoitukset() {
         int osoituksia = 0;
@@ -288,9 +300,8 @@ public class Unkarilainen {
     }
     
    /**
-    * Tämä metodi merkitsee sarakkeet, joissa on nollia aiemmin merkityillä 
-    * riveillä ja kutsuu lopuksi metodia merkitseRivit() jos uusia sarakkeita 
-    * merkitään.
+    * Tämä metodi merkitsee sarakkeet, joissa on nollia aiemmin merkityillä riveillä ja kutsuu lopuksi metodia 
+    * merkitseRivit() jos uusia sarakkeita merkitään.
     */
     private void merkitseSarakkeet() {
         boolean sarakkeitaMerkitty = false;
@@ -310,9 +321,8 @@ public class Unkarilainen {
     }
     
     /**
-    * Tämä metodi merkitsee rivit, joilla on osoitus aiemmin merkityssä 
-    * sarakkeessa ja kutsuu lopuksi metodia merkitseSarakkeet() jos uusia rivejä 
-    * merkitään.
+    * Tämä metodi merkitsee rivit, joilla on osoitus aiemmin merkityssä sarakkeessa ja kutsuu lopuksi metodia 
+    * merkitseSarakkeet() jos uusia rivejä merkitään.
     */
     private void merkitseRivit() {
         boolean rivejaMerkitty = false;
@@ -332,11 +342,8 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi yliviivaa merkitsemättömät rivit ja merkityt sarakkeet 
-     * ja palauttaa tämänhetkisessä matriisissa mahdollisten osoitusten 
-     * enimmäismäärän.
-     * @return tämä metodi palauttaa mahdollisten osoitusten enimmäismäärän 
-     * kokonaislukuna
+     * Tämä metodi yliviivaa merkitsemättömät rivit ja merkityt sarakkeet ja palauttaa tämänhetkisessä matriisissa mahdollisten osoitusten enimmäismäärän.
+     * @return tämä metodi palauttaa mahdollisten osoitusten enimmäismäärän kokonaislukuna
      */
     private int viivaaRivitJaSarakkeet() {
         int viivattu = 0;
@@ -366,8 +373,7 @@ public class Unkarilainen {
     }
 
     /**
-     * Tämä metodi etsii kustannusmatriisista pienimmän arvon, joka ei ole 
-     * viivatulla rivillä tai viivatussa sarakkeessa.
+     * Tämä metodi etsii kustannusmatriisista pienimmän arvon, joka ei ole viivatulla rivillä tai viivatussa sarakkeessa.
      * @return metodi palauttaa matriisin pienimmän vapaan arvon
      */
     private int etsiPieninVapaaArvo() {
@@ -385,9 +391,7 @@ public class Unkarilainen {
     }
 
     /**
-     * Tämä metodi vähentää kustannusmatriisin pienimmän vapaan arvon kaikista 
-     * matriisin arvoista jotka eivät ole viivatulla rivillä tai viivatussa 
-     * sarakkeessa.
+     * Tämä metodi vähentää kustannusmatriisin pienimmän vapaan arvon kaikista matriisin arvoista jotka eivät ole viivatulla rivillä tai viivatussa sarakkeessa.
      * @param pienin matriisin pienin arvo jota ei ole viivattu yli
      */
     private void vahennaPieninVapaaArvo(int pienin) {
@@ -403,8 +407,7 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi lisää kustannusmatriisin pienimmän vapaan arvon kaikkiin 
-     * matriisin arvoihin jotka ovat viivatun rivin ja sarakkeen risteyskohdassa.
+     * Tämä metodi lisää kustannusmatriisin pienimmän vapaan arvon kaikkiin matriisin arvoihin jotka ovat viivatun rivin ja sarakkeen risteyskohdassa.
      * @param pienin matriisin pieninarvo jota ei ole viivattu yli
      */
     private void lisaaPieninVapaaArvo(int pienin) {
@@ -421,8 +424,7 @@ public class Unkarilainen {
     
     
     /**
-     * Tämä metodi asettaa kustannusmatriisin manipuloinnissa käytettävät 
-     * taulukkomuuttujat alkuarvoihinsa.
+     * Tämä metodi asettaa kustannusmatriisin manipuloinnissa käytettävät taulukkomuuttujat alkuarvoihinsa.
      */
     private void nollaaMuuttujat() {
         for (int i = 1; i <= this.pelaajamaara; i++) {
@@ -437,20 +439,17 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi lukee ratkaisun suoraan kustannusmatriisista siinä tapauksessa että matriisille 
-     * on löytynyt yksiselitteinen optimiratkaisu.
+     * Tämä metodi lukee ratkaisun suoraan kustannusmatriisista siinä tapauksessa että matriisille on löytynyt yksiselitteinen optimiratkaisu.
      */
     private void lueRatkaisu() {
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
             this.hahmojenValinnat[hahmo] = this.osoituksetRiveilla[hahmo];
         }
-        this.jarjestysnumero++;
         tallennaTulos();
     }
     
     /**
-     * Tämä metodi käynnistää peruuttavan haun otimiratkaisujen etsimiseksi optimoidusta 
-     * kustannusmatriisista siinä tapauksessa, että optimiratkaisuja on useita.
+     * Tämä metodi käynnistää peruuttavan haun otimiratkaisujen etsimiseksi optimoidusta kustannusmatriisista siinä tapauksessa, että optimiratkaisuja on useita.
      */
     private void laskeMahdollisetRatkaisut() {
         int hahmo = 1;
@@ -464,7 +463,6 @@ public class Unkarilainen {
      */
     private void laskeRatkaisu(int hahmo) {
         if (hahmo == this.hahmomaara + 1) {
-            this.jarjestysnumero++;
             tallennaTulos();
             return;
         }
@@ -482,12 +480,10 @@ public class Unkarilainen {
     }
     
     /**
-     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki 
-     * hahmot eikä ole kaksoiskappale aiemmin tallennetusta jaosta, ja tallentaa 
-     * sen tämän jälkeen tulosluetteloon.
+     * Tämä metodi tarkistaa, että hahmojako on kelvollinen ja tallentaa sen tämän jälkeen tulosluetteloon.
      */
     private void tallennaTulos() {
-       int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
+        int[] pelaajienValinnat = new int[this.pelaajamaara + 1];
         for (int i = 1; i <= this.pelaajamaara; i++) {
             pelaajienValinnat[i] = 0;
         }
@@ -496,18 +492,28 @@ public class Unkarilainen {
             pelaajienValinnat[pelaaja] = i;
         }
         Tulos tulos = new Tulos(this.yhteensopivuusdata, pelaajienValinnat, this.hahmojenValinnat);
-        boolean kopio = false;
-        for (int i = 0; i < this.tulokset.pituus(); i++) {
-            if (tulos.equals(this.tulokset.hae(i))) {
-                kopio = true;
-                break;
-            }
-        }
+        boolean kopio = onKopio(tulos);
         if (kopio == false) {
+            this.jarjestysnumero++;
             tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
             tulos.setMinimiyhteensopivuus(this.minimisopivuus);
             tulos.setJarjestysnumero(this.jarjestysnumero);
             this.tulokset.lisaa(tulos);
         }
+    }
+    
+    /**
+     * Tämä metodi tarkistaa, ettei hahmojako ole kopio jostain aiemmin tallennetusta hahmojaosta.
+     * @param tulos tarkistettava hahmojako
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko hahmojako kopio
+     */
+    private boolean onKopio(Tulos tulos) {
+        boolean kopio = false;
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

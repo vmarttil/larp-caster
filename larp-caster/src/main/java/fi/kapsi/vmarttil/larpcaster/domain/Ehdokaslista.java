@@ -65,7 +65,7 @@ public class Ehdokaslista {
     }
 
     /**
-     * Tämä metodi luo itsenäisen kopion annetusta ehdokaslistasta
+     * Tämä metodi luo itsenäisen kopion annetusta ehdokaslistasta.
      * @param lahde kopioitava ehdokaslista
      */
     public Ehdokaslista(Ehdokaslista lahde) {
@@ -178,7 +178,7 @@ public class Ehdokaslista {
         for (int i = koko / 2 - 1; i >= 0; i--) {
             rakennaKeko(yhteensopivuuslista, ehdokaslista, koko, i);
         }
-        for (int i=koko-1; i>=0; i--) {
+        for (int i = koko - 1; i >= 0; i--) {
             int x = yhteensopivuuslista[0];
             int y = ehdokaslista[0];
             yhteensopivuuslista[0] = yhteensopivuuslista[i];
@@ -201,8 +201,8 @@ public class Ehdokaslista {
      */
     void rakennaKeko(int[] yhteensopivuuslista, int[] ehdokaslista, int keonKoko, int i) {
         int pienin = i;
-        int vasemmanLapsenIndeksi  = 2*i + 1; 
-        int oikeanLapsenIndeksi  = 2*i + 2;
+        int vasemmanLapsenIndeksi  = 2 * i + 1; 
+        int oikeanLapsenIndeksi  = 2 * i + 2;
         if (vasemmanLapsenIndeksi < keonKoko && yhteensopivuuslista[vasemmanLapsenIndeksi] < yhteensopivuuslista[pienin]) {
             pienin = vasemmanLapsenIndeksi;
         }

@@ -101,23 +101,20 @@ public class GaleShapley {
      */
     private void laskePelaajaehdokasvariaatiot(Ehdokaslista[] hahmojenEhdokaslistat) {
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
-            if (hahmojenEhdokaslistat[hahmo].getPituus() > 1) {
-                if (this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
-                    Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
-                    for (int i = 1; i < hahmojenEhdokaslistat.length; i++) {
-                        uudetEhdokaslistat[i] = new Ehdokaslista(hahmojenEhdokaslistat[i]);
-                    }
-                    uudetEhdokaslistat[hahmo].poistaEhdokas(0);
-                    // Lasketaan hahmojako tällä variaatiolla
-                    alustaTaulukot();
-                    this.ehdokaslistat = uudetEhdokaslistat;
-                    galeShapleyHahmoKosii();
-                    this.variaatioitaLaskettu++;
-                    if (this.variaatioitaLaskettu > 50000) {
-                        break;
-                    }
-                    laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
+            if (hahmojenEhdokaslistat[hahmo].getPituus() > 1 && this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
+                Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
+                for (int i = 1; i < hahmojenEhdokaslistat.length; i++) {
+                    uudetEhdokaslistat[i] = new Ehdokaslista(hahmojenEhdokaslistat[i]);
                 }
+                uudetEhdokaslistat[hahmo].poistaEhdokas(0);
+                alustaTaulukot();
+                this.ehdokaslistat = uudetEhdokaslistat;
+                galeShapleyHahmoKosii();
+                this.variaatioitaLaskettu++;
+                if (this.variaatioitaLaskettu > 50000) {
+                    break;
+                }
+                laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
             }
         }
     }
@@ -129,23 +126,20 @@ public class GaleShapley {
      */
     private void laskeHahmoehdokasvariaatiot(Ehdokaslista[] pelaajienEhdokaslistat) {
         for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
-            if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1) {
-                if (this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
-                    Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
-                    for (int i = 1; i < pelaajienEhdokaslistat.length; i++) {
-                        uudetEhdokaslistat[i] = new Ehdokaslista(pelaajienEhdokaslistat[i]);
-                    }
-                    uudetEhdokaslistat[pelaaja].poistaEhdokas(0);
-                    // Lasketaan hahmojako tällä variaatiolla
-                    alustaTaulukot();
-                    this.ehdokaslistat = uudetEhdokaslistat;
-                    galeShapleyPelaajaKosii();
-                    this.variaatioitaLaskettu++;
-                    if (this.variaatioitaLaskettu > 50000) {
-                        break;
-                    }
-                    laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
-                } 
+            if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1 && this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
+                Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
+                for (int i = 1; i < pelaajienEhdokaslistat.length; i++) {
+                    uudetEhdokaslistat[i] = new Ehdokaslista(pelaajienEhdokaslistat[i]);
+                }
+                uudetEhdokaslistat[pelaaja].poistaEhdokas(0);
+                alustaTaulukot();
+                this.ehdokaslistat = uudetEhdokaslistat;
+                galeShapleyPelaajaKosii();
+                this.variaatioitaLaskettu++;
+                if (this.variaatioitaLaskettu > 50000) {
+                    break;
+                }
+                laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
             }
         }
     }
@@ -166,7 +160,6 @@ public class GaleShapley {
             }
         }
         // Tallennetaan tulokset Tulos-olioon
-        this.jarjestysnumero++;
         tallennaTulos();               
     }
     
@@ -218,7 +211,6 @@ public class GaleShapley {
             }
         }
         // Tallennetaan tulokset Tulos-olioon
-        this.jarjestysnumero++;
         tallennaTulos();               
     }
     
@@ -319,30 +311,49 @@ public class GaleShapley {
     }
     
     /**
-     * Tämä metodi tarkistaa, että hahmojako on täydellinen eli kattaa kaikki hahmot eikä ole kaksoiskappale 
-     * aiemmin tallennetusta jaosta, ja tallentaa sen tämän jälkeen tulosluetteloon.
+     * Tämä metodi tarkistaa, että hahmojako on kelvollinen ja tallentaa sen tämän jälkeen tulosluetteloon.
      */
     private void tallennaTulos() {
-        Tulos tulos = new Tulos(this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat);
-        boolean vajaa = false; 
-        for (int i = 1; i <= this.hahmomaara; i++) {
-            if (this.hahmojenValinnat[i] == 0) {
-                vajaa = true;
+        boolean vajaa = onVajaa();
+        if (vajaa == false) {
+            Tulos tulos = new Tulos(this.yhteensopivuusdata, this.pelaajienValinnat, this.hahmojenValinnat);
+            boolean kopio = onKopio(tulos);
+            if (kopio == false) {
+                this.jarjestysnumero++;
+                tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
+                tulos.setMinimiyhteensopivuus(this.minimisopivuus);
+                tulos.setJarjestysnumero(this.jarjestysnumero);
+                this.tulokset.lisaa(tulos);
             }
-        }
-        boolean kopio = false;
-        for (int i = 0; i < this.tulokset.pituus(); i++) {
-            if (tulos.equals(this.tulokset.hae(i))) {
-                kopio = true;
-                break;
-            }
-        }
-        if (kopio == false && vajaa == false) {
-            tulos.setAlgoritmi(this.kaytettavaAlgoritmi);
-            tulos.setMinimiyhteensopivuus(this.minimisopivuus);
-            tulos.setJarjestysnumero(this.jarjestysnumero);
-            this.tulokset.lisaa(tulos);
         }
     }
     
+    /**
+     * Tämä metodi tarkistaa, ettei hahmojako ole vajaa eli kattaa kaikki hahmot.
+     * @return tämä metodi palauttaa totuusarvon, joka kertoo onko hahmojako vajaa
+     */
+    private boolean onVajaa() {
+        boolean vajaa = false; 
+        for (int i = 1; i <= this.hahmomaara; i++) {
+            if (this.hahmojenValinnat[i] == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Tämä metodi tarkistaa, ettei hahmojako ole kopio jostain aiemmin tallennetusta hahmojaosta.
+     * @param tulos tarkistettava hahmojako
+     * @return tämä metodi palauttaa totuusarvon joka kertoo onko hahmojako kopio
+     */
+    private boolean onKopio(Tulos tulos) {
+        boolean kopio = false;
+        for (int i = 0; i < this.tulokset.pituus(); i++) {
+            if (tulos.equals(this.tulokset.hae(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

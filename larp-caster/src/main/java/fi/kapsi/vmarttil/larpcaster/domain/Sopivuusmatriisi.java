@@ -13,7 +13,6 @@ package fi.kapsi.vmarttil.larpcaster.domain;
  * ylijäämäpelaajia varten matriisiin luodaan haamuhahmot joiden yhteensopivuus-
  * prosentiksi tulee minimiyhteensopivuus. Näihin hahmoihin päätyminen 
  * tarkoittaa, ettei kyseinen pelaaja mahdu peliin.
- * 
  * @author Ville Marttila
  */
 public class Sopivuusmatriisi {
