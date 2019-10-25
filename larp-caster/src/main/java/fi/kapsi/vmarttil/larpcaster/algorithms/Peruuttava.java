@@ -29,12 +29,12 @@ public class Peruuttava {
     private int minimisopivuus;
     private int pelaajamaara;
     private int hahmomaara;
+    private int jarjestysnumero;
     private int sopivuusraja;
     private int ehdokkaidenMinimimaara;
     private Ehdokaslista[] kaytettavatEhdokaslistat;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
-    private int jarjestysnumero;
     private Tulosluettelo tulokset;
     private boolean lopetus;
     

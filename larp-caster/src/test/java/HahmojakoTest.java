@@ -105,6 +105,30 @@ public class HahmojakoTest {
     }
     
     @Test
+    public void enimmaisvariaatioastenAsetusToimii() {
+        this.hahmojako.setEnimmaisvariaatioaste(4);
+        assertEquals(4, this.hahmojako.getEnimmaisvariaatioaste());
+    }
+    
+    @Test
+    public void tulostenEnimmaismaaranAsetusToimii() {
+        this.hahmojako.setTulostenEnimmaismaara(200);
+        assertEquals(200, this.hahmojako.getTulostenEnimmaismaara());
+    }
+    
+    @Test
+    public void laskennanAikakatkaisunAsetusToimii() {
+        this.hahmojako.setLaskennanAikakatkaisu(180);
+        assertEquals(180, this.hahmojako.getLaskennanAikakatkaisu());
+    }
+    
+    @Test
+    public void diagnostiikkatilanAsetusToimii() {
+        this.hahmojako.setDiagnostiikkatila(true);
+        assertEquals(true, this.hahmojako.getDiagnostiikkatila());
+    }
+    
+    @Test
     public void hahmojakoMahdottomillaEhdoillaEiToimi() {
         this.hahmojako.setKaytettavaAlgoritmi("galeShapleyHahmoKosii");
         this.hahmojako.setMinimisopivuus(90);

@@ -77,6 +77,7 @@ public class IntegraatioTest {
     public void hahmojakoGaleShapleyHahmoSyntDatallaToimiiOikein() {
         this.hahmojako.setKaytettavaAlgoritmi("galeShapleyHahmoKosii");
         this.hahmojako.setMinimisopivuus(50);
+        this.hahmojako.setDiagnostiikkatila(true);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[5];
         assertEquals(5, pelaaja);
@@ -86,6 +87,7 @@ public class IntegraatioTest {
     public void hahmojakoGaleShapleyPelaajaSyntDatallaToimiiOikein() {
         this.hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
         this.hahmojako.setMinimisopivuus(70);
+        this.hahmojako.setDiagnostiikkatila(true);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[3];
         assertEquals(3, pelaaja);
@@ -187,6 +189,7 @@ public class IntegraatioTest {
     public void hahmojakoPeruuttavaSyntDatalla50ToimiiOikein() {
         this.hahmojako.setKaytettavaAlgoritmi("peruuttava");
         this.hahmojako.setMinimisopivuus(50);
+        this.hahmojako.setDiagnostiikkatila(true);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[3];
         assertEquals(3, pelaaja);
@@ -223,6 +226,7 @@ public class IntegraatioTest {
     public void hahmojakoUnkarilainenSyntDatalla50ToimiiOikein() {
         this.hahmojako.setKaytettavaAlgoritmi("unkarilainen");
         this.hahmojako.setMinimisopivuus(50);
+        this.hahmojako.setDiagnostiikkatila(true);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[8];
         assertEquals(8, pelaaja);
@@ -253,5 +257,6 @@ public class IntegraatioTest {
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[20];
         assertEquals(40, pelaaja);
     }
+    
     
 }
