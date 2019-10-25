@@ -1,5 +1,5 @@
 # Toteutusdokumentti: LARPCaster-työkalu
-Tämä dokumentti esittelee LARPCaster-työkalun teknisen toteutuksen ja tarkastelee sen käyttämien algoritmien tuloksia, suorituskykyä ja muita ominaisuuksia.
+Tämä dokumentti esittelee LARPCaster-työkalun teknistä toteutusta, rakennetta ja toimintaa ja pyrkii avaamaan syitä erilaisten suunnittelu ja toteutusratkaisujen taustalla.
 
 ## Ohjelman yleisrakenne
 
