@@ -60,11 +60,11 @@ public class TextUI {
                 naytaEhdokaslistat();
             } else if (komento.equals("5") && hahmojako.getYhteensopivuusdata() != null && this.hahmojako.getEhdokaslistatOK() == true) {
                 System.out.println("Lasketaan hahmojakoja...");
-                int suoritusaika = this.hahmojako.teeHahmojako();
+                long suoritusaika = this.hahmojako.teeHahmojako();
                 if (suoritusaika == -1) {
-                    System.out.println("Algoritmi tuottanut yhtäkään kelvollista hahmojakoa nykyisillä parametreilla.");
+                    System.out.println("Algoritmi ei tuottanut yhtäkään kelvollista hahmojakoa nykyisillä parametreilla.");
                 } else { 
-                    System.out.println("Suoritusaika: " + suoritusaika + " s");
+                    System.out.println("Suoritusaika: " + suoritusaika / 100.0 + " s");
                 }
             } else if (komento.equals("6") && hahmojako.getTulokset().length > 0) {
                 naytaLaskennat();
@@ -137,9 +137,9 @@ public class TextUI {
             } else if (komento.equals("2")) {
                 hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
             } else if (komento.equals("3")) {
-                hahmojako.setKaytettavaAlgoritmi("peruuttava");
-            } else if (komento.equals("4")) {
                 hahmojako.setKaytettavaAlgoritmi("unkarilainen");
+            } else if (komento.equals("4")) {
+                hahmojako.setKaytettavaAlgoritmi("peruuttava");
             } else {
                 System.out.println("Tuntematon vaihtoehto.");
             }
@@ -154,8 +154,8 @@ public class TextUI {
         System.out.println("Vaihtoehdot (nykyinen: " + nykyinen + "): ");
         System.out.println(" 1 - " + getTulostettavaNimi("galeShapleyHahmoKosii"));
         System.out.println(" 2 - " + getTulostettavaNimi("galeShapleyPelaajaKosii"));
-        System.out.println(" 3 - " + getTulostettavaNimi("peruuttava"));
-        System.out.println(" 4 - " + getTulostettavaNimi("unkarilainen"));
+        System.out.println(" 3 - " + getTulostettavaNimi("unkarilainen"));
+        System.out.println(" 4 - " + getTulostettavaNimi("peruuttava"));
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -170,9 +170,9 @@ public class TextUI {
             return "1";
         } else if (hahmojako.getKaytettavaAlgoritmi().equals("galeShapleyPelaajaKosii")) {
             return "2";
-        } else if (hahmojako.getKaytettavaAlgoritmi().equals("peruuttava")) {
-            return "3";
         } else if (hahmojako.getKaytettavaAlgoritmi().equals("unkarilainen")) {
+            return "3";
+        } else if (hahmojako.getKaytettavaAlgoritmi().equals("peruuttava")) {
             return "4";
         } else {
             return "ei valittu";
@@ -192,9 +192,19 @@ public class TextUI {
             } else if (komento.equals("1")) {
                 asetaMinimisopivuus();
             } else if (komento.equals("2")) {
-                asetaTuloksiaEnintaanLaskentaaKohden();
+                asetaEnimmäisvariaatioaste();
             } else if (komento.equals("3")) {
+                asetaTulostenEnimmaismaara();
+            } else if (komento.equals("4")) {
+                asetaLaskennanAikakatkaisu();
+            } else if (komento.equals("5")) {
+                asetaTuloksiaEnintaanLaskentaaKohden();
+            } else if (komento.equals("6")) {
                 asetaTuloksiaEnintaanYhteensa();
+            } else if (komento.equals("7") && this.hahmojako.getDiagnostiikkatila() == true) {
+                this.hahmojako.setDiagnostiikkatila(false);
+            } else if (komento.equals("7") && this.hahmojako.getDiagnostiikkatila() == false) {
+                this.hahmojako.setDiagnostiikkatila(true);
             } else {
                 System.out.println("Tuntematon komento.");
             }
@@ -208,8 +218,16 @@ public class TextUI {
         System.out.println("");
         System.out.println("Komennot: ");
         System.out.println(" 1 - Aseta minimiyhteensopivuus (nykyinen: " + hahmojako.getMinimisopivuus() + "%)");
-        System.out.println(" 2 - Aseta hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
-        System.out.println(" 3 - Aseta hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
+        System.out.println(" 2 - Aseta varianttien laskennan enimmäisaste (0 = ei rajoitusta, nykyinen: " + hahmojako.getEnimmaisvariaatioaste() + ")");
+        System.out.println(" 3 - Aseta laskettavien tulosten enimmäismäärä (0 = ei rajoitusta, nykyinen: " + hahmojako.getTulostenEnimmaismaara()+ ")");
+        System.out.println(" 4 - Aseta laskentaan käytettävä enimmäisaika (0 = ei rajoitusta, nykyinen: " + hahmojako.getLaskennanAikakatkaisu()+ ")");
+        System.out.println(" 5 - Aseta näytettävien hahmojakojen laskentakohtainen enimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanLaskentaaKohden() + ", max: 100)");
+        System.out.println(" 6 - Aseta näytettävien hahmojakojen yhteisenimmäismäärä (nykyinen: " + hahmojako.getTuloksiaEnintaanYhteensa() + ", max: 100)");
+        if (this.hahmojako.getDiagnostiikkatila() == false) {
+            System.out.println(" 7 - Aseta diagnostiikkatila käyttöön");
+        } else {
+            System.out.println(" 7 - Poista diagnostiikkatila käytöstä");
+        }
         System.out.println(" x - Takaisin");
         System.out.print("Komento: ");
     }
@@ -224,7 +242,36 @@ public class TextUI {
         hahmojako.setMinimisopivuus(sopivuus);
     }
     
-   
+    /**
+     * Tämä metodi määrittää käyttöliittymän enimmäisvariaatioasteen asettamiselle.
+     */
+    private void asetaEnimmäisvariaatioaste() {
+        System.out.println("");
+        System.out.print("Uusi varianttien laskennan enimmäisaste (0 = ei rajoitusta, nykyinen: " + hahmojako.getEnimmaisvariaatioaste() + "): ");
+        int aste = Integer.parseInt(this.lukija.nextLine().replace(" ", ""));
+        hahmojako.setEnimmaisvariaatioaste(aste);
+    }
+
+    /**
+     * Tämä metodi määrittää käyttöliittymän laskettavien tulosten enimmäismäärän asettamiselle.
+     */
+    private void asetaTulostenEnimmaismaara() {
+        System.out.println("");
+        System.out.print("Uusi laskettavien tulosten enimmäismäärä (0 = ei rajoitusta, nykyinen: " + hahmojako.getTulostenEnimmaismaara() + "): ");
+        int maara = Integer.parseInt(this.lukija.nextLine().replace(" ", ""));
+        hahmojako.setTulostenEnimmaismaara(maara);
+    }
+    
+    /**
+     * Tämä metodi määrittää käyttöliittymän laskentaan käytettävän enimmäisajan asettamiselle.
+     */
+    private void asetaLaskennanAikakatkaisu() {
+        System.out.println("");
+        System.out.print("Uusi laskennan enimmmäisaika sekunteina (0 = ei rajoitusta, nykyinen: " + hahmojako.getLaskennanAikakatkaisu() + " s): ");
+        int aika = Integer.parseInt(this.lukija.nextLine().replace(" ", "").replace("s",""));
+        hahmojako.setLaskennanAikakatkaisu(aika);
+    }
+    
     /**
      * Tämä metodi määrittää käyttöliittymän laskentakohtaisen hahmojakojen enimmäismäärän asettamiselle.
      */

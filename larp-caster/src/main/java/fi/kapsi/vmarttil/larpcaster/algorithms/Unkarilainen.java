@@ -9,6 +9,8 @@ import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Tämä luokka toteuttaa hahmojaon ratkaisuna kohdistusongelmaan käyttäen sen ratkaisemiseen Kuhnin-Munkresin algoritmia eli niin sanottua unkarilaista menetelmää, joka perustuu 
@@ -77,6 +79,9 @@ public class Unkarilainen {
         vahennaRivienPienimmatArvot();
         vahennaSarakkeidenPienimmatArvot();
         while (true) {
+            if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > this.hahmojako.getLaskennanAikakatkaisu()) {
+                break;
+            }
             osoitaSarakkeetRiveille();
             if (tarkistaOsoitukset() == true) {
                 this.yksiselitteinenRatkaisu = true;
@@ -101,6 +106,9 @@ public class Unkarilainen {
     private void lueTulokset() {
         if (this.yksiselitteinenRatkaisu == true) {
             lueRatkaisu();
+            if (this.hahmojako.getDiagnostiikkatila() == true) {
+                tulostaStatus();
+            }
         } else {
             laskeMahdollisetRatkaisut();
         }
@@ -464,13 +472,16 @@ public class Unkarilainen {
     private void laskeRatkaisu(int hahmo) {
         if (hahmo == this.hahmomaara + 1) {
             tallennaTulos();
+            if (this.hahmojako.getDiagnostiikkatila() == true && this.tulokset.pituus() % 10000 == 0) {
+                tulostaStatus();
+            }
             return;
         }
         for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
             if (this.kustannusmatriisi[pelaaja][hahmo] == 0 && this.vapaatPelaajat[pelaaja] == true) {
                 this.hahmojenValinnat[hahmo] = pelaaja;
                 this.vapaatPelaajat[pelaaja] = false;
-                if (this.tulokset.pituus() < 50000) {
+                if (this.tulokset.pituus() < this.hahmojako.getTulostenEnimmaismaara() && Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() < this.hahmojako.getLaskennanAikakatkaisu()) {
                     laskeRatkaisu(hahmo + 1);
                 }
                 this.hahmojenValinnat[hahmo] = 0;
@@ -516,4 +527,15 @@ public class Unkarilainen {
         }
         return false;
     }
+
+/**
+     * Tämä metodi tulostaa tämänhetkisen statuksen diagnostisia tarkoituksia varten.
+     */
+    private void tulostaStatus() {
+        Instant nykyhetki = Instant.now();
+        Duration kesto = Duration.between(this.hahmojako.getSuorituksenAloitus(), nykyhetki);
+        long aika = (kesto.getSeconds() * 1000) + (kesto.getNano() / 1000000);
+        System.out.println(this.tulokset.pituus() + " uniikkia tulosta laskettu " + aika  + " millisekunnissa.");
+    }
+
 }

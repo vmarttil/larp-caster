@@ -10,6 +10,8 @@ import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
 import fi.kapsi.vmarttil.larpcaster.domain.Sopivuusmatriisi;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulos;
 import fi.kapsi.vmarttil.larpcaster.domain.Tulosluettelo;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Tämä luokka toteuttaa hahmojaon ratkaisuna vakaiden avioliittojen ongelmaan käyttäen Galen-Shapleyn 
@@ -32,7 +34,10 @@ public class GaleShapley {
     private int hahmomaara;
     private Ehdokaslista[] ehdokaslistat;
     private int jarjestysnumero;
+    private int sopivuusraja;
+    private int ehdokkaidenMinimimaara;
     private int variaatioitaLaskettu;
+    private int variaatioaste;
     private int[] ehdokkaitaKosittu;
     private int[] pelaajienValinnat;
     private int[] hahmojenValinnat;
@@ -52,18 +57,30 @@ public class GaleShapley {
         this.hahmomaara = this.yhteensopivuusdata.getHahmomaara();
         this.minimisopivuus = this.hahmojako.getMinimisopivuus();
         this.jarjestysnumero = 0;
+        this.sopivuusraja = 100;
+        this.ehdokkaidenMinimimaara = 1;
         this.variaatioitaLaskettu = 0;
+        this.variaatioaste = 0;
         this.tulokset = new Tulosluettelo();
     }
     
     /**
-     * Tämä metodi käynnistää oikean laskenta-algoritmin luokkamuuttujan 
-     * kaytettavaAlgoritmi arvon perusteella.
-     * @return tämä metodi palauttaa Tulos-olion joka sisältää lasketun
-     * hahmojaon tiedot
+     * Tämä metodi käynnistää laskenta-algoritmin ja toistaa sitä laskevalla 
+     * sopivuusrajalla kunnes määritetty minimisopivuus tulee vastaan ja kaikki variaatiot 
+     * määritettyyn asteeseen saakka on laskettu tai laskettavien variaatioiden enimmäismäärä 
+     * tulee vastaan.
+     * @return tämä metodi palauttaa Tulosluettelo-olion joka sisältää laskettujen hahmojakojen tiedot
+     * Tulos-olioina
      */
     public Tulosluettelo laskeHahmojako() {
-        laskeVariaatiot();
+        while (this.sopivuusraja >= this.minimisopivuus) {
+            laskeVariaatiot();
+            if (this.hahmojako.getDiagnostiikkatila() == true) {
+                tulostaStatus();
+            }
+            this.sopivuusraja = this.sopivuusraja - 5;
+            this.ehdokkaidenMinimimaara = (100 - this.sopivuusraja) / 5;
+        }
         this.tulokset.jarjesta();
         if (this.tulokset.pituus() > 100) {
             this.tulokset = this.tulokset.rajaa(100);
@@ -80,18 +97,19 @@ public class GaleShapley {
         if (this.kaytettavaAlgoritmi.contains("HahmoKosii")) {
             Ehdokaslista[] hahmojenEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
             for (int hahmo = 1; hahmo <= this.pelaajamaara; hahmo++) {
-                hahmojenEhdokaslistat[hahmo] = this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo);
+                Ehdokaslista ehdokaslista = new Ehdokaslista(this.yhteensopivuusdata.getPelaajaehdokaslista(hahmo), this.sopivuusraja, this.ehdokkaidenMinimimaara);
+                hahmojenEhdokaslistat[hahmo] = ehdokaslista;
             }
             laskePelaajaehdokasvariaatiot(hahmojenEhdokaslistat);
         } 
         if (this.kaytettavaAlgoritmi.contains("PelaajaKosii")) {
             Ehdokaslista[] pelaajienEhdokaslistat = new Ehdokaslista[this.pelaajamaara + 1];
             for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
-                pelaajienEhdokaslistat[pelaaja] = this.yhteensopivuusdata.getHahmoehdokaslista(pelaaja);
+                Ehdokaslista ehdokaslista = new Ehdokaslista(this.yhteensopivuusdata.getHahmoehdokaslista(pelaaja), this.sopivuusraja, this.ehdokkaidenMinimimaara);
+                pelaajienEhdokaslistat[pelaaja] = ehdokaslista;
             }
             laskeHahmoehdokasvariaatiot(pelaajienEhdokaslistat);
         }
-        
     }
         
     /**
@@ -100,6 +118,7 @@ public class GaleShapley {
      * @param hahmojenEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
      */
     private void laskePelaajaehdokasvariaatiot(Ehdokaslista[] hahmojenEhdokaslistat) {
+        this.variaatioaste++;
         for (int hahmo = 1; hahmo <= this.hahmomaara; hahmo++) {
             if (hahmojenEhdokaslistat[hahmo].getPituus() > 1 && this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(0), hahmo) == this.yhteensopivuusdata.getSopivuusprosentti(hahmojenEhdokaslistat[hahmo].getEhdokas(1), hahmo)) {
                 Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[hahmojenEhdokaslistat.length];
@@ -111,10 +130,13 @@ public class GaleShapley {
                 this.ehdokaslistat = uudetEhdokaslistat;
                 galeShapleyHahmoKosii();
                 this.variaatioitaLaskettu++;
-                if (this.variaatioitaLaskettu > 50000) {
+                if (this.variaatioitaLaskettu > this.hahmojako.getTulostenEnimmaismaara() && this.hahmojako.getTulostenEnimmaismaara() > 0) {
                     break;
                 }
-                laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
+                if (this.variaatioaste <= hahmojako.getEnimmaisvariaatioaste() || hahmojako.getEnimmaisvariaatioaste() == 0) {
+                    laskePelaajaehdokasvariaatiot(uudetEhdokaslistat);
+                }
+                this.variaatioaste--;
             }
         }
     }
@@ -125,6 +147,7 @@ public class GaleShapley {
      * @param pelaajienEhdokaslistat seuraavan variaation laskentaan käytettävien ehdokaslistojen taulukko
      */
     private void laskeHahmoehdokasvariaatiot(Ehdokaslista[] pelaajienEhdokaslistat) {
+        this.variaatioaste++;
         for (int pelaaja = 1; pelaaja <= this.pelaajamaara; pelaaja++) {
             if (pelaajienEhdokaslistat[pelaaja].getPituus() > 1 && this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(0)) == this.yhteensopivuusdata.getSopivuusprosentti(pelaaja, pelaajienEhdokaslistat[pelaaja].getEhdokas(1))) {
                 Ehdokaslista[] uudetEhdokaslistat = new Ehdokaslista[pelaajienEhdokaslistat.length];
@@ -136,10 +159,13 @@ public class GaleShapley {
                 this.ehdokaslistat = uudetEhdokaslistat;
                 galeShapleyPelaajaKosii();
                 this.variaatioitaLaskettu++;
-                if (this.variaatioitaLaskettu > 50000) {
+                if (this.variaatioitaLaskettu > this.hahmojako.getTulostenEnimmaismaara() && this.hahmojako.getTulostenEnimmaismaara() > 0) {
                     break;
                 }
-                laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
+                if (this.variaatioaste <= hahmojako.getEnimmaisvariaatioaste() || hahmojako.getEnimmaisvariaatioaste() == 0) {
+                    laskeHahmoehdokasvariaatiot(uudetEhdokaslistat);
+                }
+                this.variaatioaste--;
             }
         }
     }
@@ -355,5 +381,15 @@ public class GaleShapley {
             }
         }
         return false;
+    }
+    
+    /**
+     * Tämä metodi tulostaa tämänhetkisen statuksen diagnostisia tarkoituksia varten.
+     */
+    private void tulostaStatus() {
+        Instant nykyhetki = Instant.now();
+        Duration kesto = Duration.between(this.hahmojako.getSuorituksenAloitus(), nykyhetki);
+        long aika = (kesto.getSeconds() * 1000) + (kesto.getNano() / 1000000);
+        System.out.println(this.variaatioitaLaskettu + " variaatiota laskettu ja " + this.tulokset.pituus() + " uniikkia tulosta löydetty sopivuusrajalla >" + this.sopivuusraja + " " + aika  + " millisekunnissa.");
     }
 }

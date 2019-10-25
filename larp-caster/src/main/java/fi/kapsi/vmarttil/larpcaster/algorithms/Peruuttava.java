@@ -72,6 +72,9 @@ public class Peruuttava {
             alustaTaulukot();
             luoKaytettavatEhdokaslistat();
             etsiRatkaisu(1);
+            if (this.hahmojako.getDiagnostiikkatila() == true) {
+                tulostaStatus();
+            }
             this.sopivuusraja = this.sopivuusraja - 5;
             this.ehdokkaidenMinimimaara = (100 - this.sopivuusraja) / 5;
         }
@@ -98,7 +101,7 @@ public class Peruuttava {
      * @param hahmo sen hahmon indeksi, jolle etsitään pelaajaa
      */
     private void etsiRatkaisu(int hahmo) {
-        if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > 60 || this.tulokset.pituus() > 50000) {
+        if (Duration.between(this.hahmojako.getSuorituksenAloitus(), Instant.now()).getSeconds() > this.hahmojako.getLaskennanAikakatkaisu() || (this.tulokset.pituus() > this.hahmojako.getTulostenEnimmaismaara()) && this.hahmojako.getTulostenEnimmaismaara() > 0) {
             this.lopetus = true;
         }
         if (hahmo == this.hahmomaara + 1) {
@@ -171,5 +174,14 @@ public class Peruuttava {
         return false;
     }
     
+    /**
+     * Tämä metodi tulostaa tämänhetkisen statuksen diagnostisia tarkoituksia varten.
+     */
+    private void tulostaStatus() {
+        Instant nykyhetki = Instant.now();
+        Duration kesto = Duration.between(this.hahmojako.getSuorituksenAloitus(), nykyhetki);
+        long aika = (kesto.getSeconds() * 1000) + (kesto.getNano() / 1000000);
+        System.out.println(this.tulokset.pituus() + " uniikkia tulosta laskettu sopivuusrajalla >" + this.sopivuusraja + " " + aika  + " millisekunnissa.");
+    }
     
 }

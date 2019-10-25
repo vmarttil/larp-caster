@@ -5,7 +5,9 @@
  */
 
 import fi.kapsi.vmarttil.larpcaster.domain.Hahmojako;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import javax.xml.parsers.ParserConfigurationException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,6 +24,10 @@ import org.xml.sax.SAXException;
 public class IntegraatioTest {
     
     Hahmojako hahmojako;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    private final PrintStream originalErr = System.err;
     
     public IntegraatioTest() {
     }
@@ -47,8 +53,20 @@ public class IntegraatioTest {
         }
     }
     
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+    
     @After
     public void tearDown() {
+    }
+    
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
     }
 
     // TODO add test methods here.
@@ -140,6 +158,7 @@ public class IntegraatioTest {
         }
         this.hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
         this.hahmojako.setMinimisopivuus(40);
+        this.hahmojako.setTulostenEnimmaismaara(100);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[5];
         assertEquals(99, pelaaja);
@@ -158,6 +177,7 @@ public class IntegraatioTest {
         }
         this.hahmojako.setKaytettavaAlgoritmi("galeShapleyPelaajaKosii");
         this.hahmojako.setMinimisopivuus(30);
+        this.hahmojako.setTulostenEnimmaismaara(100);
         this.hahmojako.teeHahmojako();
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[5];
         assertEquals(99, pelaaja);
@@ -233,4 +253,5 @@ public class IntegraatioTest {
         int pelaaja = this.hahmojako.getTulokset()[0].hae(0).getHahmojenPelaajat()[20];
         assertEquals(40, pelaaja);
     }
+    
 }

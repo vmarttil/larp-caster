@@ -34,7 +34,11 @@ public class Hahmojako {
     private int minimisopivuus;
     private int tuloksiaEnintaanLaskentaaKohden;
     private int tuloksiaEnintaanYhteensa;
+    private int enimmaisvariaatioaste;
+    private int tulostenEnimmaismaara;
+    private int laskennanAikakatkaisu;
     private boolean ehdokaslistatOK;
+    private boolean diagnostiikkatila;
     Instant suorituksenAloitus;
    
     /**
@@ -49,7 +53,11 @@ public class Hahmojako {
         this.minimisopivuus = 50;
         this.tuloksiaEnintaanLaskentaaKohden = 20;
         this.tuloksiaEnintaanYhteensa = 20;
+        this.enimmaisvariaatioaste = 0;
+        this.tulostenEnimmaismaara = 50000;
+        this.laskennanAikakatkaisu = 60;
         this.ehdokaslistatOK = true;
+        this.diagnostiikkatila = false;
     }
      
     // Getters
@@ -124,10 +132,41 @@ public class Hahmojako {
     
     /**
      * Tämä metodi palauttaa yhteensä näytettävien tulosten enimmäismäärän.
-     * @return metodi palauttaa suurimman näytettäväntulosmäärän kokonaislukuna
+     * @return metodi palauttaa suurimman näytettävän tulosmäärän kokonaislukuna
      */
     public int getTuloksiaEnintaanYhteensa() {
         return this.tuloksiaEnintaanYhteensa;
+    }
+    
+    /**
+     * Tämä metodi palauttaa Galen-Sapleyn ja Kuhnin-Munkresin algoritmeilla tehtävässä 
+     * hahmojaossa varianttien laskemiseen käytettävän variaation enimmäisasteen, eli 
+     * kuinka monen tason syvyydelle hakupuun kutakin haaraa seurataan ennen kuin peruutetaan 
+     * takaisin päin ja siirrytään seuraavaan haaraan; matalat arvot ohjaavat hakua 
+     * enemmän leveys- kuin syvyyssuuntaan ja sekä rajoittavat haun enimmäiskestoa että 
+     * jakavat tuloksien variaatiota tasaisemmin eri hahmoille.
+     * @return metodi palauttaa suurimman sallitun variaation asteen kokonaislukuna
+     */
+    public int getEnimmaisvariaatioaste() {
+        return this.enimmaisvariaatioaste;
+    }
+    
+    /**
+     * Tämä metodi palauttaa yhden hahmojakolaskennan yhteydessä laskettavien tulosten enimmäismäärän, 
+     * jonka täytyttyä laskenta lopetetaan aikavaativuuden hillitsemiseksi.
+     * @return metodi palauttaa laskettavien tulosten enimmäismäärän kokonaislukuna
+     */
+    public int getTulostenEnimmaismaara() {
+        return this.tulostenEnimmaismaara;
+    }
+    
+    /**
+     * Tämä metodi palauttaa hahmojakolaskentaan käytettävän enimmäisajan, 
+     * jonka jälkeen laskenta lopetetaan aikavaativuuden hillitsemiseksi.
+     * @return metodi palauttaa enimmäisajan sekunteja kuvaavana kokonaislukuna
+     */
+    public int getLaskennanAikakatkaisu() {
+        return this.laskennanAikakatkaisu;
     }
     
     /**
@@ -140,6 +179,8 @@ public class Hahmojako {
         return this.ehdokaslistatOK;
     }
     
+    
+    
     /**
      * Tämä metodi palauttaa käynnissä olevan hahmojaon aloitushetken Instant-
      * olion muodossa.
@@ -147,6 +188,14 @@ public class Hahmojako {
      */
     public Instant getSuorituksenAloitus() {
         return this.suorituksenAloitus;
+    }
+    
+    /**
+     * Tämä metodi palauttaa tiedon siitä, onko diagnostiikkatila käytössä.
+     * @return totuusarvo joka kertoo onko diagnostiikkatila käytössä
+     */
+    public boolean getDiagnostiikkatila() {
+        return this.diagnostiikkatila;
     }
     
     // Setters
@@ -190,6 +239,36 @@ public class Hahmojako {
     } 
     
     /**
+     * Tämä metodi asettaa Galen-Shapleyn algoritmilla tehtävässä hahmojaossa ehdokaslistavarianttien laskemiseen 
+     * käytettävän variaation enimmäisasteen, eli kuinka monen tason syvyydelle hakupuun kutakin haaraa 
+     * seurataan ennen kuin peruutetaan takaisin päin ja siirrytään seuraavaan haaraan; matalat arvot 
+     * ohjaavat hakua enemmän leveys- kuin syvyyssuuntaan ja sekä rajoittavat haun enimmäiskestoa että 
+     * jakavat tuloksien variaatiota tasaisemmin eri hahmoille.
+     * @param aste suurin sallittu variaation aste
+     */
+    public void setEnimmaisvariaatioaste(int aste) {
+        this.enimmaisvariaatioaste = aste;
+    }
+    
+    /**
+     * Tämä metodi asettaa yhden hahmojakolaskennan yhteydessä laskettavien tulosten enimmäismäärän, 
+     * jonka täytyttyä laskenta lopetetaan laskenta-ajan pitämiseksi kohtuullisena.
+     * @param enimmaismaara laskettavien tulosten enimmäismäärä
+     */
+    public void setTulostenEnimmaismaara(int enimmaismaara) {
+        this.tulostenEnimmaismaara = enimmaismaara;
+    } 
+    
+    /**
+     * Tämä metodi asettaa hahmojakolaskentaan käytettävän enimmäisajan, jonka jälkeen tulosten 
+     * laskenta lopetetaan aikavaativuuden hillitsemiseksi.
+     * @param aika laskentaan käytettävä enimmäisaika
+     */
+    public void setLaskennanAikakatkaisu(int aika) {
+        this.laskennanAikakatkaisu = aika;
+    }
+    
+    /**
      * Tämä metodi kertoo sisältääkö jokaisen pelaajan ja hahmon ehdokaslista 
      * vähintään yhden sopivan hahmon tai pelaajan.
      * @param ok totuusarvo, joka on totta jos kaikkien pelaajien 
@@ -199,6 +278,14 @@ public class Hahmojako {
         this.ehdokaslistatOK = ok;
     }
 
+    /**
+     * Tämä metodi asettaa diagnostiikkatilan käyttöön tai pois käytöstä.
+     * @return totuusarvo joka kertoo onko diagnostiikkatila käytössä
+     */
+    public void setDiagnostiikkatila(boolean kaytossa) {
+        this.diagnostiikkatila = kaytossa;
+    }
+    
     // Lisäykset ja poistot
     
     /**
@@ -337,7 +424,7 @@ public class Hahmojako {
      * valitun algoritmin ja asetettujen ehtojen ja parametrien perusteella.
      * @return metodi palauttaa hahmojaon laskentaan kuluneen ajan sekunteina
      */
-    public int teeHahmojako() {
+    public long teeHahmojako() {
         this.suorituksenAloitus = Instant.now();
         Tulosluettelo tulokset = new Tulosluettelo();
         if (this.kaytettavaAlgoritmi.contains("galeShapley")) {
@@ -358,13 +445,12 @@ public class Hahmojako {
         }
         Instant suorituksenLopetus = Instant.now();
         Duration suorituksenKesto = Duration.between(suorituksenAloitus, suorituksenLopetus);
-        int suoritusaika = (int) suorituksenKesto.getSeconds();
-        System.out.println(suoritusaika);
+        long suoritusaika = (suorituksenKesto.getSeconds() * 100) + (suorituksenKesto.getNano() / 10000000);
         return suoritusaika;
     }
     
     /**
-     * Tämä metodi päivittää kaikkien tehtyjen hehmojakolaskentojen tuloksista 
+     * Tämä metodi päivittää kaikkien tehtyjen hahmojakolaskentojen tuloksista 
      * muodostetut yhteistulokset uuden laskennan jälkeen.
      * @param tulokset laskennan tuloksena syntyneet ja yhteistuloksiin 
      * lisättävät tulokset sisältävä Tulosluettelo-olio
