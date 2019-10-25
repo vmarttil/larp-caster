@@ -8,10 +8,21 @@ Sekä automaattisissa yksikkötesteissä että suorituskykytestauksessa käytet�
 ## Automaattiset testit
 Perustoiminnallisuutta testaavat JUnit-yksikkötestit pyrkivät testaamaan sekä yksittäisiä metodeja, että useiden metodien ja tietorakenteiden yhteistoimintaa sekä yksittäisten luokkien sisällä että luokkien välissä, mukaillen ohjelman todellista työnkulkua. Automaattisissa testeissä käytetään joko synteettistä testidataa (LARPCaster_synthtest_1.xml) tai eri kokoisia todellisen datan alajoukkoja, jotta saadaan mallinnettua työkalun metodien käyttäytyminen eri olosuhteissa. Kaikkia työkalun tiloja ei kuitenkaan ollut mahdollista saavuttaa käytettävissä olevalla testidatalla, joten etenkin suoritushaarojen ja osin myös komentojen osalta testikattavuus ei ole kaikkien luokkien osalta täydellinen vaan jää 90–95 prosenttiin. Alla on esitetty automattisten testien kattavuutta kuvaavat jacoco-työkalun raportit (käyttöliittymän metodeja ei testattu automaattisesti eivätkä ne näin ollen sisälly testikattavuusraporttiin):
 
+![Testikattavuus: larp-caster](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_larp-caster.png)
 
+![Testikattavuus: algorithms](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_algorithms.png)
 
+![Testikattavuus: Galeshapley](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_galeshapley.png)
+![Testikattavuus: Unkarilainen](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_unkarilainen.png)
+![Testikattavuus: Peruuttava](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_peruuttava.png)
 
+![Testikattavuus: domain](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_domain.png)
 
+![Testikattavuus: Hahmojako](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_hahmojako.png)
+![Testikattavuus: Ehdokaslista](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_ehdokaslista.png)
+![Testikattavuus: Tulos](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_tulos.png)
+![Testikattavuus: Tulosluettelo](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_tulosluettelo.png)
+![Testikattavuus: Sopivuusmatriisi](https://github.com/vmarttil/larp-caster/blob/master/dokumentaatio/kuvat/testit_sopivuusmatriisi.png)
 
 ## Manuaalinen tulosanalyysi
 Toistaiseksi tämä osio sisältää suuntaa antavia ja algoritmien optimoinnissa auttavia alustavia havaintoja algoritmien käyttäytymisestä ja suorituskyvystä. Lopullinen testiraportti tulee sisältämään kattavan analyysin eri algoritmien heikkouksista ja vahvuuksista sekä niiden suorituskyvyn vertailua erilaisilla datajoukoilla.
