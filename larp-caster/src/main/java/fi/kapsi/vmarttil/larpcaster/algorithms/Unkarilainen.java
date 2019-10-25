@@ -27,8 +27,8 @@ public class Unkarilainen {
     private int minimisopivuus;
     private int pelaajamaara;
     private int hahmomaara;
-    private long aloitusAika;
     private int[][] kustannusmatriisi;
+    private int jarjestysnumero;
     private int[] osoituksetRiveilla;
     private boolean[] blokatutRivit;
     private boolean[] blokatutSarakkeet;
@@ -39,7 +39,6 @@ public class Unkarilainen {
     private boolean yksiselitteinenRatkaisu;
     private int[] hahmojenValinnat;
     private boolean[] vapaatPelaajat;
-    private int jarjestysnumero;
     private Tulosluettelo tulokset;
 
     /**

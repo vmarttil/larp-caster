@@ -199,7 +199,7 @@ public class Ehdokaslista {
      * @param keonKoko jarjestettavan taulukon ja siihen käytettävän keon koko
      * @param i operaation juurisolmu
      */
-    void rakennaKeko(int[] yhteensopivuuslista, int[] ehdokaslista, int keonKoko, int i) {
+    private void rakennaKeko(int[] yhteensopivuuslista, int[] ehdokaslista, int keonKoko, int i) {
         int pienin = i;
         int vasemmanLapsenIndeksi  = 2 * i + 1; 
         int oikeanLapsenIndeksi  = 2 * i + 2;

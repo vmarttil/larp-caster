@@ -192,7 +192,7 @@ public class TextUI {
             } else if (komento.equals("1")) {
                 asetaMinimisopivuus();
             } else if (komento.equals("2")) {
-                asetaEnimmäisvariaatioaste();
+                asetaEnimmaisvariaatioaste();
             } else if (komento.equals("3")) {
                 asetaTulostenEnimmaismaara();
             } else if (komento.equals("4")) {
@@ -245,7 +245,7 @@ public class TextUI {
     /**
      * Tämä metodi määrittää käyttöliittymän enimmäisvariaatioasteen asettamiselle.
      */
-    private void asetaEnimmäisvariaatioaste() {
+    private void asetaEnimmaisvariaatioaste() {
         System.out.println("");
         System.out.print("Uusi varianttien laskennan enimmäisaste (0 = ei rajoitusta, nykyinen: " + hahmojako.getEnimmaisvariaatioaste() + "): ");
         int aste = Integer.parseInt(this.lukija.nextLine().replace(" ", ""));
