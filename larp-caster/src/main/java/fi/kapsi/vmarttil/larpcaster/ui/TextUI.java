@@ -68,6 +68,8 @@ public class TextUI {
                 }
             } else if (komento.equals("6") && hahmojako.getTulokset().length > 0) {
                 naytaLaskennat();
+            } else if (komento.equals("7") && hahmojako.getTulokset().length > 0) {
+                tallennaTulokset();
             } else {
                 System.out.println("Tuntematon komento.");
             }
@@ -97,6 +99,9 @@ public class TextUI {
         }
         if (hahmojako.getTulokset().length > 0) {
             System.out.println(" 6 - Näytä tulokset");
+        }
+        if (hahmojako.getTulokset().length > 0) {
+            System.out.println(" 7 - Tallenna tulokset XML-tiedostoon");
         }
         System.out.println(" x - Lopeta");
         System.out.println("");
@@ -790,5 +795,12 @@ public class TextUI {
         }
         return "";
     }
+    
+    private void tallennaTulokset() {
+        String vientiTiedostonNimi = this.hahmojako.vieTuloksetXmlTiedostoon();
+        System.out.println("Hahmojaot tallennettu XML-tiedostoon '" + vientiTiedostonNimi + "'.");
+    }
+    
+    
     
 }

@@ -5,7 +5,10 @@
  */
 package fi.kapsi.vmarttil.larpcaster.domain;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Tämä luokka määrittelee hahmojaon tuloksen ja siihen liittyvien metatietojen 
@@ -23,6 +26,7 @@ public class Tulos implements Comparable<Tulos> {
     double mediaanisopivuus;
     int parasSopivuus;
     int jarjestysnumero;
+    String tunnus;
     
     /**
      * Tämä metodi luo Tulos-olion, johon tallennetaan yhden hahmojaon tulokset ja siihen liittyvät metatiedot. 
@@ -38,6 +42,7 @@ public class Tulos implements Comparable<Tulos> {
         int[] sopivuudet = taytaHahmojenPelaajat(sopivuusmatriisi, hahmojenValinnat);
         taytaPelaajienHahmot(sopivuusmatriisi, pelaajienValinnat);
         laskeSopivuudet(sopivuudet);
+        this.tunnus = laskePvm() + algoritmi + jarjestysnumero;
     }
     
     // Luokan konstruktorin käyttämät apumetodit
@@ -67,7 +72,11 @@ public class Tulos implements Comparable<Tulos> {
         this.pelaajienHahmot = new int[sopivuusmatriisi.getPelaajamaara() + 1];
         int hahmottomat = 0;
         for (int pelaaja = 1; pelaaja <= sopivuusmatriisi.getPelaajamaara(); pelaaja++) {
-            this.pelaajienHahmot[pelaaja] = pelaajienValinnat[pelaaja];
+            if (pelaajienValinnat[pelaaja] > sopivuusmatriisi.getHahmomaara()) {
+                this.pelaajienHahmot[pelaaja] = 0;
+            } else {
+                this.pelaajienHahmot[pelaaja] = pelaajienValinnat[pelaaja];
+            }
             if (this.pelaajienHahmot[pelaaja] == 0) {
                 hahmottomat++;
             }
@@ -115,7 +124,27 @@ public class Tulos implements Comparable<Tulos> {
         }
     }
     
+    /**
+     * Tämä metodi palauttaa nykyisen ajankohdan numerojonona muodossa "vvvvkkppttmmss"
+     */
+    
+    private String laskePvm() {
+        DateFormat pvmMuoto = new SimpleDateFormat("yyyyMMddHHmmss");
+	Date pvm = new Date();
+        return pvm.toString();
+    }
+    
+    
+    
     // Getters
+    
+    /**
+     * Tämä metodi palauttaa tuloksen yksilöllisen tunnuksen.
+     * @return metodi palauttaa merkkijonon joka toimii tuloksen yksilöllisenä tunnuksena
+     */
+    public String getTunnus() { 
+        return this.tunnus;
+    }
     
     /**
      * Tämä metodi palauttaa tiedot hahmoille valituista pelaajista.

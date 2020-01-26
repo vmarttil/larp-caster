@@ -10,14 +10,22 @@ import fi.kapsi.vmarttil.larpcaster.algorithms.Peruuttava;
 import fi.kapsi.vmarttil.larpcaster.algorithms.Unkarilainen;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -51,8 +59,8 @@ public class Hahmojako {
         this.yhteistulokset = new Tulosluettelo();
         this.kaytettavaAlgoritmi = "";
         this.minimisopivuus = 50;
-        this.tuloksiaEnintaanLaskentaaKohden = 20;
-        this.tuloksiaEnintaanYhteensa = 20;
+        this.tuloksiaEnintaanLaskentaaKohden = 100;
+        this.tuloksiaEnintaanYhteensa = 100;
         this.enimmaisvariaatioaste = 0;
         this.tulostenEnimmaismaara = 50000;
         this.laskennanAikakatkaisu = 60;
@@ -473,4 +481,208 @@ public class Hahmojako {
             this.yhteistulokset = this.yhteistulokset.rajaa(this.tuloksiaEnintaanYhteensa);
         }
     }
+    
+    /**
+     * Tämä metodi tallentaa tämänhetkisen yhteistulosluettelon sisältämät castaukset 
+     * XML-muotoiseen tiedostoon jatkokäsittelyä varten
+     */
+    public String vieTuloksetXmlTiedostoon() {
+        String vientiTiedostonNimi = "hahmojaot_" + laskePvm() + ".xml";
+        Document vientiDokumentti = luoXmlDokumentti();
+        vientiDokumentti = maaritaDokumentinRakenne(vientiDokumentti);
+        Node body = vientiDokumentti.getElementsByTagNameNS("http://www.tei-c.org/ns/1.0", "body").item(0);
+        // Käydään läpi tulokset yksi kerrallaan
+        for (int i = 0; i < this.yhteistulokset.pituus(); i++) {
+            Element div = vieTulosDokumenttiin(vientiDokumentti, i);
+            body.appendChild(div);
+        }
+        Element yhteenvedot = luoYhteenveto(vientiDokumentti);
+        body.appendChild(yhteenvedot);
+        vieXmlTiedostoon(vientiDokumentti, vientiTiedostonNimi);
+        return vientiTiedostonNimi;
+    }
+    
+    /**
+     * Tämä metodi palauttaa nykyisen ajankohdan numerojonona muodossa "vvvvkkppttmmss"
+     */
+    
+    private String laskePvm() {
+        DateFormat pvmMuoto = new SimpleDateFormat("yyyyMMddHHmmss");
+	Date pvm = new Date();
+        return pvmMuoto.format(pvm);
+    }
+    
+    private Document luoXmlDokumentti() {
+        try {
+            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+            documentFactory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+            Document dokumentti = documentBuilder.newDocument();
+            return dokumentti;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private Document maaritaDokumentinRakenne(Document dokumentti) {
+        Element root = dokumentti.createElement("TEI");
+        root.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:tei", "http://www.tei-c.org/ns/1.0");
+        dokumentti.appendChild(root);
+        Element body = dokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:body");
+        root.appendChild(body);
+        return dokumentti;
+    }
+    
+    private Element vieTulosDokumenttiin(Document vientiDokumentti, int i) {
+            Element div = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:div");
+            div.setAttribute("type", "hahmojako");
+            div.setAttribute("subtype", this.yhteistulokset.hae(i).getAlgoritmi());
+            haeSopivuustiedot(vientiDokumentti, div, i);
+            Element list = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:list");
+            div.appendChild(list);
+            // Käydään läpi tuloksen hahmot ja niiden pelaajat
+            for (int j = 1; j <= this.yhteensopivuusdata.getHahmomaara(); j++) {
+                Element item = vieHahmoJaPelaaja(vientiDokumentti, i, j);
+                list.appendChild(item);
+            }
+        return div;
+    }
+    
+    private void haeSopivuustiedot(Document vientidokumentti, Element div, int i) {
+        Element sopivuuskeskiarvo = vientidokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+            sopivuuskeskiarvo.setAttribute("type", "sopivuus");
+            sopivuuskeskiarvo.setAttribute("subtype", "keskiarvo");
+            sopivuuskeskiarvo.setAttribute("unit", "percent");
+            sopivuuskeskiarvo.setAttribute("quantity", String.valueOf(Math.round(this.yhteistulokset.hae(i).getSopivuuskeskiarvo() * 10.0) / 10.0));
+            div.appendChild(sopivuuskeskiarvo);
+            Element mediaanisopivuus = vientidokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+            mediaanisopivuus.setAttribute("type", "sopivuus");
+            mediaanisopivuus.setAttribute("subtype", "mediaani");
+            mediaanisopivuus.setAttribute("unit", "percent");
+            mediaanisopivuus.setAttribute("quantity", String.valueOf(this.yhteistulokset.hae(i).getMediaanisopivuus()));
+            div.appendChild(mediaanisopivuus);
+            Element huonoinSopivuus = vientidokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+            huonoinSopivuus.setAttribute("type", "sopivuus");
+            huonoinSopivuus.setAttribute("subtype", "minimi");
+            huonoinSopivuus.setAttribute("unit", "percent");
+            huonoinSopivuus.setAttribute("quantity", String.valueOf(this.yhteistulokset.hae(i).getHuonoinSopivuus()));
+            div.appendChild(huonoinSopivuus);
+            Element parasSopivuus = vientidokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+            parasSopivuus.setAttribute("type", "sopivuus");
+            parasSopivuus.setAttribute("subtype", "maksimi");
+            parasSopivuus.setAttribute("unit", "percent");
+            parasSopivuus.setAttribute("quantity", String.valueOf(this.yhteistulokset.hae(i).getParasSopivuus()));
+            div.appendChild(parasSopivuus);
+    }
+    
+    private Element vieHahmoJaPelaaja(Document vientiDokumentti, int i, int j) {
+        Element item = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:item");
+        Element hahmo = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:name");
+        hahmo.setAttribute("role", "hahmo");
+        hahmo.setAttribute("n", this.yhteensopivuusdata.getHahmotunnus(j));
+        item.appendChild(hahmo);
+        Element pelaaja = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:name");
+        pelaaja.setAttribute("role", "pelaaja");
+        int pelaajaindeksi = this.yhteistulokset.hae(i).getHahmojenPelaajat()[j];
+        pelaaja.setAttribute("n", this.yhteensopivuusdata.getPelaajatunnus(pelaajaindeksi));
+        if (i == 0 || pelaajaindeksi != this.yhteistulokset.hae(i - 1).getHahmojenPelaajat()[j]) {
+            pelaaja.setAttribute("rend", "hi");
+        }
+        item.appendChild(pelaaja);
+        Element yhteensopivuus = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+        yhteensopivuus.setAttribute("type", "sopivuus");
+        yhteensopivuus.setAttribute("unit", "percent");
+        yhteensopivuus.setAttribute("quantity", String.valueOf(this.yhteensopivuusdata.getSopivuusprosentti(pelaajaindeksi, j)));
+        item.appendChild(yhteensopivuus);
+        return item;
+    }
+    
+    private Element luoYhteenveto(Document vientiDokumentti) {
+        Yhteenveto yhteenvetotiedot = new Yhteenveto(this);
+        Element yhteenveto = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:div");
+        yhteenveto.setAttribute("type", "yhteenvetotiedot");
+        Element hahmojenYhteenveto = luoHahmojenYhteenveto(vientiDokumentti, yhteenvetotiedot);
+        yhteenveto.appendChild(hahmojenYhteenveto);
+        Element pelaajienYhteenveto = luoPelaajienYhteenveto(vientiDokumentti, yhteenvetotiedot);
+        yhteenveto.appendChild(pelaajienYhteenveto);
+        return yhteenveto;
+    }
+    
+    private Element luoHahmojenYhteenveto(Document vientiDokumentti, Yhteenveto yhteenvetotiedot) {
+        Element yhteenveto = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:div");
+        yhteenveto.setAttribute("type", "yhteenveto");
+        yhteenveto.setAttribute("subtype", "hahmot");
+        Element hahmolista = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:list");
+        yhteenveto.appendChild(hahmolista);
+        for (int h = 1; h <= this.getYhteensopivuusdata().getHahmomaara(); h++) {
+            Element hahmo = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:item");
+            hahmo.setAttribute("type", "hahmo");
+            hahmo.setAttribute("n", this.getYhteensopivuusdata().getHahmotunnus(h));
+            hahmolista.appendChild(hahmo);
+            Element pelaajat = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:list");
+            hahmo.appendChild(pelaajat);
+            for (int p = 0; p < yhteenvetotiedot.getHahmonYhteenveto(h).length; p++) {
+                Element pelaajaitem = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:item");
+                pelaajat.appendChild(pelaajaitem);
+                Element pelaaja = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:name");
+                pelaaja.setAttribute("role", "pelaaja");
+                pelaaja.setAttribute("n", yhteenvetotiedot.getHahmonYhteenveto(h)[p].getLaskettava());
+                pelaajaitem.appendChild(pelaaja);
+                Element osuus = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+                osuus.setAttribute("unit", "percent");
+                osuus.setAttribute("quantity", String.valueOf((yhteenvetotiedot.getHahmonYhteenveto(h)[p].getMaara() * 100) / yhteenvetotiedot.getHahmojakojenMaara()));
+                pelaajaitem.appendChild(osuus);
+            }
+        }
+        return yhteenveto;
+    }
+    
+    private Element luoPelaajienYhteenveto(Document vientiDokumentti, Yhteenveto yhteenvetotiedot) {
+        Element yhteenveto = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:div");
+        yhteenveto.setAttribute("type", "yhteenveto");
+        yhteenveto.setAttribute("subtype", "pelaajat");
+        Element pelaajalista = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:list");
+        yhteenveto.appendChild(pelaajalista);
+        for (int p = 1; p <= this.getYhteensopivuusdata().getPelaajamaara(); p++) {
+            Element pelaaja = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:item");
+            pelaaja.setAttribute("type", "pelaaja");
+            pelaaja.setAttribute("n", this.getYhteensopivuusdata().getPelaajatunnus(p));
+            pelaajalista.appendChild(pelaaja);
+            Element hahmot = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:list");
+            pelaaja.appendChild(hahmot);
+            for (int h = 0; h < yhteenvetotiedot.getPelaajanYhteenveto(p).length; h++) {
+                Element hahmoitem = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:item");
+                hahmot.appendChild(hahmoitem);
+                Element hahmo = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:name");
+                hahmo.setAttribute("role", "hahmo");
+                hahmo.setAttribute("n", yhteenvetotiedot.getPelaajanYhteenveto(p)[h].getLaskettava());
+                hahmoitem.appendChild(hahmo);
+                Element osuus = vientiDokumentti.createElementNS("http://www.tei-c.org/ns/1.0", "tei:measure");
+                osuus.setAttribute("unit", "percent");
+                osuus.setAttribute("quantity", String.valueOf((yhteenvetotiedot.getPelaajanYhteenveto(p)[h].getMaara() * 100) / yhteenvetotiedot.getHahmojakojenMaara()));
+                hahmoitem.appendChild(osuus);
+            }
+        }
+        return yhteenveto;
+    }
+    
+    
+    
+    private void vieXmlTiedostoon(Document dokumentti, String tiedostonimi) {
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(dokumentti);
+            StreamResult streamResult = new StreamResult(new File(tiedostonimi));
+            transformer.transform(domSource, streamResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
+    
+    
 }
